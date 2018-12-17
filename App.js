@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import reduxThunk from 'redux-thunk';
 import firebase from 'firebase';
 import reducers from './src/reducers/index';
-import AppMain from './src/Components/AppMain';
+import AppMain from './src/components/AppMain';
 import { FIREBASE_CONFIG } from './env.js';
 
 export default class App extends React.Component {
