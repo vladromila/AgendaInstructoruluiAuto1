@@ -1,7 +1,21 @@
+import React from 'react';
 import { createAppContainer, createMaterialTopTabNavigator } from 'react-navigation';
 import {Platform} from 'react-native';
 import LoginPage from './AuthenticationTab/LoginPage';
 import SignUpPage from './AuthenticationTab/SignUpPage';
+import {Icon} from 'native-base'
+
+LoginPage.navigationOptions={
+    tabBarIcon: ({ tintColor }) => (
+        <Icon name="md-person" style={{ color: tintColor }} />
+    )
+}
+SignUpPage.navigationOptions={
+    tabBarIcon: ({ tintColor }) => (
+        <Icon name="md-person-add" style={{ color: tintColor }} />
+    )
+}
+
 const AuthenticationTabComponent = createMaterialTopTabNavigator({
 
     LoginTab: {

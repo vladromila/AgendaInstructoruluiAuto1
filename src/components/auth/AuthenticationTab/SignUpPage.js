@@ -1,21 +1,48 @@
 import React, { Component } from 'react';
-import { TextField } from 'react-native-material-textfield';
- 
+import { KeyboardAvoidingView, View, Text } from 'react-native'
+import { Container, Content, Form, Item, Input, Label } from 'native-base';
+import { Header } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { signup } from '../../../actions'
+import { Button } from 'react-native-elements';
+
 class SignUpPage extends Component {
-  state = {
-    phone: '',
-  };
- 
+  constructor() {
+    super();
+    this.state = {
+      email: '',
+      password: ''
+    };
+  }
+  onButtonPress = () => {
+    const { email, password } = this.state;
+    this.props.signup({ email, password });
+  }
   render() {
-    let { phone } = this.state;
- 
     return (
-      <TextField
-        label='Phone number'
-        value={phone}
-        onChangeText={ (phone) => this.setState({ phone }) }
-      />
+      <View style={{ flex: 1 }} >
+        <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'rgba(0,0,0,0.6)' }}>
+          <Header centerComponent={<Text style={{ fontSize: 22, color: 'white', fontWeight: 'bold' }}>Creeaza un Cont</Text>} backgroundColor="#1E6EC7" />
+          <Content>
+            <Form>
+              <Item stackedLabel>
+                <Label style={{ color: 'white', fontSize: 20 }}>Email</Label>
+                <Input style={{ color: 'white', fontSize: 18 }} onChangeText={(email) => { this.setState({ email: email }) }} />
+              </Item>
+              <Item stackedLabel>
+                <Label style={{ color: 'white', fontSize: 20 }}>Parola</Label>
+                <Input style={{ color: 'white', fontSize: 18 }} onChangeText={(password) => { this.setState({ password: password }) }} />
+              </Item>
+              <Button backgroundColor="#1E6EC7" title="Creeaza Cont" onPress={() => this.onButtonPress()} loading={this.props.loading} />
+            </Form>
+          </Content>
+        </View>
+      </View >
     );
   }
 }
-export default SignUpPage;
+mapStateToProps = (state) => {
+  const { signupLoading, signupError } = state.AuthenticationReducer;
+  return { loading: signupLoading, error: signupError };
+}
+export default connect(mapStateToProps, { signup })(SignUpPage);

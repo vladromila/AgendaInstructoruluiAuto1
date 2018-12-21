@@ -18,6 +18,11 @@ HomeTab.navigationOptions={
         <Icon name="ios-home" style={{ color: tintColor }} />
     )
 }
+StudentsTab.navigationOptions={
+    tabBarIcon: ({ tintColor }) => (
+        <Icon name="ios-people" style={{ color: tintColor }} />
+    )
+}
 
 const MainTabComponent = createMaterialTopTabNavigator({
 
