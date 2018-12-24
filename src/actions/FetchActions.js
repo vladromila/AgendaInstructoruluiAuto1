@@ -50,12 +50,12 @@ export const fetchData = () => {
                     type: 'rStudents',
                     payload: rStudents
                 })
-                const instudents = _.map(snapshot.val().rStudents, (val, uid) => {
+                const inStudents = _.map(snapshot.val().inStudents, (val, uid) => {
                     return { ...val, uid };
                 });
                 dispatch({
-                    type: 'instudents',
-                    payload: instudents
+                    type: 'inStudents',
+                    payload: inStudents
                 })
                 const info = _.map(snapshot.val().info, (val, uid) => {
                     return { ...val, uid };
