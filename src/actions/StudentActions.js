@@ -21,7 +21,7 @@ export const studentCreate = ({ nume, phone, cnp, registru, serie, blob }) => {
                             console.log(e);
                         })
                 }
-                else{
+                else {
                     dispatch({ type: STUDENT_CREATE_SUCCESS })
                     dispatch({ type: 'reset' })
                 }
@@ -107,7 +107,7 @@ export const studentOHInToAModal = () => {
 export const studentInToA = ({ student }) => {
     return (dispatch) => {
         dispatch({ type: STUDENT_INTOA_START });
-        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${student.uid}`).set({ ...student })
+        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${student.uid}`).set({ ...student, nrn: 15 })
             .then(() => {
                 firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/inStudents/${student.uid}`).remove()
                     .then(() => {

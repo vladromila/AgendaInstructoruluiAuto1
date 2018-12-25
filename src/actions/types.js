@@ -25,3 +25,8 @@ export const STUDENT_INTOA_START = 'student_intoa_start';
 export const STUDENT_INTOA_SUCCESS = 'student_intoa_success';
 export const STUDENT_INTOA_FAIL = 'student_intoa_fail';
 export const STUDENT_OH_INTOA = 'student_oh_intoa';
+
+
+//GlobalVariables
+
+export const IS_AUTOMATIC_TYPE_SELECT_WANTED = 'is_automatic_type_select_wanted';

@@ -43,6 +43,7 @@ export default class ScheduleMainPage extends Component {
                             agendaTodayColor: 'red',
                             agendaKnobColor: 'blue'
                         }}
+                        firstDay={1}
                         style={{zIndex:99}}
                     />
             </View>

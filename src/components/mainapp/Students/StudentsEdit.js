@@ -58,12 +58,12 @@ class StudentEdit extends Component {
             }
         }
     }
-     async componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps) {
         if (nextProps.editSuccess === true) {
             this.props.navigation.navigate('StudentsMainPage');
         }
     }
-    componentDidMount() {
+    async componentDidMount() {
         this.setState({
             nume: this.props.navigation.state.params.nume,
             cnp: this.props.navigation.state.params.cnp,
