@@ -6,7 +6,6 @@ import {
     Platform
 } from "react-native";
 import HomeTab from './Home/HomeTab';
-import ScheduleTab from './Schedule/ScheduleTab';
 import ExamsTab from './Exams/ExamsTab';
 import StudentsTab from './Students/StudentsTab';
 import ProfileTab from './Profile/ProfileTab';
@@ -29,9 +28,6 @@ const MainTabComponent = createMaterialTopTabNavigator({
     HomeTab: {
         screen: HomeTab
     },
-    SchedulTab: {
-        screen: ScheduleTab
-    },
     ExamsTab: {
         screen: ExamsTab
     },
@@ -43,7 +39,7 @@ const MainTabComponent = createMaterialTopTabNavigator({
     }
 }, {
         animationEnabled: true,
-        swipeEnabled: false,
+        swipeEnabled: true,
         tabBarPosition: "bottom",
         tabBarOptions: {
             style: {

@@ -1,12 +1,16 @@
 import { combineReducers } from 'redux';
 import AuthenticationReducer from './AuthenticationReducer';
 import FetchDataReducer from './FetchDataReducer';
-import StudentReducer from './StudentReducer';
+import StudentsReducer from './StudentsReducer';
 import GlobalVariables from './GlobalVariables';
+import ClassesReducer from './ClassesReducer';
+import ExamsReducer from './ExamsReducer';
 
 export default combineReducers({
     AuthenticationReducer: AuthenticationReducer,
     FetchedData: FetchDataReducer,
-    StudentsReducer: StudentReducer,
-    GlobalVariablesReducer:GlobalVariables
+    StudentsReducer: StudentsReducer,
+    GlobalVariablesReducer: GlobalVariables,
+    ClassesReducer: ClassesReducer,
+    ExamsReducer: ExamsReducer
 });

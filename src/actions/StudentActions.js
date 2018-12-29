@@ -4,7 +4,7 @@ import { STUDENT_CREATE_START, STUDENT_CREATE_SUCCESS, STUDENT_EDIT_START, STUDE
 export const studentCreate = ({ nume, phone, cnp, registru, serie, blob }) => {
     return (dispatch) => {
         dispatch({ type: STUDENT_CREATE_START });
-        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/`).push({ nume, phone, cnp, registru, serie })
+        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/`).push({ nume, phone, cnp, registru, serie, nrn: 0, nrs: 0, nre: 0 })
             .then((link) => {
                 if (blob) {
                     firebase.storage().ref(`/images/users/${firebase.auth().currentUser.uid}/students/${link.key}`).put(blob)
@@ -13,7 +13,7 @@ export const studentCreate = ({ nume, phone, cnp, registru, serie, blob }) => {
                                 firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${link.key}/uri`).set(url)
                                     .then(() => {
                                         dispatch({ type: STUDENT_CREATE_SUCCESS })
-                                        dispatch({ type: 'reset' })
+                                        dispatch({ type: 'resetStudent' })
                                     })
                             })
                         })
@@ -23,7 +23,7 @@ export const studentCreate = ({ nume, phone, cnp, registru, serie, blob }) => {
                 }
                 else {
                     dispatch({ type: STUDENT_CREATE_SUCCESS })
-                    dispatch({ type: 'reset' })
+                    dispatch({ type: 'resetStudent' })
                 }
             })
     }
@@ -41,13 +41,13 @@ export const studentEdit = ({ uid, nume, phone, cnp, registru, serie, blob, stud
                                 firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${uid}/uri`).set(url)
                                     .then(() => {
                                         dispatch({ type: STUDENT_EDIT_SUCCESS })
-                                        dispatch({ type: 'reset' })
+                                        dispatch({ type: 'resetStudent' })
                                     })
                             })
                         })
                 else {
                     dispatch({ type: STUDENT_EDIT_SUCCESS })
-                    dispatch({ type: 'reset' })
+                    dispatch({ type: 'resetStudent' })
                 }
             })
     }
@@ -68,11 +68,11 @@ export const studentDelete = ({ student }) => {
                     firebase.storage().ref(`/images/users/${firebase.auth().currentUser.uid}/students/${student.uid}`).delete()
                         .then(() => {
                             dispatch({ type: STUDENT_DELETE_SUCCESS })
-                            dispatch({ type: 'reset' })
+                            dispatch({ type: 'resetStudent' })
                         })
                 else {
                     dispatch({ type: STUDENT_DELETE_SUCCESS })
-                    dispatch({ type: 'reset' })
+                    dispatch({ type: 'resetStudent' })
                 }
             })
     }
@@ -86,7 +86,7 @@ export const studentToInStudent = ({ student }) => {
                 firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${student.uid}`).remove()
                     .then(() => {
                         dispatch({ type: STUDENT_IN_SUCCESS })
-                        dispatch({ type: 'reset' })
+                        dispatch({ type: 'resetStudent' })
                     })
                     .catch(() => {
                         dispatch({ type: STUDENT_IN_FAIL })
@@ -112,7 +112,7 @@ export const studentInToA = ({ student }) => {
                 firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/inStudents/${student.uid}`).remove()
                     .then(() => {
                         dispatch({ type: STUDENT_INTOA_SUCCESS })
-                        dispatch({ type: 'reset' })
+                        dispatch({ type: 'resetStudent' })
                     })
                     .catch(() => {
                         dispatch({ type: STUDENT_INTOA_FAIL })

@@ -1,13 +1,21 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import HomeMainPage from './HomeMainPage';
 import ClassCreate from './ClassActionsComponents/ClassCreate';
+import ExamCreate from './ExamActionsComponents/ExamCreate';
+import ClassEdit from './ClassActionsComponents/ClassEdit';
 
 const HomeTabComponent = createStackNavigator({
     HomeMainPage: {
         screen: HomeMainPage
     },
-    ClassCreate:{
-        screen:ClassCreate
+    ClassCreate: {
+        screen: ClassCreate
+    },
+    ExamCreate: {
+        screen: ExamCreate
+    },
+    ClassEdit: {
+        screen: ClassEdit
     }
 }, {
         initialRouteName: 'HomeMainPage'

@@ -3,7 +3,7 @@ import { STUDENT_CREATE_START, STUDENT_CREATE_SUCCESS, STUDENT_EDIT_START, STUDE
 const INITIAL_STATE = { createLoading: false, createSuccess: false, editLoading: false, editSuccess: false, deleteLoading: false, deleteSuccess: false, inLoading: false, inSuccess: false, inToALoading: false, inToAsuccess: false, isInToAStudentModalVisible: false, isToInStudentModalVisible: false, isDeleteStudentModalVisible: false }
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case 'reset':
+        case 'resetStudent':
         return {...INITIAL_STATE};
         case STUDENT_CREATE_START:
             return { ...state, createLoading: true }

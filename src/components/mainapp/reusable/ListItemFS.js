@@ -29,7 +29,17 @@ class ListItemFS extends React.Component {
                     rightIcon={<Icon name={this.state.isVisible === true ? "keyboard-arrow-down" : "keyboard-arrow-up"} size={40} />}
                 />
                 {this.state.isVisible === true ?
-                    <View style={{ backgroundColor: this.props.isInactive===false?'rgba(30, 110, 199,0.3)':'rgba(239, 242, 55,0.3)', marginLeft: 10, marginRight: 10, alignSelf: 'center', width: Dimensions.get('screen').width - 20, padding: 5 }}>
+                    <View style={{ backgroundColor: this.props.isInactive === false ? 'rgba(30, 110, 199,0.3)' : 'rgba(239, 242, 55,0.3)', marginLeft: 10, marginRight: 10, alignSelf: 'center', width: Dimensions.get('screen').width - 20, padding: 5 }}>
+                        <Text style={{ fontWeight: "bold", fontSize: 18 }}>Starea sedintelor:</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ fontWeight: "bold", fontSize: 16 }}>Nr. total de sed. efectuate: </Text><Text style={{ fontSize: 16 }}>{this.props.student.doneClasses ? this.props.student.extraClasses ? Object.keys(this.props.student.doneClasses).length + Object.keys(this.props.student.extraClasses).length : Object.keys(this.props.student.doneClasses).length : this.props.student.extraClasses ? Object.keys(this.props.student.extraClasses).length : 0}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ fontWeight: "bold", fontSize: 16 }}>Nr. de sed. de scolarizare efectuate: </Text><Text style={{ fontSize: 16 }}>{this.props.student.doneClasses ? Object.keys(this.props.student.doneClasses).length : 0}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ fontWeight: "bold", fontSize: 16 }}>Nr. de sed. de perfectionare efectuate: </Text><Text style={{ fontSize: 16 }}>{this.props.student.extraClasses ? Object.keys(this.props.student.extraClasses).length : 0}</Text>
+                        </View>
                         <Text style={{ fontWeight: "bold", fontSize: 18 }}>Date complete:</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={{ fontWeight: "bold", fontSize: 16 }}>Nume: </Text><Text style={{ fontSize: 16 }}>{this.props.student.nume}</Text>

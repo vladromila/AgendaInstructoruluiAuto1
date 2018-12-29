@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, BackHandler, TextInput, ScrollView, FlatList, Picker, Modal } from 'react-native'
-import { classCreate } from '../../../../actions/'
+import { classEdit } from '../../../../actions/'
 import { connect } from 'react-redux'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { Button, ListItem, SearchBar, Icon } from 'react-native-elements'
@@ -30,7 +30,7 @@ class ClassCreate extends Component {
     }
 
     static navigationOptions = {
-        title: "Creeaza o sedinta",
+        title: "Editeaza sedinta",
         headerTitleStyle: { color: 'white' },
         headerStyle: {
             backgroundColor: '#1E6EC7'
@@ -38,16 +38,17 @@ class ClassCreate extends Component {
     }
 
     async componentDidMount() {
-        const { id, day, month, year, minutes, hour } = this.props.navigation.state.params;
+        console.log(this.props.navigation.state.params);
+        const { day, month, year, minutes, hour, selectedStudent, tip } = this.props.navigation.state.params;
         this.setState({
-            id, day, month, year, minutes, hour
+            day, month, year, minutes, hour, selectedStudent, tip
         })
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.isAutomaticTypeSelectWanted === false)
             this.setState({ tip: "normala" })
-        if (nextProps.createSuccess === true)
+        if (nextProps.editSuccess === true)
             this.props.navigation.goBack();
         this.setState({ students: nextProps.students })
     }
@@ -65,7 +66,7 @@ class ClassCreate extends Component {
         return (
             <View style={{ flex: 1 }} >
                 <Item stackedLabel style={{ borderWidth: 0, borderColor: 'rgba(0,0,0,0)' }}>
-                    <Label style={{ color: '#1E6EC7', fontSize: 21, fontWeight: 'bold' }}>Locatie</Label>
+                    <Label style={{ color: '#1E6EC7', fontSize: 21, fontWeight: 'bold' }}>location</Label>
                     <Input style={{ color: '#1E6EC7', fontSize: 18, borderColor: "#1E6EC7", borderWidth: 2, width: '100%', marginRight: 5 }} onChangeText={(location) => { this.setState({ location }) }} />
                 </Item>
                 <Text style={{ alignSelf: "center", fontSize: 21, color: "#1E6EC7", fontWeight: 'bold' }}>Elevul selectat:</Text>
@@ -101,12 +102,12 @@ class ClassCreate extends Component {
                 />
                 <Button
                     containerViewStyle={{ marginTop: 3 }}
-                    title="Creeaza sedinta"
-                    loading={this.props.createLoading}
+                    title="Editeaza sedinta"
+                    loading={this.props.editLoading}
                     onPress={() => {
                         const { year, month, day, hour, minutes, tip, location } = this.state;
                         if (this.state.selectedStudent.nume) {
-                            this.props.classCreate({ year, month, day, hour, minutes, tip, studentUid: this.state.selectedStudent.uid, location })
+                            this.props.classEdit({ year, month, day, hour, minutes, tip, studentUid: this.state.selectedStudent.uid, location, uid: this.props.navigation.state.params.uid })
                         }
                     }}
                     backgroundColor="#1E6EC7"
@@ -196,8 +197,8 @@ class ClassCreate extends Component {
 mapStateToProps = (state) => {
     const { students } = state.FetchedData;
     const { isAutomaticTypeSelectWanted } = state.GlobalVariablesReducer;
-    const { createLoading, createSuccess } = state.ClassesReducer;
-    return { students, isAutomaticTypeSelectWanted, createLoading, createSuccess };
+    const { editLoading, editSuccess } = state.ClassesReducer;
+    return { students, isAutomaticTypeSelectWanted, editLoading, editSuccess };
 }
 
-export default connect(mapStateToProps, { classCreate })(ClassCreate);
+export default connect(mapStateToProps, { classEdit })(ClassCreate);

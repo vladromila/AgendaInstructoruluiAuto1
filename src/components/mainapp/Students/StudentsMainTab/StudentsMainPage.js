@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Text, View, FlatList, ScrollView, Modal, Dimensions } from 'react-native'
+import { Text, View, FlatList, ScrollView, Modal, Dimensions,StatusBar,BackAndroid } from 'react-native'
 import Icon1 from 'react-native-vector-icons/FontAwesome';
 import { Icon } from 'native-base'
-import { Header, Button } from 'react-native-elements'
+import { Header, Button, SearchBar } from 'react-native-elements'
 import Gradient from 'react-native-css-gradient'
 import ListItemFS from '../../reusable/ListItemFS';
 import { studentOHDeleteModal, studentDelete, studentOHToInModal, studentToInStudent } from '../../../../actions'
@@ -10,14 +10,17 @@ import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import QRCode from 'react-native-qrcode-svg';
 import firebase from 'firebase';
-import _ from 'lodash'
+import SearchHeader from 'react-native-search-header';
+import _ from 'lodash';
+
 const size = Dimensions.get('screen').width * 2 / 3;
 class StudentsMainPage extends Component {
     constructor() {
         super();
         this.state = {
             isQRCodeModalVisible: false,
-            selectedStudent: {}
+            selectedStudent: {},
+            students: []
         }
         this.onListItemProfilePress.bind(this);
     }
@@ -26,8 +29,11 @@ class StudentsMainPage extends Component {
         title: "Elevi Activi"
     }
     onListItemProfilePress(student) {
-        this.setState({selectedStudent:student})
+        this.setState({ selectedStudent: student })
         this.props.navigation.navigate('StudentProfile', student);
+    }
+    async componentWillReceiveProps(nextProps) {
+        this.setState({ students: nextProps.students });
     }
     onViewFinishedClassesPress(item) {
         if (item.doneClasses)
@@ -58,34 +64,55 @@ class StudentsMainPage extends Component {
             this.props.navigation.navigate('StudentCanceledClasses', { nume: item.nume })
     }
 
+    onInpuChange(input) {
+        let search = input.toLowerCase()
+        let students = this.props.students
+        let filteredStudents = students.filter((item) => {
+            return item.nume.toLowerCase().match(search)
+        })
+        this.setState({ students: filteredStudents })
+    }
+
     render() {
         return (<Gradient gradient={`linear-gradient(0deg ,white 0%,#1E6EC7 100% )`} style={{ width: '100%', height: '100%', zIndex: -1, position: 'absolute' }} >
             <Header
+                leftComponent={<Icon name="search" onPress={() => {
+                    this.searchHeader.show();
+                }} />}
                 innerContainerStyles={{ backgroundColor: '#1E6EC7' }}
                 outerContainerStyles={{ borderBottomColor: 'black', backgroundColor: '#1E6EC7', borderBottomWidth: 1 }}
                 centerComponent={<Text style={{ fontSize: 22, fontWeight: '900' }}>Elevi</Text>}
                 rightComponent={<Icon name="add" fontSize={40} onPress={() => this.props.navigation.navigate('StudentCreate')} />}
             />
+            <SearchHeader
+                ref={(searchHeader) => {
+                    this.searchHeader = searchHeader;
+                }}
+                placeholder='Search...'
+                placeholderColor='gray'
+                onEnteringSearch={(input) => {
+                    this.onInpuChange(input.nativeEvent.text);
+                }}
+            />
             <ScrollView style={{ flex: 1 }}>
-                <View style={{}}>
-                    <FlatList
-                        data={this.props.students}
-                        keyExtractor={(item, i) => `${i}`}
-                        renderItem={({ item }) => {
-                            return <ListItemFS
-                                isInactive={false}
-                                student={item}
-                                onListItemProfilePress={() => this.onListItemProfilePress(item)}
-                                onLongPress={() => {
-                                    this.setState({ selectedStudent: item })
-                                    this.ActionSheet.show();
-                                }}
-                                onViewCanceledClassesPress={() => this.onViewCanceledClassesPress(item)}
-                                onViewFinishedClassesPress={() => this.onViewFinishedClassesPress(item)}
-                            />
-                        }}
-                    />
-                </View>
+                <FlatList
+                    data={this.state.students}
+                    keyExtractor={(item, i) => `${i}`}
+                    extraData={this.state.students}
+                    renderItem={({ item }) => {
+                        return <ListItemFS
+                            isInactive={false}
+                            student={item}
+                            onListItemProfilePress={() => this.onListItemProfilePress(item)}
+                            onLongPress={() => {
+                                this.setState({ selectedStudent: item })
+                                this.ActionSheet.show();
+                            }}
+                            onViewCanceledClassesPress={() => this.onViewCanceledClassesPress(item)}
+                            onViewFinishedClassesPress={() => this.onViewFinishedClassesPress(item)}
+                        />
+                    }}
+                />
                 <Modal
                     visible={this.state.isQRCodeModalVisible}
                     transparent={true}
