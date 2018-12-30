@@ -6,64 +6,75 @@ export const fetchData = () => {
     const { currentUser } = firebase.auth();
     return (dispatch) => {
         dispatch({ type: FETCH_START })
-        firebase.database().ref(`/users/${currentUser.uid}`)
+        firebase.database().ref(`/users/${currentUser.uid}/classes`)
             .on('value', (snapshot) => {
-                const classes = _.map(snapshot.val().classes, (val, uid) => {
+                const classes = _.map(snapshot.val(), (val, uid) => {
                     return { ...val, uid };
                 });
                 dispatch({
                     type: 'classes',
                     payload: classes
                 })
-                const students = _.map(snapshot.val().students, (val, uid) => {
+            })
+        firebase.database().ref(`/users/${currentUser.uid}/students`)
+            .on('value', (snapshot) => {
+                const students = _.map(snapshot.val(), (val, uid) => {
                     return { ...val, uid };
                 });
                 dispatch({
                     type: 'students',
                     payload: students
                 })
-                const exams = _.map(snapshot.val().exams, (val, uid) => {
+            })
+        firebase.database().ref(`/users/${currentUser.uid}/exams`)
+            .on('value', (snapshot) => {
+                const exams = _.map(snapshot.val(), (val, uid) => {
                     return { ...val, uid };
                 });
                 dispatch({
                     type: 'exams',
                     payload: exams
                 })
-                const canceledClasses = _.map(snapshot.val().canceledClasses, (val, uid) => {
+            })
+        firebase.database().ref(`/users/${currentUser.uid}/finishedStudents`)
+            .on('value', (snapshot) => {
+                const finishedStudents = _.map(snapshot.val(), (val, uid) => {
                     return { ...val, uid };
                 });
-                dispatch({
-                    type: 'canceledClasses',
-                    payload: canceledClasses
-                })
-                const finishedStudents = _.map(snapshot.val().finishedStudents, (val, uid) => {
-                    return { ...val, uid };
-                });
+
                 dispatch({
                     type: 'finisedStudents',
                     payload: finishedStudents
                 })
-                const rStudents = _.map(snapshot.val().rStudents, (val, uid) => {
+            })
+        firebase.database().ref(`/users/${currentUser.uid}/rStudents`)
+            .on('value', (snapshot) => {
+                const rStudents = _.map(snapshot.val(), (val, uid) => {
                     return { ...val, uid };
                 });
                 dispatch({
                     type: 'rStudents',
                     payload: rStudents
                 })
-                const inStudents = _.map(snapshot.val().inStudents, (val, uid) => {
+            })
+        firebase.database().ref(`/users/${currentUser.uid}/inStudents`)
+            .on('value', (snapshot) => {
+                const inStudents = _.map(snapshot.val(), (val, uid) => {
                     return { ...val, uid };
                 });
                 dispatch({
                     type: 'inStudents',
                     payload: inStudents
                 })
-                const info = _.map(snapshot.val().info, (val, uid) => {
-                    return { ...val, uid };
-                });
+            })
+        firebase.database().ref(`/users/${currentUser.uid}/info`)
+            .on('value', (snapshot) => {
+                const info = snapshot.val();
                 dispatch({
                     type: 'info',
                     payload: info
                 })
             })
     }
+
 }

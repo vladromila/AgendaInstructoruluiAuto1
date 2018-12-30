@@ -20,7 +20,6 @@ class InStudentsHome extends React.Component {
         title: "Elevi inactivi"
     }
     render() {
-        console.log(this.props.inStudents)
         return (
             <Gradient gradient={`linear-gradient(0deg ,white 0%, #1E6EC7 100% )`} style={{ width: '100%', height: '100%', zIndex: -1, position: 'absolute' }} >
                 <Header

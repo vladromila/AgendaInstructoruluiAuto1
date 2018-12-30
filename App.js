@@ -56,7 +56,7 @@ if (Platform.OS === 'android') {
 export default class App extends React.Component {
   constructor() {
     super();
-    console.ignoredYellowBox = ['Setting'];
+    console.ignoredYellowBox = ['Setting',`Can't call setState`];
   }
   componentWillMount() {
     var config=FIREBASE_CONFIG

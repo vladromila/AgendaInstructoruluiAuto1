@@ -25,6 +25,11 @@ export const CLASS_CREATE_FAIL = 'class_create_fail';
 export const EXAM_CREATE_START = 'exam_create_start';
 export const EXAM_CREATE_SUCCESS = 'exam_create_success';
 export const EXAM_CREATE_FAIL = 'exam_create_fail';
+export const EXAM_ADDC_START = 'exam_addc_start';
+export const EXAM_ADDC_SUCCESS = 'exam_addc_success';
+export const EXAM_ADDC_FAIL = 'exam_addc_fail';
+export const EXAM_OH_DELETE = 'exam_oh_delete';
+export const EXAM_OH_DELETE1 = 'exam_oh_delete1';
 
 //edit
 export const STUDENT_EDIT_START = 'student_edit_start';
@@ -33,7 +38,9 @@ export const STUDENT_EDIT_FAIL = 'student_edit_fail';
 export const CLASS_EDIT_START = 'class_edit_start';
 export const CLASS_EDIT_SUCCESS = 'class_edit_success';
 export const CLASS_EDIT_FAIL = 'class_edit_fail';
-
+export const EXAM_EDIT_START = 'exam_edit_start';
+export const EXAM_EDIT_SUCCESS = 'exam_edit_success';
+export const EXAM_EDIT_FAIL = 'exam_edit_fail';
 
 //delete
 export const STUDENT_DELETE_START = 'student_delete_start';
@@ -48,6 +55,9 @@ export const CLASS_CANCEL_OH_DELETE = 'class_cancel_oh_delete';
 export const CLASS_CANCEL_DELETE_START = 'class_cancel_delete_start';
 export const CLASS_CANCEL_DELETE_SUCCESS = 'class_cancel_delete_success';
 export const CLASS_CANCEL_DELETE_FAIL = 'class_cancel_delete_fail';
+export const EXAM_DELETE_START = 'exam_delete_start';
+export const EXAM_DELETE_SUCCESS = 'exam_delete_success';
+export const EXAM_DELETE_FAIL = 'exam_delete_fail';
 
 //GlobalVariables
 

@@ -3,6 +3,7 @@ import HomeMainPage from './HomeMainPage';
 import ClassCreate from './ClassActionsComponents/ClassCreate';
 import ExamCreate from './ExamActionsComponents/ExamCreate';
 import ClassEdit from './ClassActionsComponents/ClassEdit';
+import ExamEdit from './ExamActionsComponents/ExamEdit';
 
 const HomeTabComponent = createStackNavigator({
     HomeMainPage: {
@@ -16,6 +17,9 @@ const HomeTabComponent = createStackNavigator({
     },
     ClassEdit: {
         screen: ClassEdit
+    },
+    ExamEdit:{
+        screen:ExamEdit
     }
 }, {
         initialRouteName: 'HomeMainPage'

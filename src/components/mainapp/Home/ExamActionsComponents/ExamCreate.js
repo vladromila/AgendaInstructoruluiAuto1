@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { Button, ListItem, SearchBar, Icon } from 'react-native-elements'
 
-class ClassCreate extends Component {
+class ExamCreate extends Component {
 
     constructor(props) {
         super(props);
@@ -22,7 +22,7 @@ class ClassCreate extends Component {
     }
 
     static navigationOptions = {
-        title: "Creeaza o sedinta",
+        title: "Creeaza un examen",
         headerTitleStyle: { color: 'white' },
         headerStyle: {
             backgroundColor: '#1E6EC7'
@@ -177,4 +177,4 @@ mapStateToProps = (state) => {
     return { students, createLoading, createSuccess };
 }
 
-export default connect(mapStateToProps, { examCreate })(ClassCreate);
+export default connect(mapStateToProps, { examCreate })(ExamCreate);
