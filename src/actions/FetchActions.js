@@ -43,7 +43,7 @@ export const fetchData = () => {
                 });
 
                 dispatch({
-                    type: 'finisedStudents',
+                    type: 'finishedStudents',
                     payload: finishedStudents
                 })
             })
@@ -69,10 +69,9 @@ export const fetchData = () => {
             })
         firebase.database().ref(`/users/${currentUser.uid}/info`)
             .on('value', (snapshot) => {
-                const info = snapshot.val();
                 dispatch({
                     type: 'info',
-                    payload: info
+                    payload: snapshot.val()
                 })
             })
     }

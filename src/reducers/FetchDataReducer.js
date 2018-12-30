@@ -1,5 +1,5 @@
 
-const INITIAL_STATE = { classes: [], students: [], exams: [], finishedStudents: [], rStudents: [], canceledClasses: [], inStudents: [], info: [] }
+const INITIAL_STATE = { classes: [], students: [], exams: [], finishedStudents: [], rStudents: [], canceledClasses: [], inStudents: [], info: {} }
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case 'classes':
@@ -17,7 +17,7 @@ export default (state = INITIAL_STATE, action) => {
         case 'inStudents':
             return { ...state, inStudents: action.payload }
         case 'info':
-            return { ...state, ifno: action.payload }
+            return { ...state, info: action.payload }
         default:
             return state
     }

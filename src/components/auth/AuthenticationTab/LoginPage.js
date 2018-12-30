@@ -16,7 +16,7 @@ class LoginPage extends Component {
   }
   onButtonPress = () => {
     const { email, password } = this.state;
-    this.props.login({ email, password });
+    this.props.login({ email:email.trim(), password });
   }
   render() {
     return (

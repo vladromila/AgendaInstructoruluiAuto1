@@ -36,19 +36,19 @@ class StudentsMainPage extends Component {
         this.setState({ students: nextProps.students });
     }
     onViewFinishedClassesPress(item) {
-        if (item.doneClasses)
-            if (item.extraClasses) {
-                let finishedNClasses = _.toArray(item.doneClasses);
-                let finishedEClasses = _.toArray(item.extraClasses);
+        if (item.doneClassesTotal)
+            if (item.extraClassesTotal) {
+                let finishedNClasses = _.toArray(item.doneClassesTotal);
+                let finishedEClasses = _.toArray(item.extraClassesTotal);
                 this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, finishedEClasses, nume: item.nume })
             }
             else {
-                let finishedNClasses = _.toArray(item.doneClasses);
+                let finishedNClasses = _.toArray(item.doneClassesTotal);
                 this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, nume: item.nume })
             }
         else
-            if (item.extraClasses) {
-                let finishedEClasses = _.toArray(item.extraClasses);
+            if (item.extraClassesTotal) {
+                let finishedEClasses = _.toArray(item.extraClassesTotal);
                 this.props.navigation.navigate('StudentFinishedClasses', { finishedEClasses, nume: item.nume })
             }
             else {

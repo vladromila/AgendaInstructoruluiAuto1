@@ -18,6 +18,7 @@ class ExamCreate extends Component {
             isDateModalVisible: false,
             students: this.props.students,
             selectedStudents: [],
+            pressed: false
         }
     }
 
@@ -87,8 +88,15 @@ class ExamCreate extends Component {
                     title="Creeaza examenul"
                     loading={this.props.createLoading}
                     onPress={() => {
-                        const { day, month, year, selectedStudents } = this.state
-                        this.props.examCreate({ day, month, year, examedStudents: selectedStudents })
+                        if (this.state.pressed === false) {
+                            if (this.state.selectedStudents.length > 0) {
+                                this.setState({ pressed: true })
+                                const { day, month, year, selectedStudents } = this.state
+                                this.props.examCreate({ day, month, year, examedStudents: selectedStudents })
+                            }
+                            else
+                                alert('Alegeti cel putin un elev inainte de a creea un examen!')
+                        }
                     }}
                     backgroundColor="#1E6EC7"
                 />

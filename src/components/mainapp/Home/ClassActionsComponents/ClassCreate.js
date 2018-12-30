@@ -26,6 +26,7 @@ class ClassCreate extends Component {
             isTimeModalVisible: false,
             students: this.props.students,
             selectedStudent: {},
+            pressed: false
         }
     }
 
@@ -105,9 +106,11 @@ class ClassCreate extends Component {
                     loading={this.props.createLoading}
                     onPress={() => {
                         const { year, month, day, hour, minutes, tip, location } = this.state;
-                        if (this.state.selectedStudent.nume) {
-                            this.props.classCreate({ year, month, day, hour, minutes, tip, studentUid: this.state.selectedStudent.uid, location })
-                        }
+                        if (this.state.pressed === false)
+                            if (this.state.selectedStudent.nume) {
+                                this.setState({ pressed: true })
+                                this.props.classCreate({ year, month, day, hour, minutes, tip, studentUid: this.state.selectedStudent.uid, location })
+                            }
                     }}
                     backgroundColor="#1E6EC7"
                 />

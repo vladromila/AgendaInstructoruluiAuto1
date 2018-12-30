@@ -101,7 +101,7 @@ class ListItemFC extends Component {
                                 <Text style={{ fontSize: 19, fontWeight: '500' }}>{this.props.scheduledClass.hour < 10 ? `0${this.props.scheduledClass.hour}` : `${this.props.scheduledClass.hour}`}:{this.props.scheduledClass.minutes >= 0 && this.props.scheduledClass.minutes < 10 ? `${this.props.scheduledClass.minutes}0` : `${this.props.scheduledClass.minutes}`}</Text>
                                 <Text style={{ fontSize: 16 }}>{this.props.scheduledClass.minutes + 30 >= 60 ? `${this.props.scheduledClass.hour + 2}` : `${this.props.scheduledClass.hour + 1}`}:{(this.props.scheduledClass.minutes + 30) % 60 >= 0 && (this.props.scheduledClass.minutes + 30) % 60 < 10 ? `${(this.props.scheduledClass.minutes + 30) % 60}0` : `${(this.props.scheduledClass.minutes + 30) % 60}`}</Text></View></View>}
                         rightIcon={<Icon name="add" size={40} onPress={this.props.onClassCreatePress} />}
-                        title={<View style={{ marginLeft: 6, flexDirection: 'column' }}><Text>123123</Text><Text style={{ fontSize: 19, fontWeight: '700' }}>123123</Text><Text>123123</Text></View>} />
+                        title={<View style={{ marginLeft: 6, flexDirection: 'column' }}><Text style={{ fontSize: 19, fontWeight: '700' }}>Nimic Programat</Text></View>} />
                 }
             </React.Fragment>
         )

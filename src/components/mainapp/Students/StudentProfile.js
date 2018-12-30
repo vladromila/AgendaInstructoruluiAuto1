@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import _ from 'lodash'
 import Icon1 from 'react-native-vector-icons/FontAwesome';
-import {studentDelete,studentOHDeleteModal} from '../../../actions/'
+import { studentDelete, studentOHDeleteModal } from '../../../actions/'
 import { connect } from 'react-redux'
 import { List, ListItem } from 'react-native-elements';
 import { ProgressCircle } from 'react-native-svg-charts'
@@ -83,19 +83,19 @@ class StudentProfile extends Component {
                 underlayColor={'rgba(30, 110, 199,0.9)'}
                 onPress={() => {
                   let item = this.props.navigation.state.params;
-                  if (item.doneClasses)
-                    if (item.extraClasses) {
-                      let finishedNClasses = _.toArray(item.doneClasses);
-                      let finishedEClasses = _.toArray(item.extraClasses);
+                  if (item.doneClassesTotal)
+                    if (item.extraClassesTotal) {
+                      let finishedNClasses = _.toArray(item.doneClassesTotal);
+                      let finishedEClasses = _.toArray(item.extraClassesTotal);
                       this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, finishedEClasses, nume: item.nume })
                     }
                     else {
-                      let finishedNClasses = _.toArray(item.doneClasses);
+                      let finishedNClasses = _.toArray(item.doneClassesTotal);
                       this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, nume: item.nume })
                     }
                   else
-                    if (item.extraClasses) {
-                      let finishedEClasses = _.toArray(item.extraClasses);
+                    if (item.extraClassesTotal) {
+                      let finishedEClasses = _.toArray(item.extraClassesTotal);
                       this.props.navigation.navigate('StudentFinishedClasses', { finishedEClasses, nume: item.nume })
                     }
                     else {
@@ -104,7 +104,7 @@ class StudentProfile extends Component {
                 }}
                 title={
                   <Text style={{ paddingLeft: 10, color: 'white', fontSize: 16 }}>
-                    Numarul de ore complete: <Text style={{ fontWeight: 'bold', paddingLeft: 10, color: 'white', fontSize: 16 }}>{this.props.navigation.state.params.doneClasses ? this.props.navigation.state.params.extraClasses ? (Object.keys(this.props.navigation.state.params.doneClasses).length || 0) + (Object.keys(this.props.navigation.state.params.extraClasses).length || 0) : (Object.keys(this.props.navigation.state.params.doneClasses).length || 0) : this.props.navigation.state.params.extraClasses ? (Object.keys(this.props.navigation.state.params.extraClasses).length || 0) : 0}</Text>
+                    Numarul de ore complete: <Text style={{ fontWeight: 'bold', paddingLeft: 10, color: 'white', fontSize: 16 }}>{this.props.navigation.state.params.doneClassesTotal ? this.props.navigation.state.params.extraClassesTotal ? (Object.keys(this.props.navigation.state.params.doneClassesTotal).length || 0) + (Object.keys(this.props.navigation.state.params.extraClassesTotal).length || 0) : (Object.keys(this.props.navigation.state.params.doneClassesTotal).length || 0) : this.props.navigation.state.params.extraClassesTotal ? (Object.keys(this.props.navigation.state.params.extraClassesTotal).length || 0) : 0}</Text>
                   </Text>
                 } containerStyle={{ backgroundColor: '#1E6EC7' }} titleStyle={{ color: 'white' }}
                 rightIcon={<Icon1 name='list-ol' style={{ paddingRight: 10, color: 'white' }} size={27} />}
@@ -113,12 +113,16 @@ class StudentProfile extends Component {
                 underlayColor={'rgba(30, 110, 199,0.9)'}
                 title={
                   <Text style={{ paddingLeft: 10, color: 'white', fontSize: 16 }}>
-                    Istoricul orelor anurate:
+                    Istoricul orelor anulate:
                 </Text>
                 } containerStyle={{ backgroundColor: '#1E6EC7' }} titleStyle={{ color: 'white' }}
                 rightIcon={<Icon1 name='history' onPress={() => {
-                  const { nume, uid } = this.props.navigation.state.params.item
-                  this.props.navigation.navigate('CanceledClasses', { nume, uid, title: nume })
+                  if (this.props.navigation.state.params.canceledClasses) {
+                    let canceledClasses = _.toArray(this.props.navigation.state.params.canceledClasses);
+                    this.props.navigation.navigate('StudentCanceledClasses', { canceledClasses, nume: this.props.navigation.state.params.nume })
+                  }
+                  else
+                    this.props.navigation.navigate('StudentCanceledClasses', { nume: this.props.navigation.state.params.nume })
                 }} style={{ paddingRight: 10, color: 'white' }} size={27} />}
               /><ListItem title={'Progres:'} titleStyle={{ color: 'white', alignSelf: 'center' }} hideChevron containerStyle={{ backgroundColor: '#1E6EC7', borderBottomColor: '#1E6EC7' }} />
               <View style={{ backgroundColor: 'white', paddingTop: 10, paddingBottom: 10, backgroundColor: '#1E6EC7' }}>
@@ -129,22 +133,22 @@ class StudentProfile extends Component {
                   backgroundColor={'black'}
                 /></View>
             </List>
-            {this.props.navigation.state.params.isInactive===true?null:
-            <List>
-              <ListItem
-                underlayColor={'rgba(30, 110, 199,0.9)'}
-                onPress={() => {
-                  this.props.navigation.navigate('StudentEdit', this.props.navigation.state.params)
-                }}
-                title={<Text style={{ paddingLeft: 10, color: 'white', fontSize: 16 }}>Editeaza Elev</Text>} containerStyle={{ backgroundColor: '#1E6EC7' }} titleStyle={{ color: 'white' }} onPress={() => { this.props.navigation.navigate('StudentEdit', { ...this.props.navigation.state.params }) }}
-                rightIcon={<Icon1 name='edit' color='white' style={{ paddingRight: 10 }} size={30} />} />
-              <ListItem 
-              onPress={()=>{
-this.props.studentOHDeleteModal();
-              }}
-              underlayColor={'rgba(30, 110, 199,0.9)'}
-              title={<Text style={{ paddingLeft: 10, color: 'white', fontSize: 16 }}>Sterge Elev</Text>} containerStyle={{ backgroundColor: '#1E6EC7' }} titleStyle={{ color: 'white' }} rightIcon={<Icon1 name='times' color='red' style={{ paddingRight: 10 }} size={30} />} />
-            </List>}
+            {this.props.navigation.state.params.isInactive === true ? null :
+              <List>
+                <ListItem
+                  underlayColor={'rgba(30, 110, 199,0.9)'}
+                  onPress={() => {
+                    this.props.navigation.navigate('StudentEdit', this.props.navigation.state.params)
+                  }}
+                  title={<Text style={{ paddingLeft: 10, color: 'white', fontSize: 16 }}>Editeaza Elev</Text>} containerStyle={{ backgroundColor: '#1E6EC7' }} titleStyle={{ color: 'white' }} onPress={() => { this.props.navigation.navigate('StudentEdit', { ...this.props.navigation.state.params }) }}
+                  rightIcon={<Icon1 name='edit' color='white' style={{ paddingRight: 10 }} size={30} />} />
+                <ListItem
+                  onPress={() => {
+                    this.props.studentOHDeleteModal();
+                  }}
+                  underlayColor={'rgba(30, 110, 199,0.9)'}
+                  title={<Text style={{ paddingLeft: 10, color: 'white', fontSize: 16 }}>Sterge Elev</Text>} containerStyle={{ backgroundColor: '#1E6EC7' }} titleStyle={{ color: 'white' }} rightIcon={<Icon1 name='times' color='red' style={{ paddingRight: 10 }} size={30} />} />
+              </List>}
           </View>
         </ScrollView>
         <Modal visible={this.state.isImageModalVisible} transparent={false} onRequestClose={() => this.setState({ isImageModalVisible: false })}>
@@ -154,10 +158,10 @@ this.props.studentOHDeleteModal();
     );
   }
 }
-mapStateToProps=state=>{
-  return {sry:true}
+mapStateToProps = state => {
+  return { sry: true }
 }
-export default connect(mapStateToProps,{studentDelete,studentOHDeleteModal})(StudentProfile);
+export default connect(mapStateToProps, { studentDelete, studentOHDeleteModal })(StudentProfile);
 
 const styles = StyleSheet.create({
   scrollContainer: {

@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import { NavigationActions } from 'react-navigation'
-import { LOGIN_START, LOGIN_SUCCESS, SIGNUP_START, SIGNUP_SUCCESS } from './types';
+import { LOGIN_START, LOGIN_SUCCESS, SIGNUP_START, SIGNUP_SUCCESS, SIGNUP_FAILED, LOGIN_FAILED } from './types';
 
 export const login = ({ email, password }) => {
     return (dispatch) => {
@@ -9,6 +9,10 @@ export const login = ({ email, password }) => {
             dispatch({ type: LOGIN_SUCCESS });
             dispatch(NavigationActions.navigate({ routeName: 'Main' }))
         })
+            .catch(() => {
+                alert('Emailul sau parola nu este valida')
+                dispatch({ type: LOGIN_FAILED })
+            })
     }
 }
 export const signup = ({ email, password }) => {
@@ -18,5 +22,9 @@ export const signup = ({ email, password }) => {
             dispatch({ type: SIGNUP_SUCCESS });
             dispatch(NavigationActions.navigate({ routeName: 'Main' }))
         })
+            .catch(() => {
+                alert('Emailul sau parola nu este valida')
+                dispatch({ type: SIGNUP_FAILED })
+            })
     }
 }

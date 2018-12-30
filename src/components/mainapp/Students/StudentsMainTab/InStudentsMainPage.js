@@ -50,19 +50,19 @@ class InStudentsHome extends React.Component {
                                         this.props.navigation.navigate('StudentCanceledClasses', { nume: item.nume })
                                 }}
                                 onViewFinishedClassesPress={() => {
-                                    if (item.doneClasses)
-                                        if (item.extraClasses) {
-                                            let finishedNClasses = _.toArray(item.doneClasses);
-                                            let finishedEClasses = _.toArray(item.extraClasses);
+                                    if (item.doneClassesTotal)
+                                        if (item.extraClassesTotal) {
+                                            let finishedNClasses = _.toArray(item.doneClassesTotal);
+                                            let finishedEClasses = _.toArray(item.extraClassesTotal);
                                             this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, finishedEClasses, nume: item.nume })
                                         }
                                         else {
-                                            let finishedNClasses = _.toArray(item.doneClasses);
+                                            let finishedNClasses = _.toArray(item.doneClassesTotal);
                                             this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, nume: item.nume })
                                         }
                                     else
-                                        if (item.extraClasses) {
-                                            let finishedEClasses = _.toArray(item.extraClasses);
+                                        if (item.extraClassesTotal) {
+                                            let finishedEClasses = _.toArray(item.extraClassesTotal);
                                             this.props.navigation.navigate('StudentFinishedClasses', { finishedEClasses, nume: item.nume })
                                         }
                                         else {
@@ -95,7 +95,7 @@ class InStudentsHome extends React.Component {
                 >
                     <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'rgba(0,0,0,0.8)' }}>
                         <View style={{ width: '95%', backgroundColor: 'white', justifyContent: 'center', alignContent: 'center', alignSelf: 'center', borderRadius: 15 }}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center', margin: 20, alignSelf: 'center' }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center', margin: 20, alignSelf: 'center' }}>
                                 <Text style={{ alignSelf: 'center', color: 'black', fontWeight: '300', fontSize: 21, textAlign: 'center' }}>Doriti sa setati elevul <Text style={{ color: 'black', fontWeight: '800', fontSize: 21, }}>{this.state.selectedStudent.nume}</Text> ca activ?</Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center', alignSelf: 'center' }}>

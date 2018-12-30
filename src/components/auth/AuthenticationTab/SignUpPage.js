@@ -16,11 +16,22 @@ class SignUpPage extends Component {
   }
   onButtonPress = () => {
     const { email, password } = this.state;
-    this.props.signup({ email, password });
+    this.props.signup({ email:email.trim(), password });
   }
   render() {
     return (
       <View style={{ flex: 1 }} >
+      <Image
+          style={{
+            backgroundColor: '#ccc',
+            flex: 1,
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            justifyContent: 'center',
+          }}
+          source={require('../../../../img/bi2.jpg')}
+        />
         <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'rgba(0,0,0,0.6)' }}>
           <Header centerComponent={<Text style={{ fontSize: 22, color: 'white', fontWeight: 'bold' }}>Creeaza un Cont</Text>} backgroundColor="#1E6EC7" />
           <Content>

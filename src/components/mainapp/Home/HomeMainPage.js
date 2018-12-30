@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, FlatList, ScrollView, Animated, TextInput, Modal, Dimensions } from 'react-native'
-import { ListItem, Button } from 'react-native-elements'
-import { Icon } from 'native-base';
+import { ListItem, Button, Icon } from 'react-native-elements'
 import { Header } from 'react-native-elements'
 import Gradient from 'react-native-css-gradient'
 import ListItemFC from '../reusable/ListItemsFC';
@@ -174,19 +173,19 @@ class HomeMainPage extends Component {
     }
 
     onViewFinishedClassesPress(item) {
-        if (item.doneClasses)
-            if (item.extraClasses) {
-                let finishedNClasses = _.toArray(item.doneClasses);
-                let finishedEClasses = _.toArray(item.extraClasses);
+        if (item.doneClassesTotal)
+            if (item.extraClassesTotal) {
+                let finishedNClasses = _.toArray(item.doneClassesTotal);
+                let finishedEClasses = _.toArray(item.extraClassesTotal);
                 this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, finishedEClasses, nume: item.nume })
             }
             else {
-                let finishedNClasses = _.toArray(item.doneClasses);
+                let finishedNClasses = _.toArray(item.doneClassesTotal);
                 this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, nume: item.nume })
             }
         else
-            if (item.extraClasses) {
-                let finishedEClasses = _.toArray(item.extraClasses);
+            if (item.extraClassesTotal) {
+                let finishedEClasses = _.toArray(item.extraClassesTotal);
                 this.props.navigation.navigate('StudentFinishedClasses', { finishedEClasses, nume: item.nume })
             }
             else {
@@ -209,7 +208,6 @@ class HomeMainPage extends Component {
                 innerContainerStyles={{ backgroundColor: '#1E6EC7' }}
                 outerContainerStyles={{ backgroundColor: '#1E6EC7', borderBottomWidth: 0 }}
                 centerComponent={<Text style={{ fontSize: 22, fontWeight: '900' }}>Programul Zilei</Text>}
-                rightComponent={<Icon name="add" fontSize={40} onPress={() => this.props.navigation.navigate('ClassCreate')} />}
             />
             <CalendarStrip
                 selectedDate={new Date(this.state.year, this.state.month, this.state.day, this.state.hour, this.state.minutes)}
@@ -553,7 +551,7 @@ class HomeMainPage extends Component {
                                                 containerViewStyle={{ width: 100, alignSelf: 'center', marginTop: 5 }}
                                                 borderRadius={2}
                                                 onPress={() => {
-                                                    this.props.classCancel({ uid: this.state.selectedClass.uid, studentUid: this.state.selectedClass.studentUid, tip: this.state.selectedClass.tip })
+                                                    this.props.classCancel({ selectedClass: this.state.selectedClass })
                                                 }}
                                             />
                                             <Button
@@ -588,8 +586,7 @@ class HomeMainPage extends Component {
                                                 containerViewStyle={{ width: 100, alignSelf: 'center', marginTop: 5 }}
                                                 borderRadius={2}
                                                 onPress={() => {
-                                                    const { uid } = this.state.selectedClass;
-                                                    this.props.classDelete(uid)
+                                                    this.props.classDelete({ selectedClass: this.state.selectedClass })
                                                 }}
                                             />
                                             <Button

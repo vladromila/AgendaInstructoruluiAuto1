@@ -56,19 +56,22 @@ export const classEdit = ({ year, month, day, hour, minutes, tip, studentUid, lo
 export const classOHCancelDeleteModal = () => {
     return ({ type: CLASS_CANCEL_OH_DELETE });
 }
-export const classCancel = ({ uid, studentUid, tip }) => {
+export const classCancel = ({ selectedClass }) => {
     return (dispatch) => {
         dispatch({ type: CLASS_CANCEL_DELETE_START });
-        if (tip === "normala") {
-            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${studentUid}/nrn`).transaction(function (cnr) {
+        if (selectedClass.tip === "normala") {
+            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${selectedClass.studentUid}/nrn`).transaction(function (cnr) {
                 return (cnr || 0) - 1;
             })
                 .then(() => {
-                    firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/classes/${uid}`)
-                        .remove()
+                    firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${selectedClass.studentUid}/canceledClasses/${selectedClass.uid}`).set({ ...selectedClass })
                         .then(() => {
-                            dispatch({ type: CLASS_CANCEL_DELETE_SUCCESS })
-                            dispatch({ type: 'resetClass' })
+                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/classes/${selectedClass.uid}`)
+                                .remove()
+                                .then(() => {
+                                    dispatch({ type: CLASS_CANCEL_DELETE_SUCCESS })
+                                    dispatch({ type: 'resetClass' })
+                                })
                         })
                 })
                 .catch(() => {
@@ -76,18 +79,21 @@ export const classCancel = ({ uid, studentUid, tip }) => {
                 })
         }
         else {
-            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${studentUid}/nrs`).transaction(function (cnr) {
+            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${selectedClass.studentUid}/nrs`).transaction(function (cnr) {
                 return (cnr || 0) - 1;
             })
                 .then(() => {
-                    firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/classes/${uid}`)
-                        .remove()
+                    firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${selectedClass.studentUid}/canceledClasses/${selectedClass.uid}`).set({ ...selectedClass })
                         .then(() => {
-                            dispatch({ type: CLASS_CANCEL_DELETE_SUCCESS })
-                            dispatch({ type: 'resetClass' })
-                        })
-                        .catch(() => {
-                            dispatch({ type: CLASS_CANCEL_DELETE_FAIL })
+                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/classes/${selectedClass.uid}`)
+                                .remove()
+                                .then(() => {
+                                    dispatch({ type: CLASS_CANCEL_DELETE_SUCCESS })
+                                    dispatch({ type: 'resetClass' })
+                                })
+                                .catch(() => {
+                                    dispatch({ type: CLASS_CANCEL_DELETE_FAIL })
+                                })
                         })
                 })
                 .catch(() => {
@@ -97,19 +103,46 @@ export const classCancel = ({ uid, studentUid, tip }) => {
     }
 }
 export const classOHDeleteModal = () => {
-    return ({ type: CLASS_OH_DELETE});
+    return ({ type: CLASS_OH_DELETE });
 }
-export const classDelete = (uid) => {
+export const classDelete = ({ selectedClass }) => {
     return (dispatch) => {
         dispatch({ type: CLASS_DELETE_START });
-        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/classes/${uid}`)
-            .remove()
-            .then(() => {
-                dispatch({ type: CLASS_DELETE_SUCCESS })
-                dispatch({ type: 'resetClass' })
-            })
-            .catch(() => {
-                dispatch({ type: CLASS_DELETE_FAIL });
-            })
+        if (selectedClass.tip === "normala") {
+            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${selectedClass.studentUid}/doneClassesTotal/${selectedClass.uid}`).set({ ...selectedClass })
+                .then(() => {
+                    firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${selectedClass.studentUid}/doneClasses/${selectedClass.uid}`).set({ ...selectedClass })
+                        .then(() => {
+                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/classes/${selectedClass.uid}`)
+                                .remove()
+                                .then(() => {
+                                    dispatch({ type: CLASS_DELETE_SUCCESS })
+                                    dispatch({ type: 'resetClass' })
+                                })
+                                .catch(() => {
+                                    dispatch({ type: CLASS_DELETE_FAIL });
+                                })
+                        })
+                })
+        }
+        else {
+            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${selectedClass.studentUid}/extraClassesTotal/${selectedClass.uid}`).set({ ...selectedClass })
+                .then(() => {
+                    firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${selectedClass.studentUid}/extraClasses/${selectedClass.uid}`).set({ ...selectedClass })
+                        .then(() => {
+                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/classes/${selectedClass.uid}`)
+                                .remove()
+                                .then(() => {
+                                    dispatch({ type: CLASS_DELETE_SUCCESS })
+                                    dispatch({ type: 'resetClass' })
+                                })
+                                .catch(() => {
+                                    dispatch({ type: CLASS_DELETE_FAIL });
+                                })
+                        })
+                })
+
+        }
+
     }
 }

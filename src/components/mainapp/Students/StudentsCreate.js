@@ -39,7 +39,8 @@ class StudentCreate extends Component {
             registru: '',
             serie: '',
             cnp: '',
-            keyboardSpace: 0
+            keyboardSpace: 0,
+            pressed: false
         }
         Keyboard.addListener('keyboardDidShow', (frames) => {
             if (!frames.endCoordinates) return;
@@ -103,8 +104,11 @@ class StudentCreate extends Component {
         }
     }
     onCreateStudentPress = async () => {
-        const { nume, phone, cnp, registru, serie, blob } = this.state;
-        this.props.studentCreate({ nume, phone, cnp, registru, serie, blob })
+        this.setState({ pressed: true })
+        if (this.state.pressed === false) {
+            const { nume, phone, cnp, registru, serie, blob } = this.state;
+            this.props.studentCreate({ nume, phone, cnp, registru, serie, blob })
+        }
     }
     render() {
         return (

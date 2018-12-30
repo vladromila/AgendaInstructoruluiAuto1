@@ -107,7 +107,7 @@ export const studentOHInToAModal = () => {
 export const studentInToA = ({ student }) => {
     return (dispatch) => {
         dispatch({ type: STUDENT_INTOA_START });
-        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${student.uid}`).set({ ...student, nrn: 15 })
+        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${student.uid}`).set({ ...student, nrn: 15, extraClasses: {}, nrs: 0 })
             .then(() => {
                 firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/inStudents/${student.uid}`).remove()
                     .then(() => {
