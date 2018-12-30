@@ -4,7 +4,6 @@ import { ListItem, Icon } from 'react-native-elements';
 import _ from 'lodash';
 class ListItemForE extends React.Component {
     render() {
-        console.log(this.props.exam);
         return (
             <View>
                 {this.props.exam ?
