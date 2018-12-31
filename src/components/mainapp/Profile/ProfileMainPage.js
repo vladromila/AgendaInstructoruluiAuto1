@@ -119,8 +119,8 @@ class ProfileMainPage extends Component {
                                 </View> : null}
                         </View> : null : null}
                 </ScrollView>
-                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginBottom: 10 }}>
-                    <Text style={{ fontSize: 19, color: 'black', marginLeft: 10 }}>Selectare automata a tipului de sedinta</Text>
+                <View style={{ flexDirection: 'row', width: '100%', marginBottom: 10 }}>
+                    <Text style={{ fontSize: 17, color: 'black', marginLeft: 10 }}>Selectare automata a tipului de sedinta</Text>
                     <Switch
                         style={{ marginRight: 10 }}
                         value={this.state.switchValue}
