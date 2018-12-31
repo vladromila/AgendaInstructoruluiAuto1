@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "airemake",
-    "slug": "airemake",
+    "name": "Agenda Instructorului Auto",
+    "slug": "AgendaInstructoruluiAuto",
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": [
@@ -26,7 +26,7 @@
       "supportsTablet": true
     },
     "android":{
-      "package":"ai.airemake.com"
+      "package":"aia.agendainstructoruluiauto.com"
     }
   }
 }

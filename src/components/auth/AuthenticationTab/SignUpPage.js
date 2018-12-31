@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, View, Text } from 'react-native'
+import { KeyboardAvoidingView, View, Text, Image } from 'react-native'
 import { Container, Content, Form, Item, Input, Label } from 'native-base';
 import { Header } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -16,12 +16,12 @@ class SignUpPage extends Component {
   }
   onButtonPress = () => {
     const { email, password } = this.state;
-    this.props.signup({ email:email.trim(), password });
+    this.props.signup({ email: email.trim(), password });
   }
   render() {
     return (
       <View style={{ flex: 1 }} >
-      <Image
+        <Image
           style={{
             backgroundColor: '#ccc',
             flex: 1,

@@ -72,7 +72,7 @@ class ProfileMainPage extends Component {
                         <View>
                             <ListItem
                                 containerStyle={{ backgroundColor: 'rgba(30, 110, 199,0.4)', borderBottomColor: 'black' }}
-                                title={<Text style={{ color: 'black', fontSize: 19 }}>Lista elevilor admisi: {this.props.info.firstTryA.count}</Text>}
+                                title={<Text style={{ color: 'black', fontSize: 18 }}>Lista elevilor admisi din prima incercare: {this.props.info.firstTryA.count}</Text>}
                                 onPress={() => this.setState({ isFirstTryAVisible: !this.state.isFirstTryAVisible })}
                                 underlayColor={'rgba(30, 110, 199,0.35)'}
                             />{this.state.isFirstTryAVisible === true ?
@@ -97,7 +97,7 @@ class ProfileMainPage extends Component {
                         <View>
                             <ListItem
                                 containerStyle={{ backgroundColor: 'rgba(30, 110, 199,0.4)', borderBottomColor: 'black' }}
-                                title={<Text style={{ color: 'black', fontSize: 19 }}>Lista elevilor admisi: {this.props.info.aTotal.count}</Text>}
+                                title={<Text style={{ color: 'black', fontSize: 18 }}>Lista elevilor admisi: {this.props.info.aTotal.count}</Text>}
                                 onPress={() => this.setState({ itATotalVisible: !this.state.itATotalVisible })}
                                 underlayColor={'rgba(30, 110, 199,0.35)'}
                             />{this.state.itATotalVisible === true ?
@@ -119,14 +119,10 @@ class ProfileMainPage extends Component {
                                 </View> : null}
                         </View> : null : null}
                 </ScrollView>
-                <Button
-                    title="Logout"
-                    backgroundColor="#1E6EC7"
-                    onPress={() => firebase.auth().signOut()} />
-                <View style={{ flexDirection: 'row', width: '100%' }}>
-                    <Text>Selectare automata a tipului de sedinta</Text>
+                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <Text style={{ fontSize: 19, color: 'black', marginLeft: 10 }}>Selectare automata a tipului de sedinta</Text>
                     <Switch
-                        style={{ alignSelf: "flex-end" }}
+                        style={{ marginRight: 10 }}
                         value={this.state.switchValue}
                         onValueChange={(value) => {
                             this.setState({ switchValue: value })
@@ -136,7 +132,13 @@ class ProfileMainPage extends Component {
                                 })
                             })
                         }}
-                    /></View>
+                    />
+                </View>
+                <Button
+                    title="Logout"
+                    backgroundColor="#1E6EC7"
+                    onPress={() => firebase.auth().signOut()} />
+
             </Gradient>
         )
     }
