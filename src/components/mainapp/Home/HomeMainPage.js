@@ -249,14 +249,14 @@ class HomeMainPage extends Component {
                                     {this.state.exam ?
                                         <View>
                                             <ListItem
-                                                underlayColor={'rgba(244, 146, 66, 0.75)'}
+                                                underlayColor={'rgba(255, 247, 35, 0.75)'}
                                                 leftIcon={<View style={{ flexDirection: 'column', borderRightWidth: 3, borderRightColor: 'red' }}>
                                                     <View style={{ marginRight: 10 }}>
                                                         <Text style={{ fontSize: 19, fontWeight: '500' }}>{this.state.day} {monthsShort[this.state.month]}
                                                         </Text>
                                                         <Text style={{ fontSize: 16 }}>{this.state.year}</Text>
                                                     </View></View>}
-                                                containerStyle={{ backgroundColor: 'rgba(244, 146, 66, 0.8)', borderRadius: 6, margin: 4, borderBottomColor: 'rgba(0,0,0,0)', zIndex: 99, marginBottom: this.state.isExamVisible === true ? 0 : 4 }}
+                                                containerStyle={{ backgroundColor: 'rgba(255, 247, 35, 0.8)', borderRadius: 6, margin: 4, borderBottomColor: 'rgba(0,0,0,0)', zIndex: 99, marginBottom: this.state.isExamVisible === true ? 0 : 4 }}
                                                 title={<Text style={{ fontSize: 21, fontWeight: "bold", marginLeft: 5 }}>Examen: {Object.keys(this.state.exam.examedStudents).length} elev{Object.keys(this.state.exam.examedStudents).length != 1 ? "i" : null}</Text>}
                                                 onPress={() => this.setState({ isExamVisible: !this.state.isExamVisible })}
                                                 onLongPress={() => this.ActionSheetForExams.show()}

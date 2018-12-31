@@ -21,6 +21,14 @@ export const fetchData = () => {
                 const students = _.map(snapshot.val(), (val, uid) => {
                     return { ...val, uid };
                 });
+                function compare(a, b) {
+                    if (a.nume < b.nume)
+                        return -1;
+                    if (a.nume > b.nume)
+                        return 1;
+                    return 0;
+                }
+                students.sort(compare)
                 dispatch({
                     type: 'students',
                     payload: students

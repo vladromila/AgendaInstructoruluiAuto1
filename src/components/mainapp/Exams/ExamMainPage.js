@@ -47,14 +47,14 @@ class ExamMainPage extends Component {
                     renderItem={({ item }) => {
                         return <View>
                             <ListItem
-                                underlayColor={'rgba(244, 146, 66, 0.75)'}
+                                underlayColor={'rgba(255, 247, 35, 0.75)'}
                                 leftIcon={<View style={{ flexDirection: 'column', borderRightWidth: 3, borderRightColor: 'red' }}>
                                     <View style={{ width: 75 }}>
                                         <Text style={{ fontSize: 19, fontWeight: '500' }}>{item.day} {monthsShort[item.month]}
                                         </Text>
                                         <Text style={{ fontSize: 16 }}>{item.year}</Text>
                                     </View></View>}
-                                containerStyle={{ backgroundColor: 'rgba(244, 146, 66, 0.8)', borderRadius: 6, margin: 4, borderBottomColor: 'rgba(0,0,0,0)', zIndex: 99, marginBottom: this.state.selectedExam === item.uid ? 0 : 4 }}
+                                containerStyle={{ backgroundColor: 'rgba(255, 247, 35, 0.8)', borderRadius: 6, margin: 4, borderBottomColor: 'rgba(0,0,0,0)', zIndex: 99, marginBottom: this.state.selectedExam === item.uid ? 0 : 4 }}
                                 title={<Text style={{ fontSize: 21, fontWeight: "bold", marginLeft: 5 }}>Examen: {Object.keys(item.examedStudents).length} elev{Object.keys(item.examedStudents).length != 1 ? "i" : null}</Text>}
                                 onPress={() => {
                                     if (this.state.selectedExam === item.uid)
