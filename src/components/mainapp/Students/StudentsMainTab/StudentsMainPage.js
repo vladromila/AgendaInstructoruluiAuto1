@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, FlatList, ScrollView, Modal, Dimensions,StatusBar,BackAndroid } from 'react-native'
+import { Text, View, FlatList, ScrollView, Modal, Dimensions, StatusBar, BackAndroid } from 'react-native'
 import Icon1 from 'react-native-vector-icons/FontAwesome';
 import { Icon } from 'native-base'
 import { Header, Button, SearchBar } from 'react-native-elements'
@@ -15,12 +15,12 @@ import _ from 'lodash';
 
 const size = Dimensions.get('screen').width * 2 / 3;
 class StudentsMainPage extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             isQRCodeModalVisible: false,
             selectedStudent: {},
-            students: []
+            students: this.props.students
         }
         this.onListItemProfilePress.bind(this);
     }
@@ -90,6 +90,7 @@ class StudentsMainPage extends Component {
                 }}
                 placeholder='Search...'
                 placeholderColor='gray'
+                onClear={() => { this.onInpuChange('') }}
                 onEnteringSearch={(input) => {
                     this.onInpuChange(input.nativeEvent.text);
                 }}
