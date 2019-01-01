@@ -4,6 +4,7 @@ import { examEdit } from '../../../../actions/'
 import { connect } from 'react-redux'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { Button, ListItem, SearchBar, Icon } from 'react-native-elements'
+import { months } from '../../../../variables';
 
 class ExamEdit extends Component {
 
@@ -79,7 +80,7 @@ class ExamEdit extends Component {
                     backgroundColor="#1E6EC7"
                     onPress={() => { this.setState({ isStudentsModalVisible: true }) }}
                 />
-                <Text style={{ alignSelf: "center", fontSize: 21, color: "#1E6EC7" }}>Data selectata: <Text style={{ fontWeight: 'bold' }}>{this.state.day} {this.state.month} {this.state.year}</Text></Text>
+                <Text style={{ alignSelf: "center", fontSize: 21, color: "#1E6EC7" }}>Data selectata: <Text style={{ fontWeight: 'bold' }}>{this.state.day} {months[this.state.month]} {this.state.year}</Text></Text>
                 <Button
                     containerViewStyle={{ width: '50%', alignSelf: 'center' }}
                     title="Selecteaza o data"

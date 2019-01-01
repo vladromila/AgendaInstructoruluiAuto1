@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { KeyboardAvoidingView, View, Text, Image } from 'react-native'
 import { Container, Content, Form, Item, Input, Label } from 'native-base';
-import { Header } from 'react-native-elements';
+import { Header, SocialIcon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { signup } from '../../../actions'
 import { Button } from 'react-native-elements';
@@ -44,7 +44,19 @@ class SignUpPage extends Component {
                 <Label style={{ color: 'white', fontSize: 20 }}>Parola</Label>
                 <Input style={{ color: 'white', fontSize: 18 }} onChangeText={(password) => { this.setState({ password: password }) }} />
               </Item>
-              <Button backgroundColor="#1E6EC7" title="Creeaza Cont" onPress={() => this.onButtonPress()} loading={this.props.loading} />
+              <SocialIcon
+              button
+              title="Creeaza contul"
+              style={{backgroundColor:'#1E6EC7'}}
+              onPress={()=>this.onButtonPress()}
+              />
+              <SocialIcon
+              button
+              title="Ai deja un cont? Logheaza-te."
+              style={{backgroundColor:'#1E6EC7'}}
+              underlayColor={'#1E6EC7'}
+              onPress={()=>this.props.navigation.navigate('LoginTab')}
+              />
             </Form>
           </Content>
         </View>

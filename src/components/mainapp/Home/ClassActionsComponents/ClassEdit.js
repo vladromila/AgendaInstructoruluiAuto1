@@ -6,6 +6,7 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import { Button, ListItem, SearchBar, Icon } from 'react-native-elements'
 import { Item, Label, Input } from "native-base";
 import { Header } from 'react-navigation'
+import { months } from '../../../../variables';
 
 class ClassCreate extends Component {
 
@@ -85,7 +86,7 @@ class ClassCreate extends Component {
                             <Picker.Item color="#1E6EC7" label="Sed. Scolarizare" value="normala" />
                             <Picker.Item color="#1E6EC7" label="Sed. Perfectionare" value="suplimentara" />
                         </Picker></View> : null}
-                <Text style={{ alignSelf: "center", fontSize: 21, color: "#1E6EC7" }}>Data selectata: <Text style={{ fontWeight: 'bold' }}>{this.state.day} {this.state.month} {this.state.year}</Text></Text>
+                <Text style={{ alignSelf: "center", fontSize: 21, color: "#1E6EC7" }}>Data selectata: <Text style={{ fontWeight: 'bold' }}>{this.state.day} {months[this.state.month]} {this.state.year}</Text></Text>
                 <Button
                     containerViewStyle={{ width: '50%', alignSelf: 'center' }}
                     title="Selecteaza o data"

@@ -21,7 +21,7 @@ const AuthenticationTabComponent = createMaterialTopTabNavigator({
     LoginTab: {
         screen: LoginPage
     },
-    SighUpTab: {
+    SignUpTab: {
         screen: SignUpPage
     }
 }, {
