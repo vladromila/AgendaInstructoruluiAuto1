@@ -6,6 +6,7 @@ import { setIsAutomaticTypeSelectWanted } from '../../../actions/'
 import { connect } from 'react-redux';
 import Gradient from 'react-native-css-gradient';
 import _ from 'lodash';
+import { Notifications } from 'expo'
 import { months } from '../../../variables'
 
 class ProfileMainPage extends Component {
@@ -137,7 +138,28 @@ class ProfileMainPage extends Component {
                 <Button
                     title="Logout"
                     backgroundColor="#1E6EC7"
-                    onPress={() => firebase.auth().signOut()} />
+                    onPress={() =>
+                        Notifications.getExpoPushTokenAsync().then((token) => {
+                            fetch('https://agendainstructoruluiautoserver.herokuapp.com/removeToken', {
+                                method: 'POST',
+                                headers: {
+                                    Accept: 'application/json',
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    token: {
+                                        value: token,
+                                    },
+                                    user: {
+                                        uid: firebase.auth().currentUser.uid,
+                                    },
+                                }),
+                            }).then(()=>{
+
+                            });
+                            firebase.auth().signOut()
+                        })
+                    } />
 
             </Gradient>
         )

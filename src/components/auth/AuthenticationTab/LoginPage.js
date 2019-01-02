@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, View, Text, Image, Alert } from 'react-native'
 import { Container, Content, Form, Item, Input, Label } from 'native-base';
 import { Header, SocialIcon } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { login } from '../../../actions'
+import { login, loginWithFacebook } from '../../../actions'
 import { Button } from 'react-native-elements';
 import { Facebook } from 'expo'
 import firebase from 'firebase';
@@ -13,35 +13,13 @@ class LoginPage extends Component {
     super();
     this.state = {
       email: '',
-      password: '',
-      loading: false
+      password: ''
     };
   }
   onButtonPress = () => {
     const { email, password } = this.state;
     this.props.login({ email: email.trim(), password });
   }
-
-  async loginWithFacebook() {
-    this.setState({ loading: true })
-    const { type, token } = await Facebook.logInWithReadPermissionsAsync(
-      '595214430921927',
-      { permissions: ['public_profile'] },
-    );
-
-    if (type === 'success' && token) {
-      const credential = firebase.auth.FacebookAuthProvider.credential(token);
-      await firebase
-        .auth()
-        .signInAndRetrieveDataWithCredential(credential)
-        .then(() => {
-          this.setState({ loading: false })
-        })
-    }
-    else
-      this.setState({ loading: false })
-  }
-
 
   render() {
     return (
@@ -81,10 +59,10 @@ class LoginPage extends Component {
               <SocialIcon
                 title='Logheaza-te cu facebook'
                 button
-                loading={this.state.loading}
+                loading={this.props.loginWithFacebookLoading}
                 type='facebook'
                 onPress={() => {
-                  this.loginWithFacebook();
+                  this.props.loginWithFacebook();
                 }}
               />
               <SocialIcon
@@ -104,7 +82,7 @@ class LoginPage extends Component {
   }
 }
 mapStateToProps = (state) => {
-  const { loginLoading, loginError } = state.AuthenticationReducer;
-  return { loading: loginLoading, error: loginError };
+  const { loginLoading, loginError, loginWithFacebookLoading } = state.AuthenticationReducer;
+  return { loading: loginLoading, error: loginError, loginWithFacebookLoading };
 }
-export default connect(mapStateToProps, { login })(LoginPage);
+export default connect(mapStateToProps, { login, loginWithFacebook })(LoginPage);

@@ -2,6 +2,9 @@
 export const LOGIN_START = 'login_start';
 export const LOGIN_SUCCESS = 'login_success';
 export const LOGIN_FAILED = 'login_failed';
+export const LOGIN_WITH_FACEBOOK_START = 'login_with_facebook_start';
+export const LOGIN_WITH_FACEBOOK_SUCCESS = 'login_with_facebook_success';
+export const LOGIN_WITH_FACEBOOK_FAIL = 'login_with_facebook_fail';
 export const SIGNUP_START = 'signup_start';
 export const SIGNUP_SUCCESS = 'signup_success';
 export const SIGNUP_FAILED = 'signup_failed';
