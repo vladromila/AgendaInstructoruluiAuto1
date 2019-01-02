@@ -5,7 +5,7 @@ import { Header, ListItem, Button } from 'react-native-elements'
 import { Item, Label, Input } from 'native-base'
 import { examAddC, examOHDelete1, examDelete } from '../../../actions/'
 import { connect } from 'react-redux'
-import { monthsShort } from '../../../variables'
+import { monthsShort, months } from '../../../variables'
 import _ from 'lodash';
 import ActionSheet from 'react-native-actionsheet';
 
@@ -44,59 +44,169 @@ class ExamMainPage extends Component {
                     data={this.props.exams}
                     extraData={[this.props, this.state]}
                     keyExtractor={(item, i) => `${i}`}
-                    renderItem={({ item }) => {
-                        return <View>
-                            <ListItem
-                                underlayColor={'rgba(255, 247, 35, 0.75)'}
-                                leftIcon={<View style={{ flexDirection: 'column', borderRightWidth: 3, borderRightColor: 'red' }}>
-                                    <View style={{ width: 75 }}>
-                                        <Text style={{ fontSize: 19, fontWeight: '500' }}>{item.day} {monthsShort[item.month]}
-                                        </Text>
-                                        <Text style={{ fontSize: 16 }}>{item.year}</Text>
-                                    </View></View>}
-                                containerStyle={{ backgroundColor: 'rgba(255, 247, 35, 0.8)', borderRadius: 6, margin: 4, borderBottomColor: 'rgba(0,0,0,0)', zIndex: 99, marginBottom: this.state.selectedExam === item.uid ? 0 : 4 }}
-                                title={<Text style={{ fontSize: 21, fontWeight: "bold", marginLeft: 5 }}>Examen: {Object.keys(item.examedStudents).length} elev{Object.keys(item.examedStudents).length != 1 ? "i" : null}</Text>}
-                                onPress={() => {
-                                    if (this.state.selectedExam === item.uid)
-                                        this.setState({ selectedExam: {} })
-                                    else
-                                        this.setState({ selectedExam: item.uid })
-                                }}
-                                onLongPress={() => {
-                                    this.setState({ exam: item });
-                                    this.ActionSheetForExams.show()
+                    renderItem={({ item, index }) => {
+                        if (this.props.exams[index - 1])
+                            if (this.props.exams[index - 1].month < this.props.exams[index].month || this.props.exams[index - 1].year < this.props.exams[index].year)
+                                return <View>
+                                    <Text style={{ fontSize: 21, fontWeight: 'bold', alignSelf: 'center' }}>{months[item.month]} {item.year}:</Text>
+                                    <ListItem
+                                        underlayColor={'rgba(255, 247, 35, 0.75)'}
+                                        leftIcon={<View style={{ flexDirection: 'column', borderRightWidth: 3, borderRightColor: 'red' }}>
+                                            <View style={{ width: 75 }}>
+                                                <Text style={{ fontSize: 19, fontWeight: '500' }}>{item.day} {monthsShort[item.month]}
+                                                </Text>
+                                                <Text style={{ fontSize: 16 }}>{item.year}</Text>
+                                            </View></View>}
+                                        containerStyle={{ backgroundColor: 'rgba(255, 247, 35, 0.8)', borderRadius: 6, margin: 4, borderBottomColor: 'rgba(0,0,0,0)', zIndex: 99, marginBottom: this.state.selectedExam === item.uid ? 0 : 4 }}
+                                        title={<Text style={{ fontSize: 21, fontWeight: "bold", marginLeft: 5 }}>Examen: {Object.keys(item.examedStudents).length} elev{Object.keys(item.examedStudents).length != 1 ? "i" : null}</Text>}
+                                        onPress={() => {
+                                            if (this.state.selectedExam === item.uid)
+                                                this.setState({ selectedExam: {} })
+                                            else
+                                                this.setState({ selectedExam: item.uid })
+                                        }}
+                                        onLongPress={() => {
+                                            this.setState({ exam: item });
+                                            this.ActionSheetForExams.show()
 
-                                }}
-                                hideChevron
-                            />
-                            {
-                                this.state.selectedExam === item.uid ?
-                                    <View style={{ alignSelf: 'center', width: '90%', backgroundColor: 'rgba(0,0,0,0.1)' }}>
-                                        {_.toArray(item.examedStudents).map((examedStudent, i) => {
-                                            return <ListItem
-                                                underlayColor={'rgba(255, 255, 255,0.15)'}
-                                                containerStyle={{ backgroundColor: examedStudent.progress === "pending" ? 'rgba(255, 255, 255,0.2)' : examedStudent.progress === "admis" ? "rgba(29, 124, 37,0.7)" : "rgba(204, 24, 45,0.7)", borderBottomColor: 'black', borderLeftColor: 'black', borderRightColor: 'black', borderWidth: 1, borderTopWidth: 0 }}
-                                                titleStyle={{ fontSize: 19, fontWeight: 'bold', color: examedStudent.progress === "respins" ? "white" : 'black' }}
-                                                key={i}
-                                                title={
-                                                    <View style={{ flexDirection: 'row' }}>
-                                                        <Text style={{ fontSize: 19, fontWeight: 'bold', color: examedStudent.progress === "respins" ? "white" : 'black' }}>{examedStudent.nume}</Text>
-                                                    </View>}
-                                                subtitle={examedStudent.progress !== "pending" ?
-                                                    <View style={{ flexDirection: 'column' }}>
-                                                        <Text style={{ fontSize: 16, fontWeight: 'bold', color: examedStudent.progress === "respins" ? "white" : 'black' }}>{examedStudent.progress === "admis" ? "Admis" : examedStudent.progress === "respins" ? "Respins" : ""}</Text>
-                                                    </View>
-                                                    : null
-                                                }
-                                                onLongPress={() => {
-                                                    this.setState({ selectedExamedStudent: examedStudent, id: i, isExamModalVisible: true, exam: item })
-                                                }}
-                                                hideChevron
-                                            />
-                                        })}
-                                    </View>
-                                    : null
-                            }</View>
+                                        }}
+                                        hideChevron
+                                    />
+                                    {
+                                        this.state.selectedExam === item.uid ?
+                                            <View style={{ alignSelf: 'center', width: '90%', backgroundColor: 'rgba(0,0,0,0.1)' }}>
+                                                {_.toArray(item.examedStudents).map((examedStudent, i) => {
+                                                    return <ListItem
+                                                        underlayColor={'rgba(255, 255, 255,0.15)'}
+                                                        containerStyle={{ backgroundColor: examedStudent.progress === "pending" ? 'rgba(255, 255, 255,0.2)' : examedStudent.progress === "admis" ? "rgba(29, 124, 37,0.7)" : "rgba(204, 24, 45,0.7)", borderBottomColor: 'black', borderLeftColor: 'black', borderRightColor: 'black', borderWidth: 1, borderTopWidth: 0 }}
+                                                        titleStyle={{ fontSize: 19, fontWeight: 'bold', color: examedStudent.progress === "respins" ? "white" : 'black' }}
+                                                        key={i}
+                                                        title={
+                                                            <View style={{ flexDirection: 'row' }}>
+                                                                <Text style={{ fontSize: 19, fontWeight: 'bold', color: examedStudent.progress === "respins" ? "white" : 'black' }}>{examedStudent.nume}</Text>
+                                                            </View>}
+                                                        subtitle={examedStudent.progress !== "pending" ?
+                                                            <View style={{ flexDirection: 'column' }}>
+                                                                <Text style={{ fontSize: 16, fontWeight: 'bold', color: examedStudent.progress === "respins" ? "white" : 'black' }}>{examedStudent.progress === "admis" ? "Admis" : examedStudent.progress === "respins" ? "Respins" : ""}</Text>
+                                                            </View>
+                                                            : null
+                                                        }
+                                                        onLongPress={() => {
+                                                            this.setState({ selectedExamedStudent: examedStudent, id: i, isExamModalVisible: true, exam: item })
+                                                        }}
+                                                        hideChevron
+                                                    />
+                                                })}
+                                            </View>
+                                            : null
+                                    }</View>
+                            else
+                                return <View>
+                                    <ListItem
+                                        underlayColor={'rgba(255, 247, 35, 0.75)'}
+                                        leftIcon={<View style={{ flexDirection: 'column', borderRightWidth: 3, borderRightColor: 'red' }}>
+                                            <View style={{ width: 75 }}>
+                                                <Text style={{ fontSize: 19, fontWeight: '500' }}>{item.day} {monthsShort[item.month]}
+                                                </Text>
+                                                <Text style={{ fontSize: 16 }}>{item.year}</Text>
+                                            </View></View>}
+                                        containerStyle={{ backgroundColor: 'rgba(255, 247, 35, 0.8)', borderRadius: 6, margin: 4, borderBottomColor: 'rgba(0,0,0,0)', zIndex: 99, marginBottom: this.state.selectedExam === item.uid ? 0 : 4 }}
+                                        title={<Text style={{ fontSize: 21, fontWeight: "bold", marginLeft: 5 }}>Examen: {Object.keys(item.examedStudents).length} elev{Object.keys(item.examedStudents).length != 1 ? "i" : null}</Text>}
+                                        onPress={() => {
+                                            if (this.state.selectedExam === item.uid)
+                                                this.setState({ selectedExam: {} })
+                                            else
+                                                this.setState({ selectedExam: item.uid })
+                                        }}
+                                        onLongPress={() => {
+                                            this.setState({ exam: item });
+                                            this.ActionSheetForExams.show()
+
+                                        }}
+                                        hideChevron
+                                    />
+                                    {
+                                        this.state.selectedExam === item.uid ?
+                                            <View style={{ alignSelf: 'center', width: '90%', backgroundColor: 'rgba(0,0,0,0.1)' }}>
+                                                {_.toArray(item.examedStudents).map((examedStudent, i) => {
+                                                    return <ListItem
+                                                        underlayColor={'rgba(255, 255, 255,0.15)'}
+                                                        containerStyle={{ backgroundColor: examedStudent.progress === "pending" ? 'rgba(255, 255, 255,0.2)' : examedStudent.progress === "admis" ? "rgba(29, 124, 37,0.7)" : "rgba(204, 24, 45,0.7)", borderBottomColor: 'black', borderLeftColor: 'black', borderRightColor: 'black', borderWidth: 1, borderTopWidth: 0 }}
+                                                        titleStyle={{ fontSize: 19, fontWeight: 'bold', color: examedStudent.progress === "respins" ? "white" : 'black' }}
+                                                        key={i}
+                                                        title={
+                                                            <View style={{ flexDirection: 'row' }}>
+                                                                <Text style={{ fontSize: 19, fontWeight: 'bold', color: examedStudent.progress === "respins" ? "white" : 'black' }}>{examedStudent.nume}</Text>
+                                                            </View>}
+                                                        subtitle={examedStudent.progress !== "pending" ?
+                                                            <View style={{ flexDirection: 'column' }}>
+                                                                <Text style={{ fontSize: 16, fontWeight: 'bold', color: examedStudent.progress === "respins" ? "white" : 'black' }}>{examedStudent.progress === "admis" ? "Admis" : examedStudent.progress === "respins" ? "Respins" : ""}</Text>
+                                                            </View>
+                                                            : null
+                                                        }
+                                                        onLongPress={() => {
+                                                            this.setState({ selectedExamedStudent: examedStudent, id: i, isExamModalVisible: true, exam: item })
+                                                        }}
+                                                        hideChevron
+                                                    />
+                                                })}
+                                            </View>
+                                            : null
+                                    }</View>
+                        else
+                            return <View>
+                                <Text style={{ fontSize: 21, fontWeight: 'bold', alignSelf: 'center' }}>{months[item.month]} {item.year}:</Text>
+                                <ListItem
+                                    underlayColor={'rgba(255, 247, 35, 0.75)'}
+                                    leftIcon={<View style={{ flexDirection: 'column', borderRightWidth: 3, borderRightColor: 'red' }}>
+                                        <View style={{ width: 75 }}>
+                                            <Text style={{ fontSize: 19, fontWeight: '500' }}>{item.day} {monthsShort[item.month]}
+                                            </Text>
+                                            <Text style={{ fontSize: 16 }}>{item.year}</Text>
+                                        </View></View>}
+                                    containerStyle={{ backgroundColor: 'rgba(255, 247, 35, 0.8)', borderRadius: 6, margin: 4, borderBottomColor: 'rgba(0,0,0,0)', zIndex: 99, marginBottom: this.state.selectedExam === item.uid ? 0 : 4 }}
+                                    title={<Text style={{ fontSize: 21, fontWeight: "bold", marginLeft: 5 }}>Examen: {Object.keys(item.examedStudents).length} elev{Object.keys(item.examedStudents).length != 1 ? "i" : null}</Text>}
+                                    onPress={() => {
+                                        if (this.state.selectedExam === item.uid)
+                                            this.setState({ selectedExam: {} })
+                                        else
+                                            this.setState({ selectedExam: item.uid })
+                                    }}
+                                    onLongPress={() => {
+                                        this.setState({ exam: item });
+                                        this.ActionSheetForExams.show()
+
+                                    }}
+                                    hideChevron
+                                />
+                                {
+                                    this.state.selectedExam === item.uid ?
+                                        <View style={{ alignSelf: 'center', width: '90%', backgroundColor: 'rgba(0,0,0,0.1)' }}>
+                                            {_.toArray(item.examedStudents).map((examedStudent, i) => {
+                                                return <ListItem
+                                                    underlayColor={'rgba(255, 255, 255,0.15)'}
+                                                    containerStyle={{ backgroundColor: examedStudent.progress === "pending" ? 'rgba(255, 255, 255,0.2)' : examedStudent.progress === "admis" ? "rgba(29, 124, 37,0.7)" : "rgba(204, 24, 45,0.7)", borderBottomColor: 'black', borderLeftColor: 'black', borderRightColor: 'black', borderWidth: 1, borderTopWidth: 0 }}
+                                                    titleStyle={{ fontSize: 19, fontWeight: 'bold', color: examedStudent.progress === "respins" ? "white" : 'black' }}
+                                                    key={i}
+                                                    title={
+                                                        <View style={{ flexDirection: 'row' }}>
+                                                            <Text style={{ fontSize: 19, fontWeight: 'bold', color: examedStudent.progress === "respins" ? "white" : 'black' }}>{examedStudent.nume}</Text>
+                                                        </View>}
+                                                    subtitle={examedStudent.progress !== "pending" ?
+                                                        <View style={{ flexDirection: 'column' }}>
+                                                            <Text style={{ fontSize: 16, fontWeight: 'bold', color: examedStudent.progress === "respins" ? "white" : 'black' }}>{examedStudent.progress === "admis" ? "Admis" : examedStudent.progress === "respins" ? "Respins" : ""}</Text>
+                                                        </View>
+                                                        : null
+                                                    }
+                                                    onLongPress={() => {
+                                                        this.setState({ selectedExamedStudent: examedStudent, id: i, isExamModalVisible: true, exam: item })
+                                                    }}
+                                                    hideChevron
+                                                />
+                                            })}
+                                        </View>
+                                        : null
+                                }</View>
                     }}
                 />
                 <Modal

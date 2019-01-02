@@ -36,9 +36,30 @@ export const fetchData = () => {
             })
         firebase.database().ref(`/users/${currentUser.uid}/exams`)
             .on('value', (snapshot) => {
+                function compare(a, b) {
+                    if (a.year < b.year)
+                        return -1;
+                    if (a.year > b.year)
+                        return 1;
+                    if (a.year === b.year) {
+                        if (a.month < b.month)
+                            return -1;
+                        if (a.month > b.month)
+                            return 1;
+                        if (a.month === b.month) {
+                            if (a.day < b.day)
+                                return -1;
+                            if (a.day > b.day)
+                                return 1;
+                            return 0;
+                        }
+                    }
+                }
+                
                 const exams = _.map(snapshot.val(), (val, uid) => {
                     return { ...val, uid };
                 });
+                exams.sort(compare);
                 dispatch({
                     type: 'exams',
                     payload: exams
