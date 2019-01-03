@@ -104,22 +104,39 @@ export const studentOHToInModal = () => {
 export const studentOHInToAModal = () => {
     return ({ type: STUDENT_OH_INTOA });
 }
-export const studentInToA = ({ student }) => {
+export const studentInToA = ({ student, cs }) => {
     return (dispatch) => {
-        dispatch({ type: STUDENT_INTOA_START });
-        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${student.uid}`).set({ ...student, nrn: 15, extraClasses: {}, nrs: 0 })
-            .then(() => {
-                firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/inStudents/${student.uid}`).remove()
+        dispatch({ type: STUDENT_INTOA_START, payload: cs });
+        if (cs === 1)
+            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${student.uid}`).set({ ...student })
+                .then(() => {
+                    firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/inStudents/${student.uid}`).remove()
+                        .then(() => {
+                            dispatch({ type: STUDENT_INTOA_SUCCESS })
+                            dispatch({ type: 'resetStudent' })
+                        })
+                        .catch(() => {
+                            dispatch({ type: STUDENT_INTOA_FAIL })
+                        })
+                })
+                .catch(() => {
+                    dispatch({ type: STUDENT_INTOA_FAIL })
+                })
+        else
+            if (cs === 2)
+                firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${student.uid}`).set({ ...student, nrn: 15, extraClasses: {}, nrs: 0 })
                     .then(() => {
-                        dispatch({ type: STUDENT_INTOA_SUCCESS })
-                        dispatch({ type: 'resetStudent' })
+                        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/inStudents/${student.uid}`).remove()
+                            .then(() => {
+                                dispatch({ type: STUDENT_INTOA_SUCCESS })
+                                dispatch({ type: 'resetStudent' })
+                            })
+                            .catch(() => {
+                                dispatch({ type: STUDENT_INTOA_FAIL })
+                            })
                     })
                     .catch(() => {
                         dispatch({ type: STUDENT_INTOA_FAIL })
                     })
-            })
-            .catch(() => {
-                dispatch({ type: STUDENT_INTOA_FAIL })
-            })
     }
 }

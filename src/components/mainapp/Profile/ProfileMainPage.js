@@ -6,7 +6,7 @@ import { setIsAutomaticTypeSelectWanted } from '../../../actions/'
 import { connect } from 'react-redux';
 import Gradient from 'react-native-css-gradient';
 import _ from 'lodash';
-import { Notifications } from 'expo'
+import { Notifications, Permissions } from 'expo'
 import { months } from '../../../variables'
 
 class ProfileMainPage extends Component {
@@ -29,7 +29,9 @@ class ProfileMainPage extends Component {
         this.retrieveData().then((value) => {
             if (value === null) {
                 this.setState({ switchValue: false })
-                this.storeData(value);
+                this.storeData(false).then(() => {
+                    this.props.setIsAutomaticTypeSelectWanted(false)
+                });
             }
             else {
                 this.setState({ switchValue: value })
@@ -52,6 +54,38 @@ class ProfileMainPage extends Component {
             }
         } catch (error) {
         }
+    }
+
+    async unregisterForPushNotificationsAsync() {
+        const { status: existingStatus } = await Permissions.getAsync(
+            Permissions.NOTIFICATIONS
+        );
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            return;
+        }
+        let token = await Notifications.getExpoPushTokenAsync();
+        return fetch('https://agendainstructoruluiautoserver.herokuapp.com/removeToken', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token: {
+                    value: token,
+                },
+                user: {
+                    uid: firebase.auth().currentUser.uid,
+                },
+            }),
+        }).then(() => {
+            firebase.auth().signOut();
+        });
     }
 
     render() {
@@ -138,27 +172,7 @@ class ProfileMainPage extends Component {
                 <Button
                     title="Logout"
                     backgroundColor="#1E6EC7"
-                    onPress={() =>
-                        Notifications.getExpoPushTokenAsync().then((token) => {
-                            fetch('https://agendainstructoruluiautoserver.herokuapp.com/removeToken', {
-                                method: 'POST',
-                                headers: {
-                                    Accept: 'application/json',
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    token: {
-                                        value: token,
-                                    },
-                                    user: {
-                                        uid: firebase.auth().currentUser.uid,
-                                    },
-                                }),
-                            }).then(()=>{
-
-                            });
-                            firebase.auth().signOut()
-                        })
+                    onPress={() => this.unregisterForPushNotificationsAsync()
                     } />
 
             </Gradient>

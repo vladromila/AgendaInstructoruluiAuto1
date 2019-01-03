@@ -1,10 +1,10 @@
 import { STUDENT_CREATE_START, STUDENT_CREATE_SUCCESS, STUDENT_EDIT_START, STUDENT_EDIT_SUCCESS, STUDENT_OH_DELETE, STUDENT_DELETE_START, STUDENT_DELETE_SUCCESS, STUDENT_IN_START, STUDENT_IN_SUCCESS, STUDENT_OH_IN, STUDENT_INTOA_START, STUDENT_INTOA_SUCCESS, STUDENT_OH_INTOA } from "../actions/types";
 
-const INITIAL_STATE = { createLoading: false, createSuccess: false, editLoading: false, editSuccess: false, deleteLoading: false, deleteSuccess: false, inLoading: false, inSuccess: false, inToALoading: false, inToAsuccess: false, isInToAStudentModalVisible: false, isToInStudentModalVisible: false, isDeleteStudentModalVisible: false }
+const INITIAL_STATE = { createLoading: false, createSuccess: false, editLoading: false, editSuccess: false, deleteLoading: false, deleteSuccess: false, inLoading: false, inSuccess: false, inToALoading: false, inToAsuccess: false, isInToAStudentModalVisible: false, isToInStudentModalVisible: false, isDeleteStudentModalVisible: false, loadingButton: 0 }
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case 'resetStudent':
-        return {...INITIAL_STATE};
+            return { ...INITIAL_STATE };
         case STUDENT_CREATE_START:
             return { ...state, createLoading: true }
         case STUDENT_CREATE_SUCCESS:
@@ -28,9 +28,9 @@ export default (state = INITIAL_STATE, action) => {
         case STUDENT_OH_INTOA:
             return { ...state, isInToAStudentModalVisible: !state.isInToAStudentModalVisible }
         case STUDENT_INTOA_START:
-            return { ...state, inToALoading: true }
+            return { ...state, inToALoading: true, loadingButton: action.payload }
         case STUDENT_INTOA_SUCCESS:
-            return { ...state, inToALoading: false, inToALoading: false, isInToAStudentModalVisible: false }
+            return { ...state, inToALoading: false, inToALoading: false, isInToAStudentModalVisible: false, loadingButton: 0 }
         default:
             return state;
     }
