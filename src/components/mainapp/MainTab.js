@@ -11,6 +11,7 @@ import StudentsTab from './Students/StudentsTab';
 import ProfileTab from './Profile/ProfileTab';
 import { createMaterialTopTabNavigator, createAppContainer } from 'react-navigation'
 import { Icon } from 'native-base';
+import ChatTab from "./ChatTab/ChatTab";
 
 HomeTab.navigationOptions = {
     tabBarIcon: ({ tintColor }) => (
@@ -32,7 +33,11 @@ ProfileTab.navigationOptions = {
         <Icon name="md-person" style={{ color: tintColor }} />
     )
 }
-
+ChatTab.navigationOptions={
+    tabBarIcon: ({ tintColor }) => (
+        <Icon name="md-chatbubbles" style={{ color: tintColor }} />
+    )
+}
 const MainTabComponent = createMaterialTopTabNavigator({
 
     HomeTab: {
@@ -43,6 +48,9 @@ const MainTabComponent = createMaterialTopTabNavigator({
     },
     StudentsTab: {
         screen: StudentsTab
+    },
+    ChatTav: {
+        screen: ChatTab
     },
     ProfileTab: {
         screen: ProfileTab

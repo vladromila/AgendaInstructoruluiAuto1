@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Text, View, FlatList, ScrollView, Animated, TextInput, Modal, Dimensions } from 'react-native'
+import { Text, View, FlatList, ScrollView, Animated, TextInput, Modal, Dimensions, NetInfo } from 'react-native'
 import { ListItem, Button, Icon } from 'react-native-elements'
 import { Header } from 'react-native-elements'
 import Gradient from 'react-native-css-gradient'
 import ListItemFC from '../reusable/ListItemsFC';
 import { connect } from 'react-redux'
-import { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete } from '../../../actions';
+import { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange } from '../../../actions';
 import CalendarStrip from 'react-native-calendar-strip';
 import { Agenda, LocaleConfig } from 'react-native-calendars'
 import _ from 'lodash';
@@ -54,6 +54,7 @@ class HomeMainPage extends Component {
             selectedClass: {},
             ok: false
         }
+        this.handleFirstConnectivityChange = this.handleFirstConnectivityChange.bind(this)
     }
     static navigationOptions = {
         header: null
@@ -83,6 +84,13 @@ class HomeMainPage extends Component {
     }
 
     async componentDidMount() {
+        NetInfo.isConnected.fetch().then((isConnected) => {
+            this.props.connectionStatusChange(isConnected)
+        })
+        NetInfo.isConnected.addEventListener(
+            'connectionChange',
+            this.handleFirstConnectivityChange
+        );
         let date = new Date();
         this.setState({ year: date.getFullYear(), month: date.getMonth(), day: date.getDate(), hour: date.getHours(), minutes: date.getMinutes() })
     }
@@ -154,6 +162,10 @@ class HomeMainPage extends Component {
         else
             this.setState({ exam: null })
         this.setState({ classes, isExamVisible: false })
+    }
+
+    handleFirstConnectivityChange(connectionInfo) {
+        this.props.connectionStatusChange(connectionInfo)
     }
 
     componentWillMount() {
@@ -634,4 +646,4 @@ mapStateToProps = (state) => {
     const { addCLoading, addCSuccess, isExamDeleteModalVisible, deleteLoading } = state.ExamsReducer;
     return { classes, exams, students, isClassCancelDeleteModalVisible, classCancelDeleteLoading, isClassDeleteModalVisible, classDeleteLoading, addCLoading, addCSuccess, isExamDeleteModalVisible, deleteLoading };
 }
-export default connect(mapStateToProps, { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete })(HomeMainPage)
+export default connect(mapStateToProps, { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange })(HomeMainPage)

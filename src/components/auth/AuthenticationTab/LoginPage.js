@@ -53,6 +53,7 @@ class LoginPage extends Component {
                 button
                 onPress={() => this.onButtonPress()
                 }
+                underlayColor={'#1E6EC7'}
                 loading={this.props.loading}
                 style={{ backgroundColor: '#1E6EC7' }}
               />
@@ -60,6 +61,7 @@ class LoginPage extends Component {
                 title='Logheaza-te cu facebook'
                 button
                 loading={this.props.loginWithFacebookLoading}
+                underlayColor={'#1E6EC7'}
                 type='facebook'
                 onPress={() => {
                   this.props.loginWithFacebook();

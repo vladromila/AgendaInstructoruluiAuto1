@@ -15,8 +15,10 @@ class SignUpPage extends Component {
     };
   }
   onButtonPress = () => {
-    const { email, password } = this.state;
-    this.props.signup({ email: email.trim(), password });
+    if (this.props.loading === false) {
+      const { email, password } = this.state;
+      this.props.signup({ email: email.trim(), password });
+    }
   }
   render() {
     return (
@@ -45,17 +47,19 @@ class SignUpPage extends Component {
                 <Input style={{ color: 'white', fontSize: 18 }} onChangeText={(password) => { this.setState({ password: password }) }} />
               </Item>
               <SocialIcon
-              button
-              title="Creeaza contul"
-              style={{backgroundColor:'#1E6EC7'}}
-              onPress={()=>this.onButtonPress()}
+                button
+                title="Creeaza contul"
+                style={{ backgroundColor: '#1E6EC7' }}
+                onPress={() => this.onButtonPress()}
+                loading={this.props.loading}
+                underlayColor={'#1E6EC7'}
               />
               <SocialIcon
-              button
-              title="Ai deja un cont? Logheaza-te."
-              style={{backgroundColor:'#1E6EC7'}}
-              underlayColor={'#1E6EC7'}
-              onPress={()=>this.props.navigation.navigate('LoginTab')}
+                button
+                title="Ai deja un cont? Logheaza-te."
+                style={{ backgroundColor: '#1E6EC7' }}
+                underlayColor={'#1E6EC7'}
+                onPress={() => this.props.navigation.navigate('LoginTab')}
               />
             </Form>
           </Content>

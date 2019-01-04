@@ -33,6 +33,7 @@ export const EXAM_ADDC_SUCCESS = 'exam_addc_success';
 export const EXAM_ADDC_FAIL = 'exam_addc_fail';
 export const EXAM_OH_DELETE = 'exam_oh_delete';
 export const EXAM_OH_DELETE1 = 'exam_oh_delete1';
+export const CONNECTION_STATUS_CHANGE='connection_status_change';
 
 //edit
 export const STUDENT_EDIT_START = 'student_edit_start';

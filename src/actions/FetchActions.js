@@ -34,6 +34,15 @@ export const fetchData = () => {
                     payload: students
                 })
             })
+        firebase.database().ref(`/users/${currentUser.uid}/messages`)
+            .on('value', (snapshot) => {
+                if (snapshot.val()) {
+                    dispatch({
+                        type: 'messages',
+                        payload: _.toArray(snapshot.val())
+                    })
+                }
+            })
         firebase.database().ref(`/users/${currentUser.uid}/exams`)
             .on('value', (snapshot) => {
                 function compare(a, b) {
@@ -55,7 +64,7 @@ export const fetchData = () => {
                         }
                     }
                 }
-                
+
                 const exams = _.map(snapshot.val(), (val, uid) => {
                     return { ...val, uid };
                 });
