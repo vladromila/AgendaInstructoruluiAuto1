@@ -40,7 +40,11 @@ class StudentCreate extends Component {
             serie: '',
             cnp: '',
             keyboardSpace: 0,
-            pressed: false
+            pressed: false,
+            sds: 0,
+            sdp: 0,
+            generatedSds: [],
+            generatedSdp: []
         }
         Keyboard.addListener('keyboardDidShow', (frames) => {
             if (!frames.endCoordinates) return;
@@ -106,11 +110,12 @@ class StudentCreate extends Component {
     onCreateStudentPress = async () => {
         this.setState({ pressed: true })
         if (this.state.pressed === false) {
-            const { nume, phone, cnp, registru, serie, blob } = this.state;
-            this.props.studentCreate({ nume, phone, cnp, registru, serie, blob })
+            const { nume, phone, cnp, registru, serie, blob, generatedSds, generatedSdp } = this.state;
+            this.props.studentCreate({ nume, phone, cnp, registru, serie, blob, generatedSds, generatedSdp })
         }
     }
     render() {
+        console.log(this.state.generatedSdp)
         return (
             <ScrollView style={styles.scrollContainer}>
                 <View style={styles.container}>
@@ -162,6 +167,62 @@ class StudentCreate extends Component {
                                     Serie: <Text style={{ fontWeight: 'bold', paddingLeft: 10, color: 'white', fontSize: 18 }}>{this.state.serie}</Text>
                                 </Text>
                             } containerStyle={{ backgroundColor: '#1E6EC7' }} titleStyle={{ color: 'white' }} rightIcon={<Icon1 name='edit' size={30} color='white' />} />
+                        <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+                            <Text style={{ fontSize: 19, color: '#1E6EC7', fontWeight: 'bold', alignSelf: 'center' }}>Genereaza sedinte de scolarizare:</Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center' }}>
+                                <TouchableHighlight onPress={() => {
+                                    if (this.state.sds > 0) {
+                                        let generatedSds = this.state.generatedSds;
+                                        generatedSds.pop();
+                                        this.setState({ generatedSds: generatedSds });
+                                        this.setState({ sds: this.state.sds - 1 })
+                                    }
+                                }}
+                                    underlayColor={'rgba(0,0,0,0.3)'} style={{ height: 50, width: 50, borderRadius: 25, alignContent: 'center', justifyContent: 'center', margin: 0, padding: 0 }}>
+                                    <Text style={{ fontSize: 50, fontWeight: 'bold', alignSelf: 'center', justifyContent: 'center', alignContent: 'center', color: '#1E6EC7' }}>-</Text>
+                                </TouchableHighlight>
+                                <Text style={{ alignSelf: 'center', color: '#1E6EC7', fontSize: 30, fontWeight: 'bold' }}>{this.state.sds}</Text>
+                                <TouchableHighlight onPress={() => {
+                                    let date = new Date();
+                                    if (this.state.sds < 15) {
+                                        let generatedSds = this.state.generatedSds;
+                                        generatedSds.push({ tip: "normala", day: date.getDate(), month: date.getMonth(), year: date.getFullYear(), hour: Math.floor(((this.state.sds + 1) * 90) / 60), minutes: (this.state.sds + 1) * 90 - Math.floor(((this.state.sds + 1) * 90) / 60) * 60 })
+                                        this.setState({ generatedSds })
+                                        this.setState({ sds: this.state.sds + 1 })
+                                    }
+                                }} underlayColor={'rgba(0,0,0,0.3)'} style={{ height: 50, width: 50, borderRadius: 25, alignContent: 'center', justifyContent: 'center', margin: 0, padding: 0 }}>
+                                    <Text style={{ fontSize: 50, fontWeight: 'bold', alignSelf: 'center', justifyContent: 'center', alignContent: 'center', color: '#1E6EC7' }}>+</Text>
+                                </TouchableHighlight>
+                            </View>
+                        </View>
+                        <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+                            <Text style={{ fontSize: 19, color: '#1E6EC7', fontWeight: 'bold', alignSelf: 'center' }}>Genereaza sedinte de scolarizare:</Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center' }}>
+                                <TouchableHighlight onPress={() => {
+                                    if (this.state.sdp > 0) {
+                                        this.setState({ sdp: this.state.sdp - 1 })
+                                        let generatedSdp = this.state.generatedSdp;
+                                        generatedSdp.pop();
+                                        this.setState({ generatedSdp: generatedSdp });
+                                    }
+                                }}
+                                    underlayColor={'rgba(0,0,0,0.3)'} style={{ height: 50, width: 50, borderRadius: 25, alignContent: 'center', justifyContent: 'center', margin: 0, padding: 0 }}>
+                                    <Text style={{ fontSize: 50, fontWeight: 'bold', alignSelf: 'center', justifyContent: 'center', alignContent: 'center', color: '#1E6EC7' }}>-</Text>
+                                </TouchableHighlight>
+                                <Text style={{ alignSelf: 'center', color: '#1E6EC7', fontSize: 30, fontWeight: 'bold' }}>{this.state.sdp}</Text>
+                                <TouchableHighlight onPress={() => {
+                                    let date = new Date();
+                                    if (this.state.sdp < 15) {
+                                        let generatedSdp = this.state.generatedSdp;
+                                        generatedSdp.push({ tip: "suplimentara", day: date.getDate(), month: date.getMonth(), year: date.getFullYear(), hour: Math.floor(((this.state.sdp + 1) * 90) / 60), minutes: (this.state.sdp + 1) * 90 - Math.floor(((this.state.sdp + 1) * 90) / 60) * 60 })
+                                        this.setState({ generatedSdp })
+                                        this.setState({ sdp: this.state.sdp + 1 })
+                                    }
+                                }} underlayColor={'rgba(0,0,0,0.3)'} style={{ height: 50, width: 50, borderRadius: 25, alignContent: 'center', justifyContent: 'center', margin: 0, padding: 0 }}>
+                                    <Text style={{ fontSize: 50, fontWeight: 'bold', alignSelf: 'center', justifyContent: 'center', alignContent: 'center', color: '#1E6EC7' }}>+</Text>
+                                </TouchableHighlight>
+                            </View>
+                        </View>
                         <Button
                             title="Adauga"
                             backgroundColor="#1E6EC7"

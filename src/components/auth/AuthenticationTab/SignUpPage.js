@@ -44,7 +44,7 @@ class SignUpPage extends Component {
               </Item>
               <Item stackedLabel>
                 <Label style={{ color: 'white', fontSize: 20 }}>Parola</Label>
-                <Input style={{ color: 'white', fontSize: 18 }} onChangeText={(password) => { this.setState({ password: password }) }} />
+                <Input style={{ color: 'white', fontSize: 18 }} onChangeText={(password) => { this.setState({ password: password }) }} secureTextEntry/>
               </Item>
               <SocialIcon
                 button

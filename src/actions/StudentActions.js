@@ -1,11 +1,27 @@
 import firebase from 'firebase';
 import { STUDENT_CREATE_START, STUDENT_CREATE_SUCCESS, STUDENT_EDIT_START, STUDENT_EDIT_SUCCESS, STUDENT_OH_DELETE, STUDENT_DELETE_START, STUDENT_DELETE_SUCCESS, STUDENT_IN_SUCCESS, STUDENT_IN_START, STUDENT_IN_FAIL, STUDENT_OH_IN, STUDENT_OH_INTOA, STUDENT_INTOA_START, STUDENT_INTOA_SUCCESS, STUDENT_INTOA_FAIL } from "./types";
 
-export const studentCreate = ({ nume, phone, cnp, registru, serie, blob }) => {
+export const studentCreate = ({ nume, phone, cnp, registru, serie, blob, generatedSds, generatedSdp }) => {
     return (dispatch) => {
         dispatch({ type: STUDENT_CREATE_START });
-        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/`).push({ nume, phone, cnp, registru, serie, nrn: 0, nrs: 0, nre: 0 })
+        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/`).push({ nume, phone, cnp, registru, serie, nrn: generatedSds.length, nrs: generatedSdp.length, nre: 0 })
             .then((link) => {
+                generatedSds.forEach(ss => {
+                    firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${link.key}/doneClasses`)
+                        .push({ ...ss, studentUid: link.key })
+                        .then((classLink) => {
+                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${link.key}/doneClassesTotal/${classLink.key}`)
+                                .set({ ...ss, studentUid: link.key })
+                        })
+                })
+                generatedSdp.forEach(sp => {
+                    firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${link.key}/extraClasses`)
+                        .push({ ...sp, studentUid: link.key })
+                        .then((classLink) => {
+                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${link.key}/extraClassesTotal/${classLink.key}`)
+                                .set({ ...sp, studentUid: link.key })
+                        })
+                })
                 if (blob) {
                     firebase.storage().ref(`/images/users/${firebase.auth().currentUser.uid}/students/${link.key}`).put(blob)
                         .then((snapshot) => {
