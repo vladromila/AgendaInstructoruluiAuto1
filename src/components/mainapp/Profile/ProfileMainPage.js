@@ -94,7 +94,12 @@ class ProfileMainPage extends Component {
 
     render() {
         return (
-            <View style={{ flex: 1 }}>
+            <Gradient gradient={`linear-gradient(0deg ,white 0%,#1E6EC7 100% )`} style={{ width: '100%', height: '100%', zIndex: -1, position: 'absolute' }} >
+                <Header
+                    innerContainerStyles={{ backgroundColor: '#1E6EC7' }}
+                    outerContainerStyles={{ borderBottomColor: 'black', backgroundColor: '#1E6EC7', borderBottomWidth: 1 }}
+                    centerComponent={<Text style={{ fontSize: 22, fontWeight: '900' }}>Promovabilitate examene</Text>}
+                />
                 <ScrollView>
                     {this.props.info ? this.props.info.firstTryA ?
                         <View>
@@ -121,31 +126,24 @@ class ProfileMainPage extends Component {
                                     })}
                                 </View> : null}
                         </View> : null : null}
-                    {this.props.info ? this.props.info.aTotal ?
                         <View>
                             <ListItem
                                 containerStyle={{ backgroundColor: 'rgba(30, 110, 199,0.4)', borderBottomColor: 'black' }}
-                                title={<Text style={{ color: 'black', fontSize: 18 }}>Lista elevilor admisi: {this.props.info.aTotal.count}</Text>}
-                                onPress={() => this.setState({ itATotalVisible: !this.state.itATotalVisible })}
+                                title={<Text style={{ color: 'black', fontSize: 18 }}>Lista elevilor admisi</Text>}
+                                onPress={() => this.props.navigation.navigate('FinishedStudentsList')}
                                 underlayColor={'rgba(30, 110, 199,0.35)'}
-                            />{this.state.itATotalVisible === true ?
-                                <View style={{ backgroundColor: 'rgba(30, 110, 199,0.4)', padding: 5, marginLeft: 30 }}>
-                                    {_.toArray(this.props.info.aTotal.list).map((item, i) => {
-                                        return <View key={i}><ListItem
-                                            containerStyle={{ backgroundColor: 'rgba(30, 110, 199,0.4)', margin: 3, borderBottomColor: 'black' }}
-                                            title={<Text style={{ color: 'black', fontSize: 17 }}>{item.nume}</Text>}
-                                            onPress={() => this.state.selectedATotal === i ? this.setState({ selectedATotal: null }) : this.setState({ selectedATotal: i })}
-                                            underlayColor={'rgba(30, 110, 199,0.35)'}
-                                        />{this.state.selectedATotal === i ?
-                                            <View style={{ backgroundColor: 'rgba(30, 110, 199,0.4)', padding: 5, marginLeft: 30, flexDirection: 'column' }}>
-                                                <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Date despre examen:</Text>
-                                                <Text style={{ fontSize: 15 }}>Data: <Text style={{ fontWeight: 'bold' }}>{item.month} {months[item.month]} {item.year}</Text></Text>
-                                                <Text style={{ fontSize: 15 }}>Politist Examinator: <Text style={{ fontWeight: 'bold' }}>{item.numePolitist}</Text></Text>
-                                            </View> : null}
-                                        </View>
-                                    })}
-                                </View> : null}
-                        </View> : null : null}
+                                hideChevron
+                            />
+                        </View>
+                        <View>
+                            <ListItem
+                                containerStyle={{ backgroundColor: 'rgba(30, 110, 199,0.4)', borderBottomColor: 'black' }}
+                                title={<Text style={{ color: 'black', fontSize: 18 }}>Lista elevilor respinsi</Text>}
+                                onPress={() => this.props.navigation.navigate('RStudentsList')}
+                                underlayColor={'rgba(30, 110, 199,0.35)'}
+                                hideChevron
+                            />
+                        </View>
                 </ScrollView>
                 <View style={{ flexDirection: 'row', width: '100%', marginBottom: 10 }}>
                     <Text style={{ fontSize: 17, color: 'black', marginLeft: 10 }}>Selectare automata a tipului de sedinta</Text>
@@ -166,8 +164,10 @@ class ProfileMainPage extends Component {
                     title="Logout"
                     backgroundColor="#1E6EC7"
                     onPress={() => this.unregisterForPushNotificationsAsync()
-                    } />
-            </View>
+                    }
+                    containerViewStyle={{ marginBottom: 4 }}
+                />
+            </Gradient>
         )
     }
 }

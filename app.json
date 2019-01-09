@@ -26,7 +26,6 @@
       "supportsTablet": true
     },
     "android": {
-      "supportsTablet": true,
       "package": "aia.agendainstructoruluiauto.com",
       "versionCode": 130
     }

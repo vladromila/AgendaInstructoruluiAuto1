@@ -1,8 +1,9 @@
 import React from 'react';
 import { Text, View, AsyncStorage, ScrollView } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem, Header, Icon } from 'react-native-elements';
 import firebase from 'firebase'
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import Gradient from 'react-native-css-gradient';
 
 class PersonalDocuments extends React.Component {
     constructor() {
@@ -81,49 +82,56 @@ class PersonalDocuments extends React.Component {
     }
     render() {
         return (
-            <ScrollView style={{ flex: 1 }}>
-                <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '500' }}>Atestat:</Text>
-                <ListItem
-                    containerStyle={{ borderRadius: 25, marginTop: 4, marginLeft: 4, marginRight: 4, marginBottom: 4, borderColor: 'black', borderWidth: 1, zIndex: 99 }}
-                    title={<Text style={{ alignSelf: 'center', fontSize: 18 }}>{Object.keys(this.state.dva).length === 0 ? 'Data valabilitatii nesetate' : `${this.state.dva.day}/${this.state.dva.month + 1}/${this.state.dva.year}`}</Text>}
-                    onPress={() => {
-                        this.setState({ selectedType: 'dva' })
-                        this.setState({ isDateTimePickerVisible: true })
-                    }}
-                    underlayColor={`rgba(0,0,0,0.05)`}
-                    hideChevron
+            <Gradient gradient={`linear-gradient(0deg ,white 0%,#1E6EC7 100% )`} style={{ width: '100%', height: '100%', zIndex: -1, position: 'absolute' }} >
+                <Header
+                    innerContainerStyles={{ backgroundColor: '#1E6EC7' }}
+                    outerContainerStyles={{ borderBottomColor: 'black', backgroundColor: '#1E6EC7', borderBottomWidth: 1 }}
+                    centerComponent={<Text style={{ fontSize: 22, fontWeight: '900' }}>Acte Instructor</Text>}
                 />
-                <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '500' }}>Aviz psihologic:</Text>
-                <ListItem
-                    containerStyle={{ borderRadius: 25, marginTop: 4, marginLeft: 4, marginRight: 4, marginBottom: 4, borderColor: 'black', borderWidth: 1, zIndex: 99 }}
-                    title={<Text style={{ alignSelf: 'center', fontSize: 18 }}>{Object.keys(this.state.ep).length === 0 ? 'Data valabilitatii nesetate' : `${this.state.ep.day}/${this.state.ep.month + 1}/${this.state.ep.year}`}</Text>}
-                    onPress={() => {
-                        this.setState({ selectedType: 'ep' })
-                        this.setState({ isDateTimePickerVisible: true })
-                    }}
-                    underlayColor={`rgba(0,0,0,0.05)`}
-                    hideChevron
-                />
-                <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '500' }}>Fisa medicala:</Text>
-                <ListItem
-                    containerStyle={{ borderRadius: 25, marginTop: 4, marginLeft: 4, marginRight: 4, marginBottom: 4, borderColor: 'black', borderWidth: 1, zIndex: 99 }}
-                    title={<Text style={{ alignSelf: 'center', fontSize: 18 }}>{Object.keys(this.state.fm).length === 0 ? 'Data valabilitatii nesetate' : `${this.state.fm.day}/${this.state.fm.month + 1}/${this.state.fm.year}`}</Text>}
-                    onPress={() => {
-                        this.setState({ selectedType: 'fm' })
-                        this.setState({ isDateTimePickerVisible: true })
-                    }}
-                    underlayColor={`rgba(0,0,0,0.05)`}
-                    hideChevron
-                />
-                <DateTimePicker
-                    isVisible={this.state.isDateTimePickerVisible}
-                    mode='date'
-                    onCancel={() => this.setState({ isDateTimePickerVisible: false })}
-                    onConfirm={(date) => {
-                        this.onConfirmPress(date)
-                    }}
-                />
-            </ScrollView>
+                <ScrollView style={{ flex: 1 }}>
+                    <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '500' }}>Atestat:</Text>
+                    <ListItem
+                        containerStyle={{ borderRadius: 25, marginTop: 4, marginLeft: 4, marginRight: 4, marginBottom: 4, borderColor: 'black', borderWidth: 1, zIndex: 99 }}
+                        title={<Text style={{ alignSelf: 'center', fontSize: 18 }}>{Object.keys(this.state.dva).length === 0 ? 'Data valabilitatii nesetate' : `${this.state.dva.day}/${this.state.dva.month + 1}/${this.state.dva.year}`}</Text>}
+                        onPress={() => {
+                            this.setState({ selectedType: 'dva' })
+                            this.setState({ isDateTimePickerVisible: true })
+                        }}
+                        underlayColor={`rgba(0,0,0,0.05)`}
+                        hideChevron
+                    />
+                    <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '500' }}>Aviz psihologic:</Text>
+                    <ListItem
+                        containerStyle={{ borderRadius: 25, marginTop: 4, marginLeft: 4, marginRight: 4, marginBottom: 4, borderColor: 'black', borderWidth: 1, zIndex: 99 }}
+                        title={<Text style={{ alignSelf: 'center', fontSize: 18 }}>{Object.keys(this.state.ep).length === 0 ? 'Data valabilitatii nesetate' : `${this.state.ep.day}/${this.state.ep.month + 1}/${this.state.ep.year}`}</Text>}
+                        onPress={() => {
+                            this.setState({ selectedType: 'ep' })
+                            this.setState({ isDateTimePickerVisible: true })
+                        }}
+                        underlayColor={`rgba(0,0,0,0.05)`}
+                        hideChevron
+                    />
+                    <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '500' }}>Fisa medicala:</Text>
+                    <ListItem
+                        containerStyle={{ borderRadius: 25, marginTop: 4, marginLeft: 4, marginRight: 4, marginBottom: 4, borderColor: 'black', borderWidth: 1, zIndex: 99 }}
+                        title={<Text style={{ alignSelf: 'center', fontSize: 18 }}>{Object.keys(this.state.fm).length === 0 ? 'Data valabilitatii nesetate' : `${this.state.fm.day}/${this.state.fm.month + 1}/${this.state.fm.year}`}</Text>}
+                        onPress={() => {
+                            this.setState({ selectedType: 'fm' })
+                            this.setState({ isDateTimePickerVisible: true })
+                        }}
+                        underlayColor={`rgba(0,0,0,0.05)`}
+                        hideChevron
+                    />
+                    <DateTimePicker
+                        isVisible={this.state.isDateTimePickerVisible}
+                        mode='date'
+                        onCancel={() => this.setState({ isDateTimePickerVisible: false })}
+                        onConfirm={(date) => {
+                            this.onConfirmPress(date)
+                        }}
+                    />
+                </ScrollView>
+            </Gradient>
         )
     }
 }

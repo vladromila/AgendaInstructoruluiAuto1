@@ -1,20 +1,45 @@
-import { createStackNavigator, createAppContainer } from 'react-navigation';
-import FinishedStudentsList from './FinishedStudentsList';
-import RStudentsList from './RStudentsList';
-import ProfileTopBar from './ProfileTopBar';
+import { View, Text, Platform } from 'react-native';
+import React from 'react';
+import { createAppContainer, createMaterialTopTabNavigator } from 'react-navigation'
+import ProfileMainPageTab from './ProfileMainPageTab';
+import VehicleDocumentsTab from './VehicleDocumentsTab';
+import PersonalDocuments from './PersonalDocuments';
 
-const ProfileTabComponent = createStackNavigator({
-    ProfileMainPage: {
-        screen: ProfileTopBar
+const ProfileTopBar = createAppContainer(
+    createMaterialTopTabNavigator({
+        ProfileMainPage: {
+            screen: ProfileMainPageTab
+        },
+        PersonalDocuments: {
+            screen: PersonalDocuments
+        },
+        VehicleDocumentsTab: {
+            screen: VehicleDocumentsTab
+        }
     },
-    FinishedStudentsList: {
-        screen: FinishedStudentsList
-    },
-    RStudentsList: {
-        screen: RStudentsList
-    }
-}, {
-        initialRouteName: 'ProfileMainPage'
-    })
-const ProfileTab = createAppContainer(ProfileTabComponent);
-export default ProfileTab;
+        {
+            tabBarPosition: 'bottom',
+            animationEnabled: false,
+            swipeEnabled: false,
+            tabBarOptions: {
+                style: {
+                    ...Platform.select({
+                        android: {
+                            backgroundColor: '#1E6EC7'
+                        }
+                    })
+                },
+                indicatorStyle: {
+                    backgroundColor: 'white'
+                },
+                activeTintColor: 'white',
+                inactiveTintColor: '#d1cece',
+                pressColor: 'white',
+                showLabel: true,
+                showIcon: false,
+
+            }
+        })
+)
+
+export default ProfileTopBar;
