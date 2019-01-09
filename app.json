@@ -25,9 +25,10 @@
     "ios": {
       "supportsTablet": true
     },
-    "android":{
-      "package":"aia.agendainstructoruluiauto.com",
-      "versionCode":130
+    "android": {
+      "supportsTablet": true,
+      "package": "aia.agendainstructoruluiauto.com",
+      "versionCode": 130
     }
   }
 }

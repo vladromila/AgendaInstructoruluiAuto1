@@ -58,35 +58,38 @@ class ProfileMainPage extends Component {
     }
 
     async unregisterForPushNotificationsAsync() {
-        const { status: existingStatus } = await Permissions.getAsync(
-            Permissions.NOTIFICATIONS
-        );
-        let finalStatus = existingStatus;
-        if (existingStatus !== 'granted') {
-            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-            finalStatus = status;
-        }
-        if (finalStatus !== 'granted') {
-            return;
-        }
-        let token = await Notifications.getExpoPushTokenAsync();
-        return fetch('https://agendainstructoruluiautoserver.herokuapp.com/removeToken', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                token: {
-                    value: token,
+        AsyncStorage.clear(async () => {
+            const { status: existingStatus } = await Permissions.getAsync(
+                Permissions.NOTIFICATIONS
+            );
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                return;
+            }
+            let token = await Notifications.getExpoPushTokenAsync();
+            return fetch('https://agendainstructoruluiautoserver.herokuapp.com/removeToken', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
                 },
-                user: {
-                    uid: firebase.auth().currentUser.uid,
-                },
-            }),
-        }).then(() => {
-            firebase.auth().signOut();
-        });
+                body: JSON.stringify({
+                    token: {
+                        value: token,
+                    },
+                    user: {
+                        uid: firebase.auth().currentUser.uid,
+                    },
+                }),
+            }).then(() => {
+                firebase.auth().signOut();
+            });
+        })
+
     }
 
     render() {

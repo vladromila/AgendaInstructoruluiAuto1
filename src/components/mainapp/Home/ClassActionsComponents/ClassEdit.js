@@ -22,7 +22,7 @@ class ClassCreate extends Component {
             location: '',
             tip: "normala",
             input: '',
-            isStudentsModalVisible: true,
+            isStudentsModalVisible: false,
             isDateModalVisible: false,
             isTimeModalVisible: false,
             students: this.props.students,

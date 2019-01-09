@@ -10,9 +10,9 @@ class PersonalDocuments extends React.Component {
         this.state = {
             isDateTimePickerVisible: false,
             selectedType: '',
-            dv: {},
-            ep:{},
-            aa:{}
+            dva: {},
+            ep: {},
+            fm: {}
         }
     }
     static navigationOptions = {
@@ -46,8 +46,8 @@ class PersonalDocuments extends React.Component {
         this.setState({ isDateTimePickerVisible: false })
     }
     retrieveData() {
-        let arr=['dv','ep','aa'];
-        arr.forEach(pr=>{
+        let arr = ['dva', 'ep', 'fm'];
+        arr.forEach(pr => {
             AsyncStorage.getItem(pr).then((value) => {
                 if (value === null) {
                     AsyncStorage.setItem(`${pr}u`, JSON.stringify(false))
@@ -82,18 +82,18 @@ class PersonalDocuments extends React.Component {
     render() {
         return (
             <ScrollView style={{ flex: 1 }}>
-                <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '500' }}>Valabilitate:</Text>
+                <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '500' }}>Atestat:</Text>
                 <ListItem
                     containerStyle={{ borderRadius: 25, marginTop: 4, marginLeft: 4, marginRight: 4, marginBottom: 4, borderColor: 'black', borderWidth: 1, zIndex: 99 }}
-                    title={<Text style={{ alignSelf: 'center', fontSize: 18 }}>{Object.keys(this.state.dv).length === 0 ? 'Data valabilitatii nesetate' : `${this.state.dv.day}/${this.state.dv.month + 1}/${this.state.dv.year}`}</Text>}
+                    title={<Text style={{ alignSelf: 'center', fontSize: 18 }}>{Object.keys(this.state.dva).length === 0 ? 'Data valabilitatii nesetate' : `${this.state.dva.day}/${this.state.dva.month + 1}/${this.state.dva.year}`}</Text>}
                     onPress={() => {
-                        this.setState({ selectedType: 'dv' })
+                        this.setState({ selectedType: 'dva' })
                         this.setState({ isDateTimePickerVisible: true })
                     }}
                     underlayColor={`rgba(0,0,0,0.05)`}
                     hideChevron
                 />
-                <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '500' }}>Valabilitate ex. psihologic</Text>
+                <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '500' }}>Aviz psihologic:</Text>
                 <ListItem
                     containerStyle={{ borderRadius: 25, marginTop: 4, marginLeft: 4, marginRight: 4, marginBottom: 4, borderColor: 'black', borderWidth: 1, zIndex: 99 }}
                     title={<Text style={{ alignSelf: 'center', fontSize: 18 }}>{Object.keys(this.state.ep).length === 0 ? 'Data valabilitatii nesetate' : `${this.state.ep.day}/${this.state.ep.month + 1}/${this.state.ep.year}`}</Text>}
@@ -104,12 +104,12 @@ class PersonalDocuments extends React.Component {
                     underlayColor={`rgba(0,0,0,0.05)`}
                     hideChevron
                 />
-                <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '500' }}>Analize Anuale</Text>
+                <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '500' }}>Fisa medicala:</Text>
                 <ListItem
                     containerStyle={{ borderRadius: 25, marginTop: 4, marginLeft: 4, marginRight: 4, marginBottom: 4, borderColor: 'black', borderWidth: 1, zIndex: 99 }}
-                    title={<Text style={{ alignSelf: 'center', fontSize: 18 }}>{Object.keys(this.state.aa).length === 0 ? 'Data valabilitatii nesetate' : `${this.state.aa.day}/${this.state.aa.month + 1}/${this.state.aa.year}`}</Text>}
+                    title={<Text style={{ alignSelf: 'center', fontSize: 18 }}>{Object.keys(this.state.fm).length === 0 ? 'Data valabilitatii nesetate' : `${this.state.fm.day}/${this.state.fm.month + 1}/${this.state.fm.year}`}</Text>}
                     onPress={() => {
-                        this.setState({ selectedType: 'aa' })
+                        this.setState({ selectedType: 'fm' })
                         this.setState({ isDateTimePickerVisible: true })
                     }}
                     underlayColor={`rgba(0,0,0,0.05)`}

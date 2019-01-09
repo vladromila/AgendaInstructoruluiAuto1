@@ -1,7 +1,7 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import ProfileTopBar from './ProfileTopBar';
 import FinishedStudentsList from './FinishedStudentsList';
 import RStudentsList from './RStudentsList';
+import ProfileTopBar from './ProfileTopBar';
 
 const ProfileTabComponent = createStackNavigator({
     ProfileMainPage: {
