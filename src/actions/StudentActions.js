@@ -45,11 +45,27 @@ export const studentCreate = ({ nume, phone, cnp, registru, serie, blob, generat
     }
 }
 
-export const studentEdit = ({ uid, nume, phone, cnp, registru, serie, blob, student }) => {
+export const studentEdit = ({ uid, nume, phone, cnp, registru, serie, blob, student, generatedSds, generatedSdp }) => {
     return (dispatch) => {
         dispatch({ type: STUDENT_EDIT_START });
-        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${uid}`).set({ ...student, nume, phone, cnp, registru, serie })
+        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${uid}`).set({ ...student, nume, phone, cnp, registru, serie, nrn: student.nrn + generatedSds.length, nrs: student.nrs + generatedSdp.length })
             .then(() => {
+                generatedSds.forEach(ss => {
+                    firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${uid}/doneClasses`)
+                        .push({ ...ss, studentUid: uid })
+                        .then((classLink) => {
+                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${uid}/doneClassesTotal/${classLink.key}`)
+                                .set({ ...ss, studentUid: uid })
+                        })
+                })
+                generatedSdp.forEach(sp => {
+                    firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${uid}/extraClasses`)
+                        .push({ ...sp, studentUid: uid })
+                        .then((classLink) => {
+                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${uid}/extraClassesTotal/${classLink.key}`)
+                                .set({ ...sp, studentUid: uid })
+                        })
+                })
                 if (blob)
                     firebase.storage().ref(`/images/users/${firebase.auth().currentUser.uid}/students/${uid}`).put(blob)
                         .then((snapshot) => {

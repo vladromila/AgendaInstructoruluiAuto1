@@ -22,7 +22,8 @@ class ProfileMainPage extends Component {
     }
 
     static navigationOptions = {
-        header: null
+        header: null,
+        title: "Date Principlale"
     }
 
     componentWillMount() {
@@ -90,18 +91,7 @@ class ProfileMainPage extends Component {
 
     render() {
         return (
-            <Gradient gradient={`linear-gradient(0deg ,white 0%,#1E6EC7 100% )`} style={{ width: '100%', height: '100%', zIndex: -1, position: 'absolute' }} >
-                <Header
-                    leftComponent={<Icon name="people" size={30} color="white" onPress={() => {
-                        this.props.navigation.navigate('FinishedStudentsList');
-                    }} />}
-                    rightComponent={<Icon name="perm-contact-calendar" size={30} color="white" onPress={() => {
-                        this.props.navigation.navigate('RStudentsList');
-                    }} />}
-                    innerContainerStyles={{ backgroundColor: '#1E6EC7' }}
-                    outerContainerStyles={{ borderBottomColor: 'black', backgroundColor: '#1E6EC7', borderBottomWidth: 1 }}
-                    centerComponent={<Text style={{ fontSize: 22, fontWeight: '900' }}>Profil</Text>}
-                />
+            <View style={{ flex: 1 }}>
                 <ScrollView>
                     {this.props.info ? this.props.info.firstTryA ?
                         <View>
@@ -174,8 +164,7 @@ class ProfileMainPage extends Component {
                     backgroundColor="#1E6EC7"
                     onPress={() => this.unregisterForPushNotificationsAsync()
                     } />
-
-            </Gradient>
+            </View>
         )
     }
 }
