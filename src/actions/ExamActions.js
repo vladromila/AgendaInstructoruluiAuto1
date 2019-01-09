@@ -89,7 +89,7 @@ export const examAddC = ({ student, exam, examedStudentData, id, calificativ, po
                     firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/inStudents/${student.uid}`)
                         .set({ ...student, nre: examedStudentData.nre + 1 })
                         .then(() => {
-                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/rStudents/${student.uid}/nume`)
+                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/rStudents/${student.uid}/name`)
                                 .set(student.nume)
                                 .then(() => {
                                     firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/rStudents/${student.uid}/attempts/${exam.uid}`)
