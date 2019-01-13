@@ -148,7 +148,7 @@ class StudentsMainPage extends Component {
                 <ActionSheet
                     ref={o => this.ActionSheet = o}
                     title={<Text style={{ fontSize: 21, color: '#1E6EC7', fontWeight: 'bold' }}>{this.state.selectedStudent.nume}:</Text>}
-                    options={['Visuealizeaza codul QR', 'Seteaza ca inactiv', 'Vizualizeaza profilul', 'Editeaza Profilul', 'Sterge Elevul', 'Anuleaza']}
+                    options={['Vizuealizeaza codul QR', 'Seteaza ca inactiv', 'Vizualizeaza profilul', 'Editeaza Profilul', 'Sterge Elevul', 'Anuleaza']}
                     cancelButtonIndex={5}
                     destructiveButtonIndex={5}
                     onPress={(index) => {

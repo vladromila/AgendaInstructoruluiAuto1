@@ -100,6 +100,14 @@ export const fetchData = () => {
                 const inStudents = _.map(snapshot.val(), (val, uid) => {
                     return { ...val, uid };
                 });
+                function compare(a, b) {
+                    if (a.nume < b.nume)
+                        return -1;
+                    if (a.nume > b.nume)
+                        return 1;
+                    return 0;
+                }
+                inStudents.sort(compare)
                 dispatch({
                     type: 'inStudents',
                     payload: inStudents

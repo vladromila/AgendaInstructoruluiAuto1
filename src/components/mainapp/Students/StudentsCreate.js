@@ -8,6 +8,7 @@ import {
     TouchableHighlight,
     KeyboardAvoidingView,
     Dimensions,
+    Modal,
     TextInput,
     Keyboard
 } from 'react-native';
@@ -16,12 +17,9 @@ import Icon1 from 'react-native-vector-icons/FontAwesome';
 import { List, ListItem, Button } from 'react-native-elements';
 import ActionSheet from 'react-native-actionsheet'
 import { Permissions, ImagePicker } from 'expo'
-import QRCode from 'react-native-qrcode';
-import Modal from 'react-native-modalbox';
 import { studentCreate } from '../../../actions/'
 import { connect } from 'react-redux';
 import { Header } from 'react-navigation'
-import firebase from 'firebase';
 class StudentCreate extends Component {
     constructor() {
         super();
@@ -167,7 +165,7 @@ class StudentCreate extends Component {
                                     Serie: <Text style={{ fontWeight: 'bold', paddingLeft: 10, color: 'white', fontSize: 18 }}>{this.state.serie}</Text>
                                 </Text>
                             } containerStyle={{ backgroundColor: '#1E6EC7' }} titleStyle={{ color: 'white' }} rightIcon={<Icon1 name='edit' size={30} color='white' />} />
-                        <View style={{ justifyContent: 'center', alignContent: 'center',backgroundColor:'#1E6EC7',marginTop:10 }}>
+                        <View style={{ justifyContent: 'center', alignContent: 'center', backgroundColor: '#1E6EC7', marginTop: 10 }}>
                             <Text style={{ fontSize: 16, color: 'white', alignSelf: 'center' }}>Genereaza sedinte de scolarizare:</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center' }}>
                                 <TouchableHighlight onPress={() => {
@@ -195,7 +193,7 @@ class StudentCreate extends Component {
                                 </TouchableHighlight>
                             </View>
                         </View>
-                        <View style={{ justifyContent: 'center', alignContent: 'center',backgroundColor:'#1E6EC7' }}>
+                        <View style={{ justifyContent: 'center', alignContent: 'center', backgroundColor: '#1E6EC7' }}>
                             <Text style={{ fontSize: 16, color: 'white', alignSelf: 'center' }}>Genereaza sedinte de scolarizare:</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center' }}>
                                 <TouchableHighlight onPress={() => {
@@ -243,159 +241,114 @@ class StudentCreate extends Component {
                             if (index == 1) { this.takeImage(); }
                         }}
                     />
-
                     <Modal
-                        isOpen={this.state.isNameModalVisible}
-                        style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            top: this.state.keyboardSpace ? -2 * Header.HEIGHT - this.state.keyboardSpace : -250,
-                            width: 350,
-                            height: 150,
-                            borderRadius: 15
-                        }}
-                        position={"bottom"}
-                        ref={"modal"}
-                        onClosed={() => {
-                            this.setState({ isNameModalVisible: false });
-                        }}
+                        visible={this.state.isNameModalVisible}
+                        transparent={true}
+                        onRequestClose={() => this.setState({ isNameModalVisible: false })}
+                        animationType='slide'
                     >
-                        <View style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', width: 350 }}>
-                            <Text style={{ alignSelf: 'center', fontSize: 21, fontWeight: '700' }} >Numele elevului:</Text>
-                            <TextInput textContentType="name" onChangeText={(nume) => this.setState({ nume })} style={{ borderColor: '#1E6EC7', borderWidth: 2, width: '90%', fontSize: 19, padding: 8, borderRadius: 10, alignSelf: 'center' }} />
-                            <Button
-                                title="Gata"
-                                backgroundColor="#1E6EC7"
-                                containerViewStyle={{ width: 100, alignSelf: 'center', marginTop: 5 }}
-                                borderRadius={2}
-                                onPress={() => {
-                                    this.setState({ isNameModalVisible: false })
-                                }}
-                            />
+                        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', alignContent: 'center' }}>
+                            <View style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', width: 350, backgroundColor: 'white' }}>
+                                <Text style={{ alignSelf: 'center', fontSize: 21, fontWeight: '700' }} >Numele elevului:</Text>
+                                <TextInput value={this.state.nume} textContentType="name" onChangeText={(nume) => this.setState({ nume })} style={{ borderColor: '#1E6EC7', borderWidth: 2, width: '90%', fontSize: 19, padding: 8, borderRadius: 10, alignSelf: 'center' }} />
+                                <Button
+                                    title="Gata"
+                                    backgroundColor="#1E6EC7"
+                                    containerViewStyle={{ width: 100, alignSelf: 'center', marginTop: 5 }}
+                                    borderRadius={2}
+                                    onPress={() => {
+                                        this.setState({ isNameModalVisible: false })
+                                    }}
+                                />
+                            </View>
                         </View>
                     </Modal>
                     <Modal
-                        isOpen={this.state.isSerieModalVisible}
-                        style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            top: this.state.keyboardSpace ? -2 * Header.HEIGHT - this.state.keyboardSpace : -250,
-                            padding: 20,
-                            width: 350,
-                            height: 150,
-                            borderRadius: 15
-                        }}
-                        position={"bottom"}
-                        ref={"modal"}
-                        onClosed={() => {
-                            this.setState({ isSerieModalVisible: false });
-                        }}
+                        visible={this.state.isTelModalVisible}
+                        transparent={true}
+                        onRequestClose={() => this.setState({ isTelModalVisible: false })}
+                        animationType='slide'
                     >
-                        <View style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', width: 350 }}>
-                            <Text style={{ alignSelf: 'center', fontSize: 21, fontWeight: '700' }} >Seria elevului:</Text>
-                            <TextInput keyboardType="number-pad" onChangeText={(serie) => this.setState({ serie })} style={{ borderColor: '#1E6EC7', borderWidth: 2, width: '90%', fontSize: 19, padding: 8, borderRadius: 10, alignSelf: 'center' }} />
-                            <Button
-                                title="Gata"
-                                backgroundColor="#1E6EC7"
-                                containerViewStyle={{ width: 100, alignSelf: 'center', marginTop: 5 }}
-                                borderRadius={2}
-                                onPress={() => {
-                                    this.setState({ isSerieModalVisible: false })
-                                }}
-                            />
+                        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', alignContent: 'center' }}>
+                            <View style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', width: 350, backgroundColor: 'white' }}>
+                                <Text style={{ alignSelf: 'center', fontSize: 21, fontWeight: '700' }} >Nr. de telefon:</Text>
+                                <TextInput value={this.state.phone} keyboardType="phone-pad" textContentType="name" onChangeText={(phone) => this.setState({ phone })} style={{ borderColor: '#1E6EC7', borderWidth: 2, width: '90%', fontSize: 19, padding: 8, borderRadius: 10, alignSelf: 'center' }} />
+                                <Button
+                                    title="Gata"
+                                    backgroundColor="#1E6EC7"
+                                    containerViewStyle={{ width: 100, alignSelf: 'center', marginTop: 5 }}
+                                    borderRadius={2}
+                                    onPress={() => {
+                                        this.setState({ isTelModalVisible: false })
+                                    }}
+                                />
+                            </View>
                         </View>
                     </Modal>
                     <Modal
-                        isOpen={this.state.isTelModalVisible}
-                        style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            top: this.state.keyboardSpace ? -2 * Header.HEIGHT - this.state.keyboardSpace : -250,
-                            padding: 20,
-                            width: 350,
-                            height: 150,
-                            borderRadius: 15
-                        }}
-                        position={"bottom"}
-                        ref={"modal"}
-                        onClosed={() => {
-                            this.setState({ isTelModalVisible: false });
-                        }}
+                        visible={this.state.isCNPModalVisible}
+                        transparent={true}
+                        onRequestClose={() => this.setState({ isCNPModalVisible: false })}
+                        animationType='slide'
                     >
-                        <View style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', width: 350 }}>
-                            <Text style={{ alignSelf: 'center', fontSize: 21, fontWeight: '700' }} >Nr. de telefon al elevului:</Text>
-                            <TextInput keyboardType="phone-pad" onChangeText={(nr) => this.setState({ phone: nr })} style={{ borderColor: '#1E6EC7', borderWidth: 2, width: '90%', fontSize: 19, padding: 8, borderRadius: 10, alignSelf: 'center' }} />
-                            <Button
-                                title="Gata"
-                                backgroundColor="#1E6EC7"
-                                containerViewStyle={{ width: 100, alignSelf: 'center', marginTop: 5 }}
-                                borderRadius={2}
-                                onPress={() => {
-                                    this.setState({ isTelModalVisible: false })
-                                }}
-                            />
+                        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', alignContent: 'center' }}>
+                            <View style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', width: 350, backgroundColor: 'white' }}>
+                                <Text style={{ alignSelf: 'center', fontSize: 21, fontWeight: '700' }} >CNP-ul elevului:</Text>
+                                <TextInput value={this.state.cnp} keyboardType="number-pad" textContentType="telephoneNumber" onChangeText={(cnp) => this.setState({ cnp })} style={{ borderColor: '#1E6EC7', borderWidth: 2, width: '90%', fontSize: 19, padding: 8, borderRadius: 10, alignSelf: 'center' }} />
+                                <Button
+                                    title="Gata"
+                                    backgroundColor="#1E6EC7"
+                                    containerViewStyle={{ width: 100, alignSelf: 'center', marginTop: 5 }}
+                                    borderRadius={2}
+                                    onPress={() => {
+                                        this.setState({ isCNPModalVisible: false })
+                                    }}
+                                />
+                            </View>
                         </View>
                     </Modal>
                     <Modal
-                        isOpen={this.state.isCNPModalVisible}
-                        style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            top: this.state.keyboardSpace ? -2 * Header.HEIGHT - this.state.keyboardSpace : -250,
-                            padding: 20,
-                            width: 350,
-                            height: 150,
-                            borderRadius: 15
-                        }}
-                        position={"bottom"}
-                        ref={"modal"}
-                        onClosed={() => {
-                            this.setState({ isCNPModalVisible: false });
-                        }}
+                        visible={this.state.isRegistruModalVisible}
+                        transparent={true}
+                        onRequestClose={() => this.setState({ isRegistruModalVisible: false })}
+                        animationType='slide'
                     >
-                        <View style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', width: 350 }}>
-                            <Text style={{ alignSelf: 'center', fontSize: 21, fontWeight: '700' }} >CNP-ul elevului:</Text>
-                            <TextInput keyboardType="number-pad" onChangeText={(cnp) => this.setState({ cnp })} style={{ borderColor: '#1E6EC7', borderWidth: 2, width: '90%', fontSize: 19, padding: 8, borderRadius: 10, alignSelf: 'center' }} />
-                            <Button
-                                title="Gata"
-                                backgroundColor="#1E6EC7"
-                                containerViewStyle={{ width: 100, alignSelf: 'center', marginTop: 5 }}
-                                borderRadius={2}
-                                onPress={() => {
-                                    this.setState({ isCNPModalVisible: false })
-                                }}
-                            />
+                        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', alignContent: 'center' }}>
+                            <View style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', width: 350, backgroundColor: 'white' }}>
+                                <Text style={{ alignSelf: 'center', fontSize: 21, fontWeight: '700' }} >Registrul elevului:</Text>
+                                <TextInput value={this.state.registru} keyboardType="number-pad" textContentType="name" onChangeText={(registru) => this.setState({ registru })} style={{ borderColor: '#1E6EC7', borderWidth: 2, width: '90%', fontSize: 19, padding: 8, borderRadius: 10, alignSelf: 'center' }} />
+                                <Button
+                                    title="Gata"
+                                    backgroundColor="#1E6EC7"
+                                    containerViewStyle={{ width: 100, alignSelf: 'center', marginTop: 5 }}
+                                    borderRadius={2}
+                                    onPress={() => {
+                                        this.setState({ isRegistruModalVisible: false })
+                                    }}
+                                />
+                            </View>
                         </View>
                     </Modal>
                     <Modal
-                        isOpen={this.state.isRegistruModalVisible}
-                        style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            top: this.state.keyboardSpace ? -2 * Header.HEIGHT - this.state.keyboardSpace : -250,
-                            padding: 20,
-                            width: 350,
-                            height: 150,
-                            borderRadius: 15
-                        }}
-                        position={"bottom"}
-                        ref={"modal"}
-                        onClosed={() => {
-                            this.setState({ isRegistruModalVisible: false });
-                        }}
+                        visible={this.state.isSerieModalVisible}
+                        transparent={true}
+                        onRequestClose={() => this.setState({ isSerieModalVisible: false })}
+                        animationType='slide'
                     >
-                        <View style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', width: 350 }}>
-                            <Text style={{ alignSelf: 'center', fontSize: 21, fontWeight: '700' }} >Numar registru elev:</Text>
-                            <TextInput keyboardType="number-pad" onChangeText={(reg) => this.setState({ registru: reg })} style={{ borderColor: '#1E6EC7', borderWidth: 2, width: '90%', fontSize: 19, padding: 8, borderRadius: 10, alignSelf: 'center' }} />
-                            <Button
-                                title="Gata"
-                                backgroundColor="#1E6EC7"
-                                containerViewStyle={{ width: 100, alignSelf: 'center', marginTop: 5 }}
-                                borderRadius={2}
-                                onPress={() => {
-                                    this.setState({ isRegistruModalVisible: false })
-                                }}
-                            />
+                        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', alignContent: 'center' }}>
+                            <View style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', width: 350, backgroundColor: 'white' }}>
+                                <Text style={{ alignSelf: 'center', fontSize: 21, fontWeight: '700' }} >Seria elevului:</Text>
+                                <TextInput value={this.state.serie} keyboardType="number-pad" textContentType="name" onChangeText={(serie) => this.setState({ serie })} style={{ borderColor: '#1E6EC7', borderWidth: 2, width: '90%', fontSize: 19, padding: 8, borderRadius: 10, alignSelf: 'center' }} />
+                                <Button
+                                    title="Gata"
+                                    backgroundColor="#1E6EC7"
+                                    containerViewStyle={{ width: 100, alignSelf: 'center', marginTop: 5 }}
+                                    borderRadius={2}
+                                    onPress={() => {
+                                        this.setState({ isSerieModalVisible: false })
+                                    }}
+                                />
+                            </View>
                         </View>
                     </Modal>
                 </View>
