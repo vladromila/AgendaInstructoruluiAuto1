@@ -10,16 +10,20 @@ class ListItemFC extends Component {
             isVisible: false
         }
     }
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.class)
+        if (nextProps.selectedUid === nextProps.class.uid) {
+            this.setState({ isVisible: true })
+        }
+        else
+            this.setState({ isVisible: false })
+    }
     render() {
         return (
             <React.Fragment>
                 {this.props.class && this.props.student ? <View><ListItem
                     onLongPress={this.props.onLongPress}
-                    onPress={() => {
-                        if (this.state.isVisible === true)
-                            this.setState({ isVisible: false })
-                        else this.setState({ isVisible: true })
-                    }}
+                    onPress={this.props.onPress}
                     underlayColor={'rgba(245, 15, 15, 0.4)'}
                     containerStyle={{ backgroundColor: 'rgba(245, 15, 15, 0.5)', borderRadius: 6, margin: 4, borderBottomColor: 'rgba(0,0,0,0)', zIndex: 99 }}
                     leftIcon={<View style={{ flexDirection: 'column', borderRightWidth: 3, borderRightColor: 'red' }}>

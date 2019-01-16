@@ -52,7 +52,8 @@ class HomeMainPage extends Component {
             calificativ: '',
             politist: '',
             selectedClass: {},
-            ok: false
+            ok: false,
+            selectedUid: null
         }
         this.handleFirstConnectivityChange = this.handleFirstConnectivityChange.bind(this)
     }
@@ -261,15 +262,15 @@ class HomeMainPage extends Component {
                                     {this.state.exam ?
                                         <View>
                                             <ListItem
-                                                underlayColor={'rgba(255, 247, 35, 0.75)'}
-                                                leftIcon={<View style={{ flexDirection: 'column', borderRightWidth: 3, borderRightColor: 'red' }}>
+                                                underlayColor={'rgba(255,0,0,0.9)'}
+                                                leftIcon={<View style={{ flexDirection: 'column', borderRightWidth: 3, borderRightColor: 'white' }}>
                                                     <View style={{ marginRight: 10 }}>
-                                                        <Text style={{ fontSize: 19, fontWeight: '500' }}>{this.state.day} {monthsShort[this.state.month]}
+                                                        <Text style={{ fontSize: 19, fontWeight: '500', color: 'white' }}>{this.state.day} {monthsShort[this.state.month]}
                                                         </Text>
-                                                        <Text style={{ fontSize: 16 }}>{this.state.year}</Text>
+                                                        <Text style={{ fontSize: 16, color: 'white' }}>{this.state.year}</Text>
                                                     </View></View>}
-                                                containerStyle={{ backgroundColor: 'rgba(255, 247, 35, 0.8)', borderRadius: 6, margin: 4, borderBottomColor: 'rgba(0,0,0,0)', zIndex: 99, marginBottom: this.state.isExamVisible === true ? 0 : 4 }}
-                                                title={<Text style={{ fontSize: 21, fontWeight: "bold", marginLeft: 5 }}>Examen: {Object.keys(this.state.exam.examedStudents).length} elev{Object.keys(this.state.exam.examedStudents).length != 1 ? "i" : null}</Text>}
+                                                containerStyle={{ backgroundColor: 'red', borderRadius: 6, margin: 4, borderBottomColor: 'rgba(0,0,0,0)', zIndex: 99, marginBottom: this.state.isExamVisible === true ? 0 : 4 }}
+                                                title={<Text style={{ fontSize: 21, fontWeight: "bold", marginLeft: 5, color: 'white' }}>Examen: {Object.keys(this.state.exam.examedStudents).length} elev{Object.keys(this.state.exam.examedStudents).length != 1 ? "i" : null}</Text>}
                                                 onPress={() => this.setState({ isExamVisible: !this.state.isExamVisible })}
                                                 onLongPress={() => this.ActionSheetForExams.show()}
                                                 hideChevron
@@ -364,9 +365,13 @@ class HomeMainPage extends Component {
                                                     onListItemProfilePress={() => { this.props.navigation.navigate('StudentProfile', wantedStudent); }}
                                                     onViewCanceledClassesPress={() => this.onViewCanceledClassesPress(wantedStudent)}
                                                     onViewFinishedClassesPress={() => this.onViewFinishedClassesPress(wantedStudent)}
+                                                    selectedUid={this.state.selectedUid}
                                                     onLongPress={() => {
                                                         this.setState({ selectedClass: wantedClass, selectedStudent: wantedStudent });
                                                         this.ActionSheetForClasses.show();
+                                                    }}
+                                                    onPress={() => {
+                                                        this.setState({ selectedUid: this.state.selectedUid === wantedClass.uid ? null : wantedClass.uid })
                                                     }}
                                                 />
 
