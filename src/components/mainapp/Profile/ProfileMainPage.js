@@ -70,24 +70,32 @@ class ProfileMainPage extends Component {
             if (finalStatus !== 'granted') {
                 return;
             }
-            let token = await Notifications.getExpoPushTokenAsync();
-            return fetch('https://agendainstructoruluiautoserver.herokuapp.com/removeToken', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    token: {
-                        value: token,
-                    },
-                    user: {
-                        uid: firebase.auth().currentUser.uid,
-                    },
-                }),
-            }).then(() => {
-                firebase.auth().signOut();
-            });
+            return await Notifications.getExpoPushTokenAsync()
+                .then((token) => {
+                    fetch('https://agendainstructoruluiautoserver.herokuapp.com/removeToken', {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            token: {
+                                value: token,
+                            },
+                            user: {
+                                uid: firebase.auth().currentUser.uid,
+                            },
+                        }),
+                    }).then(() => {
+                        firebase.auth().signOut();
+                    })
+                    .catch(()=>{
+                        firebase.auth().signOut();
+                    })
+                })
+                .catch(() => {
+                    firebase.auth().signOut();
+                })
         })
 
     }
@@ -126,24 +134,24 @@ class ProfileMainPage extends Component {
                                     })}
                                 </View> : null}
                         </View> : null : null}
-                        <View>
-                            <ListItem
-                                containerStyle={{ backgroundColor: 'rgba(30, 110, 199,0.4)', borderBottomColor: 'black' }}
-                                title={<Text style={{ color: 'black', fontSize: 18 }}>Lista elevilor admisi</Text>}
-                                onPress={() => this.props.navigation.navigate('FinishedStudentsList')}
-                                underlayColor={'rgba(30, 110, 199,0.35)'}
-                                hideChevron
-                            />
-                        </View>
-                        <View>
-                            <ListItem
-                                containerStyle={{ backgroundColor: 'rgba(30, 110, 199,0.4)', borderBottomColor: 'black' }}
-                                title={<Text style={{ color: 'black', fontSize: 18 }}>Lista elevilor respinsi</Text>}
-                                onPress={() => this.props.navigation.navigate('RStudentsList')}
-                                underlayColor={'rgba(30, 110, 199,0.35)'}
-                                hideChevron
-                            />
-                        </View>
+                    <View>
+                        <ListItem
+                            containerStyle={{ backgroundColor: 'rgba(30, 110, 199,0.4)', borderBottomColor: 'black' }}
+                            title={<Text style={{ color: 'black', fontSize: 18 }}>Lista elevilor admisi</Text>}
+                            onPress={() => this.props.navigation.navigate('FinishedStudentsList')}
+                            underlayColor={'rgba(30, 110, 199,0.35)'}
+                            hideChevron
+                        />
+                    </View>
+                    <View>
+                        <ListItem
+                            containerStyle={{ backgroundColor: 'rgba(30, 110, 199,0.4)', borderBottomColor: 'black' }}
+                            title={<Text style={{ color: 'black', fontSize: 18 }}>Lista elevilor respinsi</Text>}
+                            onPress={() => this.props.navigation.navigate('RStudentsList')}
+                            underlayColor={'rgba(30, 110, 199,0.35)'}
+                            hideChevron
+                        />
+                    </View>
                 </ScrollView>
                 <View style={{ flexDirection: 'row', width: '100%', marginBottom: 10 }}>
                     <Text style={{ fontSize: 17, color: 'black', marginLeft: 10 }}>Selectare automata a tipului de sedinta</Text>
