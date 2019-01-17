@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Text, View, FlatList, ScrollView, Animated, TextInput, Modal, Dimensions, NetInfo } from 'react-native'
+import { Text, View, FlatList, ScrollView, Animated, TextInput, Modal, Dimensions, NetInfo, AsyncStorage } from 'react-native'
 import { ListItem, Button, Icon } from 'react-native-elements'
 import { Header } from 'react-native-elements'
 import Gradient from 'react-native-css-gradient'
 import ListItemFC from '../reusable/ListItemsFC';
 import { connect } from 'react-redux'
-import { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange } from '../../../actions';
+import { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange, fetchDataFromLocalStorage, fetchStudentsFromLocalStorage } from '../../../actions';
 import CalendarStrip from 'react-native-calendar-strip';
 import { Agenda, LocaleConfig } from 'react-native-calendars'
 import _ from 'lodash';
@@ -171,6 +171,16 @@ class HomeMainPage extends Component {
 
     componentWillMount() {
         this.props.fetchData();
+        AsyncStorage.getItem('classes')
+            .then((value) => {
+                if (value !== null)
+                    this.props.fetchDataFromLocalStorage({ classes: JSON.parse(value) });
+            })
+        AsyncStorage.getItem('students')
+            .then((value) => {
+                if (value !== null)
+                    this.props.fetchStudentsFromLocalStorage({ students: JSON.parse(value) });
+            })
     }
 
     compareClasses(s1, s2, sClass) {
@@ -651,4 +661,4 @@ mapStateToProps = (state) => {
     const { addCLoading, addCSuccess, isExamDeleteModalVisible, deleteLoading } = state.ExamsReducer;
     return { classes, exams, students, isClassCancelDeleteModalVisible, classCancelDeleteLoading, isClassDeleteModalVisible, classDeleteLoading, addCLoading, addCSuccess, isExamDeleteModalVisible, deleteLoading };
 }
-export default connect(mapStateToProps, { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange })(HomeMainPage)
+export default connect(mapStateToProps, { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange, fetchDataFromLocalStorage, fetchStudentsFromLocalStorage })(HomeMainPage)

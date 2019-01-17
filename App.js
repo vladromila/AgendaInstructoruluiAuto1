@@ -1,5 +1,5 @@
 import React from 'react';
-import { YellowBox, View } from 'react-native';
+import { YellowBox, View, AsyncStorage } from 'react-native';
 import _ from 'lodash';
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux';
@@ -9,7 +9,7 @@ import reducers from './src/reducers/index';
 import AppMain from './src/components/AppMain';
 import { FIREBASE_CONFIG } from './env.js';
 
-import {Platform, InteractionManager} from 'react-native';
+import { Platform, InteractionManager } from 'react-native';
 
 const _setTimeout = global.setTimeout;
 const _clearTimeout = global.clearTimeout;
@@ -52,23 +52,24 @@ if (Platform.OS === 'android') {
         _clearTimeout(id);
     };
 }
+const store = createStore(reducers, {}, applyMiddleware(reduxThunk));
 
 export default class App extends React.Component {
-  constructor() {
-    super();
-    console.ignoredYellowBox = ['Setting',`Can't call setState`];
-  }
-  componentWillMount() {
-    var config=FIREBASE_CONFIG
-    firebase.initializeApp(config);
-  }
-  render() {
-    return (
-      <Provider store={createStore(reducers, {}, applyMiddleware(reduxThunk))}>
-        <View style={{ flex: 1 }}>
-          <AppMain />
-        </View>
-      </Provider>
-    );
-  }
+    constructor() {
+        super();
+        console.ignoredYellowBox = ['Setting', `Can't call setState`];
+    }
+    componentWillMount() {
+        var config = FIREBASE_CONFIG
+        firebase.initializeApp(config);
+    }
+    render() {
+        return (
+            <Provider store={store}>
+                <View style={{ flex: 1 }}>
+                    <AppMain />
+                </View>
+            </Provider>
+        );
+    }
 }

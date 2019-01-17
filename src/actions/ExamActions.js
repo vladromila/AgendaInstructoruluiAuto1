@@ -86,22 +86,14 @@ export const examAddC = ({ student, exam, examedStudentData, id, calificativ, po
             firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/exams/${exam.uid}/examedStudents/${id}/progress/`)
                 .set("respins")
                 .then(() => {
-                    firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/inStudents/${student.uid}`)
-                        .set({ ...student, nre: examedStudentData.nre + 1 })
+                    firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/rStudents/${student.uid}/name`)
+                        .set(student.nume)
                         .then(() => {
-                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/rStudents/${student.uid}/name`)
-                                .set(student.nume)
+                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/rStudents/${student.uid}/attempts/${exam.uid}`)
+                                .set({ day: exam.day, month: exam.month, year: exam.year, numePolitist: politist })
                                 .then(() => {
-                                    firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/rStudents/${student.uid}/attempts/${exam.uid}`)
-                                        .set({ day: exam.day, month: exam.month, year: exam.year, numePolitist: politist })
-                                        .then(() => {
-                                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${student.uid}`)
-                                                .remove()
-                                                .then(() => {
-                                                    dispatch({ type: EXAM_ADDC_SUCCESS });
-                                                    dispatch({ type: 'resetExam' });
-                                                })
-                                        })
+                                    dispatch({ type: EXAM_ADDC_SUCCESS });
+                                    dispatch({ type: 'resetExam' });
                                 })
                         })
                 })
