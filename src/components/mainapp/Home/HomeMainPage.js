@@ -5,7 +5,7 @@ import { Header } from 'react-native-elements'
 import Gradient from 'react-native-css-gradient'
 import ListItemFC from '../reusable/ListItemsFC';
 import { connect } from 'react-redux'
-import { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange, fetchDataFromLocalStorage, fetchStudentsFromLocalStorage } from '../../../actions';
+import { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange, fetchClassesFromLocalStorage, fetchStudentsFromLocalStorage, fetchExamsFromLocalStorage, fetchFinishedStudentsFromLocalStorage, fetchInStudentsFromLocalStorage, fetchInfoFromLocalStorage, fetchRStudentsFromLocalStorage } from '../../../actions';
 import CalendarStrip from 'react-native-calendar-strip';
 import { Agenda, LocaleConfig } from 'react-native-calendars'
 import _ from 'lodash';
@@ -174,12 +174,37 @@ class HomeMainPage extends Component {
         AsyncStorage.getItem('classes')
             .then((value) => {
                 if (value !== null)
-                    this.props.fetchDataFromLocalStorage({ classes: JSON.parse(value) });
+                    this.props.fetchClassesFromLocalStorage({ classes: JSON.parse(value) });
             })
         AsyncStorage.getItem('students')
             .then((value) => {
                 if (value !== null)
                     this.props.fetchStudentsFromLocalStorage({ students: JSON.parse(value) });
+            })
+        AsyncStorage.getItem('exams')
+            .then((value) => {
+                if (value !== null)
+                    this.props.fetchExamsFromLocalStorage({ exams: JSON.parse(value) });
+            })
+        AsyncStorage.getItem('inStudents')
+            .then((value) => {
+                if (value !== null)
+                    this.props.fetchInStudentsFromLocalStorage({ inStudents: JSON.parse(value) });
+            })
+        AsyncStorage.getItem('finishedStudents')
+            .then((value) => {
+                if (value !== null)
+                    this.props.fetchFinishedStudentsFromLocalStorage({ finishedStudents: JSON.parse(value) });
+            })
+        AsyncStorage.getItem('rStudents')
+            .then((value) => {
+                if (value !== null)
+                    this.props.fetchRStudentsFromLocalStorage({ rStudents: JSON.parse(value) });
+            })
+        AsyncStorage.getItem('info')
+            .then((value) => {
+                if (value !== null)
+                    this.props.fetchInfoFromLocalStorage({ info: JSON.parse(value) });
             })
     }
 
@@ -661,4 +686,4 @@ mapStateToProps = (state) => {
     const { addCLoading, addCSuccess, isExamDeleteModalVisible, deleteLoading } = state.ExamsReducer;
     return { classes, exams, students, isClassCancelDeleteModalVisible, classCancelDeleteLoading, isClassDeleteModalVisible, classDeleteLoading, addCLoading, addCSuccess, isExamDeleteModalVisible, deleteLoading };
 }
-export default connect(mapStateToProps, { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange, fetchDataFromLocalStorage, fetchStudentsFromLocalStorage })(HomeMainPage)
+export default connect(mapStateToProps, { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange, fetchClassesFromLocalStorage, fetchStudentsFromLocalStorage, fetchExamsFromLocalStorage, fetchFinishedStudentsFromLocalStorage, fetchInStudentsFromLocalStorage, fetchInfoFromLocalStorage, fetchRStudentsFromLocalStorage })(HomeMainPage)

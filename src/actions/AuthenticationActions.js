@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import { NavigationActions } from 'react-navigation'
-import { LOGIN_START, LOGIN_SUCCESS, SIGNUP_START, SIGNUP_SUCCESS, SIGNUP_FAILED, LOGIN_FAILED, LOGIN_WITH_FACEBOOK_SUCCESS, LOGIN_WITH_FACEBOOK_FAIL, LOGIN_WITH_FACEBOOK_START } from './types';
+import { LOGIN_START, LOGIN_SUCCESS, SIGNUP_START, SIGNUP_SUCCESS, SIGNUP_FAILED, LOGIN_FAILED, LOGIN_WITH_FACEBOOK_SUCCESS, LOGIN_WITH_FACEBOOK_FAIL, LOGIN_WITH_FACEBOOK_START, PASSWORD_RESET_START, PASSWORD_RESET_FAIL, PASSWORD_RESET_SUCCESS } from './types';
 import { Permissions, Notifications, Facebook } from 'expo';
 
 const PUSH_ENDPOINT = 'https://agendainstructoruluiautoserver.herokuapp.com/addToken';
@@ -90,6 +90,21 @@ export const signup = ({ email, password }) => {
             .catch(() => {
                 alert('Emailul sau parola nu este valida')
                 dispatch({ type: SIGNUP_FAILED })
+            })
+    }
+}
+
+export const resetPassword = (email) => {
+    return (dispatch) => {
+        dispatch({ type: PASSWORD_RESET_START });
+        firebase.auth().sendPasswordResetEmail(email)
+            .then(() => {
+                dispatch({ type: PASSWORD_RESET_SUCCESS })
+                dispatch({ type: 'presetReset' })
+            })
+            .catch(() => {
+                alert('Email-ul introdus nu exista in baza noastra de date sau conexiunea dumneavoastra la internet este inexistenta.')
+                dispatch({ type: PASSWORD_RESET_FAIL })
             })
     }
 }

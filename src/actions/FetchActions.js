@@ -2,7 +2,7 @@ import firebase from 'firebase';
 import { FETCH_START } from './types';
 import _ from 'lodash'
 
-export const fetchDataFromLocalStorage = ({ classes, students }) => {
+export const fetchClassesFromLocalStorage = ({ classes, students }) => {
     return (dispatch) => {
         dispatch({
             type: 'classesLocal',
@@ -20,6 +20,48 @@ export const fetchStudentsFromLocalStorage = ({ students }) => {
     }
 }
 
+export const fetchExamsFromLocalStorage = ({ exams}) => {
+    return (dispatch) => {
+        dispatch({
+            type: 'examsLocal',
+            payload: exams
+        })
+    }
+}
+
+export const fetchInStudentsFromLocalStorage = ({ inStudents }) => {
+    return (dispatch) => {
+        dispatch({
+            type: 'inStudentsLocal',
+            payload: inStudents
+        })
+    }
+}
+
+export const fetchFinishedStudentsFromLocalStorage = ({ finishedStudents }) => {
+    return (dispatch) => {
+        dispatch({
+            type: 'finishedStudentsLocal',
+            payload: finishedStudents
+        })
+    }
+}
+export const fetchRStudentsFromLocalStorage = ({ rStudents }) => {
+    return (dispatch) => {
+        dispatch({
+            type: 'rStudentsLocal',
+            payload: rStudents
+        })
+    }
+}
+export const fetchInfoFromLocalStorage = ({ info }) => {
+    return (dispatch) => {
+        dispatch({
+            type: 'infoLocal',
+            payload: info
+        })
+    }
+}
 export const fetchData = () => {
     const { currentUser } = firebase.auth();
     return (dispatch) => {
