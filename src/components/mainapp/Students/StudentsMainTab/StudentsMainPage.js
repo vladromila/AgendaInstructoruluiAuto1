@@ -20,7 +20,8 @@ class StudentsMainPage extends Component {
         this.state = {
             isQRCodeModalVisible: false,
             selectedStudent: {},
-            students: this.props.students
+            students: this.props.students,
+            selectedStudentUid: null
         }
         this.onListItemProfilePress.bind(this);
     }
@@ -99,15 +100,22 @@ class StudentsMainPage extends Component {
                 <FlatList
                     data={this.state.students}
                     keyExtractor={(item, i) => `${i}`}
-                    extraData={this.state.students}
+                    extraData={[this.state.students,this.state.selectedStudentUid]}
                     renderItem={({ item }) => {
                         return <ListItemFS
                             isInactive={false}
+                            selectedStudentUid={this.state.selectedStudentUid}
                             student={item}
                             onListItemProfilePress={() => this.onListItemProfilePress(item)}
                             onLongPress={() => {
                                 this.setState({ selectedStudent: item })
                                 this.ActionSheet.show();
+                            }}
+                            onPress={() => {
+                                if (this.state.selectedStudentUid === item.uid)
+                                    this.setState({ selectedStudentUid: null })
+                                else
+                                    this.setState({ selectedStudentUid: item.uid })
                             }}
                             onViewCanceledClassesPress={() => this.onViewCanceledClassesPress(item)}
                             onViewFinishedClassesPress={() => this.onViewFinishedClassesPress(item)}

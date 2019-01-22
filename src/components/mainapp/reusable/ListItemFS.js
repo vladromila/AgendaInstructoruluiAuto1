@@ -10,7 +10,12 @@ class ListItemFS extends React.Component {
             isVisible: false
         }
     }
-
+    componentWillReceiveProps(nextProps) {
+       if(nextProps.selectedStudentUid===nextProps.student.uid)
+       this.setState({isVisible:true})
+       else
+       this.setState({isVisible:false});
+    }
     render() {
         return (
             <View style={{ justifyContent: 'center', alignContent: 'center' }}>
@@ -20,12 +25,7 @@ class ListItemFS extends React.Component {
                     underlayColor={this.props.isInactive === false ? 'rgba(30, 110, 199,0.5)' : 'rgba(239, 242, 55,0.5)'}
                     containerStyle={{ backgroundColor: this.props.isInactive === false ? 'rgba(30, 110, 199,0.4)' : 'rgba(239, 242, 55,0.4)', borderRadius: 10, marginTop: 4, marginLeft: 4, marginRight: 4, marginBottom: this.state.isVisible === true ? 0 : 4, borderColor: 'black', borderWidth: 1, zIndex: 99 }}
                     onLongPress={this.props.onLongPress}
-                    onPress={() => {
-                        if (this.state.isVisible === true)
-                            this.setState({ isVisible: false })
-                        else
-                            this.setState({ isVisible: true })
-                    }}
+                    onPress={this.props.onPress}
                     rightIcon={<Icon name={this.state.isVisible === true ? "keyboard-arrow-down" : "keyboard-arrow-up"} size={40} />}
                 />
                 {this.state.isVisible === true ?

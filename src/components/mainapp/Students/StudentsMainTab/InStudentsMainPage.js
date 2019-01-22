@@ -12,7 +12,8 @@ class InStudentsHome extends React.Component {
     constructor() {
         super();
         this.state = {
-            selectedStudent: {}
+            selectedStudent: {},
+            selectedStudentUid: ''
         }
     }
     static navigationOptions = {
@@ -36,6 +37,13 @@ class InStudentsHome extends React.Component {
                             return <ListItemFS
                                 isInactive={true}
                                 student={item}
+                                onPress={() => {
+                                    if (this.state.selectedStudentUid === item.uid)
+                                        this.setState({ selectedStudentUid: null })
+                                    else
+                                        this.setState({ selectedStudentUid: item.uid })
+                                }}
+                                selectedStudentUid={this.state.selectedStudentUid}
                                 onLongPress={() => {
                                     this.setState({ selectedStudent: item })
                                     this.ActionSheet.show();
