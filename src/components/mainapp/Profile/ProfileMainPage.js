@@ -127,7 +127,7 @@ class ProfileMainPage extends Component {
                                         />{this.state.selectedFirstTryA === i ?
                                             <View style={{ backgroundColor: 'rgba(30, 110, 199,0.4)', padding: 5, marginLeft: 30, flexDirection: 'column' }}>
                                                 <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Date despre examen:</Text>
-                                                <Text style={{ fontSize: 15 }}>Data: <Text style={{ fontWeight: 'bold' }}>{item.month} {months[item.month]} {item.year}</Text></Text>
+                                                <Text style={{ fontSize: 15 }}>Data: <Text style={{ fontWeight: 'bold' }}>{item.day} {months[item.month]} {item.year}</Text></Text>
                                                 <Text style={{ fontSize: 15 }}>Politist Examinator: <Text style={{ fontWeight: 'bold' }}>{item.numePolitist}</Text></Text>
                                             </View> : null}
                                         </View>

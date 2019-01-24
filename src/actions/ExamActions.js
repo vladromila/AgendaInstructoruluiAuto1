@@ -48,7 +48,7 @@ export const examAddC = ({ student, exam, examedStudentData, id, calificativ, po
                             })
                                 .then(() => {
                                     firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/info/aTotal/list/${student.uid}`)
-                                        .set({ ...examedStudentData, incercare: examedStudentData.nre + 1, numePolitist: politist })
+                                        .set({ ...examedStudentData, day:exam.day,month:exam.month,year:exam.year, incercare: examedStudentData.nre + 1, numePolitist: politist })
                                         .then(() => {
                                             if (examedStudentData.nre === 0) {
                                                 firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/info/firstTryA/count/`)
@@ -57,7 +57,7 @@ export const examAddC = ({ student, exam, examedStudentData, id, calificativ, po
                                                     })
                                                     .then(() => {
                                                         firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/info/firstTryA/list/${student.uid}`)
-                                                            .set({ ...examedStudentData, incercare: examedStudentData.nre + 1, numePolitist: politist })
+                                                            .set({ ...examedStudentData,day:exam.day,month:exam.month,year:exam.year, incercare: examedStudentData.nre + 1, numePolitist: politist })
                                                             .then(() => {
                                                                 firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${student.uid}`)
                                                                     .remove()
