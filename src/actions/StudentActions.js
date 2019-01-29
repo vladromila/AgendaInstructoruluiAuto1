@@ -4,7 +4,7 @@ import { STUDENT_CREATE_START, STUDENT_CREATE_SUCCESS, STUDENT_EDIT_START, STUDE
 export const studentCreate = ({ nume, phone, cnp, registru, serie, blob, generatedSds, generatedSdp }) => {
     return (dispatch) => {
         dispatch({ type: STUDENT_CREATE_START });
-        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/`).push({ nume, phone, cnp, registru, serie, nrn: generatedSds.length, nrs: generatedSdp.length, nre: 0 })
+        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/`).push({ nume, phone, cnp, registru, serie,nre: 0 })
             .then((link) => {
                 generatedSds.forEach(ss => {
                     firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${link.key}/doneClasses`)
@@ -48,7 +48,7 @@ export const studentCreate = ({ nume, phone, cnp, registru, serie, blob, generat
 export const studentEdit = ({ uid, nume, phone, cnp, registru, serie, blob, student, generatedSds, generatedSdp }) => {
     return (dispatch) => {
         dispatch({ type: STUDENT_EDIT_START });
-        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${uid}`).set({ ...student, nume, phone, cnp, registru, serie, nrn: student.nrn + generatedSds.length, nrs: student.nrs + generatedSdp.length })
+        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${uid}`).set({ ...student, nume, phone, cnp, registru, serie})
             .then(() => {
                 generatedSds.forEach(ss => {
                     firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${uid}/doneClasses`)
@@ -156,7 +156,7 @@ export const studentInToA = ({ student, cs }) => {
                 })
         else
             if (cs === 2)
-                firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${student.uid}`).set({ ...student, nrn: 15, extraClasses: {}, nrs: 0 })
+                firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/students/${student.uid}`).set({ ...student, extraClasses: {} })
                     .then(() => {
                         firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/inStudents/${student.uid}`).remove()
                             .then(() => {

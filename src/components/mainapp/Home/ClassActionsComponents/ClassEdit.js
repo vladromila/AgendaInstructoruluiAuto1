@@ -20,7 +20,6 @@ class ClassCreate extends Component {
             minutes: null,
             hour: null,
             location: '',
-            tip: "normala",
             input: '',
             isStudentsModalVisible: false,
             isDateModalVisible: false,
@@ -39,15 +38,13 @@ class ClassCreate extends Component {
     }
 
     async componentDidMount() {
-        const { day, month, year, minutes, hour, selectedStudent, tip } = this.props.navigation.state.params;
+        const { day, month, year, minutes, hour, selectedStudent } = this.props.navigation.state.params;
         this.setState({
-            day, month, year, minutes, hour, selectedStudent, tip
+            day, month, year, minutes, hour, selectedStudent
         })
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.isAutomaticTypeSelectWanted === false)
-            this.setState({ tip: "normala" })
         if (nextProps.editSuccess === true)
             this.props.navigation.goBack();
         this.setState({ students: nextProps.students })
@@ -75,17 +72,6 @@ class ClassCreate extends Component {
                     backgroundColor="#1E6EC7"
                     onPress={() => { this.setState({ isStudentsModalVisible: true }) }}
                 />
-                <Text style={{ color: '#1E6EC7', fontSize: 21, alignSelf: 'center', fontWeight: 'bold' }}>Tipul sedintei: {this.props.isAutomaticTypeSelectWanted === true ? this.state.tip === "normala" ? "Scolarizare" : "Perfectionare" : null} </Text>
-                {this.props.isAutomaticTypeSelectWanted === false ?
-                    <View>
-                        <Picker
-                            selectedValue={this.state.tip}
-                            style={{ borderColor: '#1E6EC7', borderWidth: 2 }}
-                            onValueChange={(value) => { this.setState({ tip: value }) }}
-                        >
-                            <Picker.Item color="#1E6EC7" label="Sed. Scolarizare" value="normala" />
-                            <Picker.Item color="#1E6EC7" label="Sed. Perfectionare" value="suplimentara" />
-                        </Picker></View> : null}
                 <Text style={{ alignSelf: "center", fontSize: 21, color: "#1E6EC7" }}>Data selectata: <Text style={{ fontWeight: 'bold' }}>{this.state.day} {months[this.state.month]} {this.state.year}</Text></Text>
                 <Button
                     containerViewStyle={{ width: '50%', alignSelf: 'center' }}
@@ -105,9 +91,9 @@ class ClassCreate extends Component {
                     title="Editeaza sedinta"
                     loading={this.props.editLoading}
                     onPress={() => {
-                        const { year, month, day, hour, minutes, tip, location } = this.state;
+                        const { year, month, day, hour, minutes, location } = this.state;
                         if (this.state.selectedStudent.nume) {
-                            this.props.classEdit({ year, month, day, hour, minutes, tip, studentUid: this.state.selectedStudent.uid, location, uid: this.props.navigation.state.params.uid })
+                            this.props.classEdit({ year, month, day, hour, minutes, studentUid: this.state.selectedStudent.uid, location, uid: this.props.navigation.state.params.uid })
                         }
                     }}
                     backgroundColor="#1E6EC7"
@@ -165,13 +151,9 @@ class ClassCreate extends Component {
                                         underlayColor={'rgba(0,0,0,0.01)'}
                                         onPress={() => {
                                             if (this.state.selectedStudent.uid === item.uid)
-                                                this.setState({ selectedStudent: {}, tip: "normala" });
+                                                this.setState({ selectedStudent: {} });
                                             else {
                                                 this.setState({ selectedStudent: item });
-                                                if (item.nrn > 14)
-                                                    this.setState({ tip: "suplimentara" });
-                                                else
-                                                    this.setState({ tip: "normala" });
                                             }
                                         }}
                                         title={<Text style={{ color: isSelected === true ? 'white' : '#1E6EC7', fontSize: 20, fontWeight: "bold" }}>{item.nume}</Text>}

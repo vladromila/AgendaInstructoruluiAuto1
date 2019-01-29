@@ -623,7 +623,7 @@ class HomeMainPage extends Component {
                                 visible={this.props.isClassDeleteModalVisible}
                                 transparent={true}
                                 onRequestClose={() => {
-                                    this.props.classOHCancelDeleteModal();
+                                    this.props.classOHDeleteModal();
                                 }}
                                 animationType={"slide"}
                             >
@@ -638,7 +638,7 @@ class HomeMainPage extends Component {
                                                 containerViewStyle={{ width: 100, alignSelf: 'center', marginTop: 5 }}
                                                 borderRadius={2}
                                                 onPress={() => {
-                                                    this.props.classDelete({ selectedClass: this.state.selectedClass })
+                                                    this.props.classDelete({ selectedClass: this.state.selectedClass, nrn: this.state.selectedStudent.doneClasses ? Object.keys(this.state.selectedStudent.doneClasses).length : 0 })
                                                 }}
                                             />
                                             <Button

@@ -11,12 +11,12 @@ class ListItemFC extends Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if(nextProps.class)
-        if (nextProps.selectedUid === nextProps.class.uid) {
-            this.setState({ isVisible: true })
-        }
-        else
-            this.setState({ isVisible: false })
+        if (nextProps.class)
+            if (nextProps.selectedUid === nextProps.class.uid) {
+                this.setState({ isVisible: true })
+            }
+            else
+                this.setState({ isVisible: false })
     }
     render() {
         return (
@@ -31,7 +31,7 @@ class ListItemFC extends Component {
                             <Text style={{ fontSize: 19, fontWeight: '500' }}>{this.props.class.hour < 10 ? `0${this.props.class.hour}` : `${this.props.class.hour}`}:{this.props.class.minutes >= 0 && this.props.class.minutes < 10 ? `${this.props.class.minutes}0` : `${this.props.class.minutes}`}</Text>
                             <Text style={{ fontSize: 16 }}>{this.props.class.minutes + 30 >= 60 ? `${this.props.class.hour + 2}` : `${this.props.class.hour + 1}`}:{(this.props.class.minutes + 30) % 60 >= 0 && (this.props.class.minutes + 30) % 60 < 10 ? `${(this.props.class.minutes + 30) % 60}0` : `${(this.props.class.minutes + 30) % 60}`}</Text></View></View>}
                     rightIcon={<Icon name={this.state.isVisible === true ? "keyboard-arrow-down" : "keyboard-arrow-up"} size={40} />}
-                    title={<View style={{ marginLeft: 6, flexDirection: 'column' }}>{this.props.class.location !== '' && this.props.class.location ? <Text style={{ fontSize: 17, fontWeight: '500',color:'white' }}>Locatie: <Text style={{ fontWeight: 'bold' }}>{`${this.props.class.location}`}</Text></Text> : null}<Text style={{ fontSize: 19, fontWeight: '700' }}>{this.props.student.nume}</Text><Text style={{ fontSize: 17, fontWeight: '200' }}>{this.props.class.tip === "normala" ? "Sedinta de scolarizare" : "Sedinta de perfectionare"}</Text></View>} />
+                    title={<View style={{ marginLeft: 6, flexDirection: 'column' }}>{this.props.class.location !== '' && this.props.class.location ? <Text style={{ fontSize: 17, fontWeight: '500', color: 'white' }}>Locatie: <Text style={{ fontWeight: 'bold' }}>{`${this.props.class.location}`}</Text></Text> : null}<Text style={{ fontSize: 19, fontWeight: '700' }}>{this.props.student.nume}</Text>{this.props.class.month===new Date().getMonth()&&this.props.class.year===new Date().getFullYear()&&this.props.class.day===new Date().getDate()?<Text style={{ fontSize: 17, fontWeight: '200' }}>{this.props.student.doneClasses?Object.keys(this.props.student.doneClasses).length<15?"Sedinta de scolarizare":"Sedinta de perfectionare":"Sedinta de scolarizare"}</Text>:null}</View>} />
                     {this.state.isVisible === true ?
                         <View>
                             <View style={{ backgroundColor: 'rgba(245, 15, 15, 0.5)', marginLeft: 10, marginRight: 10, alignSelf: 'center', width: Dimensions.get('screen').width - 20, padding: 5 }}>
