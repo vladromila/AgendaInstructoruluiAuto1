@@ -13,7 +13,6 @@ class ProfileMainPage extends Component {
     constructor() {
         super();
         this.state = {
-            switchValue: false,
             itATotalVisible: false,
             selectedATotal: -1,
             selectedFirstTryA: -1,
@@ -24,37 +23,6 @@ class ProfileMainPage extends Component {
     static navigationOptions = {
         header: null,
         title: "Date Principlale"
-    }
-
-    componentWillMount() {
-        this.retrieveData().then((value) => {
-            if (value === null) {
-                this.setState({ switchValue: false })
-                this.storeData(false).then(() => {
-                    this.props.setIsAutomaticTypeSelectWanted(false)
-                });
-            }
-            else {
-                this.setState({ switchValue: value })
-                this.props.setIsAutomaticTypeSelectWanted(value);
-            }
-        })
-    }
-
-    storeData = async (value) => {
-        try {
-            await AsyncStorage.setItem('switchValue', JSON.stringify(value));
-        } catch (error) {
-        }
-    }
-    retrieveData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('switchValue');
-            if (value !== null) {
-                return JSON.parse(value);
-            }
-        } catch (error) {
-        }
     }
 
     async unregisterForPushNotificationsAsync() {
@@ -153,21 +121,6 @@ class ProfileMainPage extends Component {
                         />
                     </View>
                 </ScrollView>
-                <View style={{ flexDirection: 'row', width: '100%', marginBottom: 10 }}>
-                    <Text style={{ fontSize: 17, color: 'black', marginLeft: 10 }}>Selectare automata a tipului de sedinta</Text>
-                    <Switch
-                        style={{ marginRight: 10 }}
-                        value={this.state.switchValue}
-                        onValueChange={(value) => {
-                            this.setState({ switchValue: value })
-                            this.storeData(value).then(() => {
-                                this.retrieveData().then((value) => {
-                                    this.props.setIsAutomaticTypeSelectWanted(value);
-                                })
-                            })
-                        }}
-                    />
-                </View>
                 <Button
                     title="Logout"
                     backgroundColor="#1E6EC7"
