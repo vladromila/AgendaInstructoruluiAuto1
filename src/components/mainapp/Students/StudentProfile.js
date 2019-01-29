@@ -128,7 +128,7 @@ class StudentProfile extends Component {
               <View style={{ backgroundColor: 'white', paddingTop: 10, paddingBottom: 10, backgroundColor: '#1E6EC7' }}>
                 <ProgressCircle
                   style={{ height: 200, elevation: 10 }}
-                  progress={this.props.navigation.state.params.nrn === 0 ? this.props.navigation.state.params.nrs === 0 ? 0 : 15 : this.props.navigation.state.params.nrn / 15}
+                  progress={this.props.navigation.state.params.doneClasses ?Object.keys(this.props.navigation.state.params.doneClasses).length/15:0}
                   progressColor={'white'}
                   backgroundColor={'black'}
                 /></View>
