@@ -4,26 +4,24 @@ import { ListItem, Header, Icon } from 'react-native-elements';
 import firebase from 'firebase'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import Gradient from 'react-native-css-gradient';
+import { connect } from 'react-redux'
 
 class VehicleData extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             isDateTimePickerVisible: false,
             selectedType: '',
-            ar: {},
-            ap: {},
-            itp: {},
-            tpa: {},
-            st: {}
+            ar: props.info ? props.info.vehicleDocuments ? props.info.vehicleDocuments.ar ? { day: props.info.vehicleDocuments.ar.day, month: props.info.vehicleDocuments.ar.month, year: props.info.vehicleDocuments.ar.year } : {} : {} : {},
+            ap: props.info ? props.info.vehicleDocuments ? props.info.vehicleDocuments.ap ? { day: props.info.vehicleDocuments.ap.day, month: props.info.vehicleDocuments.ap.month, year: props.info.vehicleDocuments.ap.year } : {} : {} : {},
+            itp: props.info ? props.info.vehicleDocuments ? props.info.vehicleDocuments.itp ? { day: props.info.vehicleDocuments.itp.day, month: props.info.vehicleDocuments.itp.month, year: props.info.vehicleDocuments.itp.year } : {} : {} : {},
+            tpa: props.info ? props.info.vehicleDocuments ? props.info.vehicleDocuments.tpa ? { day: props.info.vehicleDocuments.tpa.day, month: props.info.vehicleDocuments.tpa.month, year: props.info.vehicleDocuments.tpa.year } : {} : {} : {},
+            st: props.info ? props.info.vehicleDocuments ? props.info.vehicleDocuments.st ? { day: props.info.vehicleDocuments.st.day, month: props.info.vehicleDocuments.st.month, year: props.info.vehicleDocuments.st.year } : {} : {} : {}
         }
     }
     static navigationOptions = {
         header: null,
         title: "Acte Vehicul"
-    }
-    componentWillMount() {
-        this.retrieveData();
     }
     onConfirmPress(date) {
         let data = {
@@ -47,40 +45,6 @@ class VehicleData extends React.Component {
 
         }
         this.setState({ isDateTimePickerVisible: false })
-    }
-    retrieveData() {
-        let arr = ['ar', 'ap', 'itp', 'st', 'tpa']
-        arr.forEach(pr => {
-            AsyncStorage.getItem(pr).then((value) => {
-                if (value === null) {
-                    AsyncStorage.setItem(`${pr}u`, JSON.stringify(false))
-                        .then(() => {
-                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/info/vehicleDocuments/${pr}`)
-                                .on('value', snapshot => {
-                                    if (snapshot.val() !== null) {
-                                        this.setState({ [pr]: snapshot.val() })
-                                        AsyncStorage.setItem(pr, JSON.stringify(snapshot.val()))
-                                            .then(() => {
-                                                AsyncStorage.setItem(pr, JSON.stringify(true))
-                                            })
-                                    }
-                                })
-                        })
-                }
-                else {
-                    this.setState({ [pr]: JSON.parse(value) })
-                    AsyncStorage.getItem(`${pr}u`)
-                        .then((b) => {
-                            if (JSON.parse(b) === false)
-                                firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/info/vehicleDocuments/${pr}`)
-                                    .set({ ...JSON.parse(value) })
-                                    .then(() => {
-                                        AsyncStorage.setItem(`${pr}u`, JSON.stringify(true))
-                                    })
-                        })
-                }
-            })
-        })
     }
     render() {
         return (
@@ -159,5 +123,9 @@ class VehicleData extends React.Component {
         )
     }
 }
+mapStateToProps = (state) => {
+    const { info } = state.FetchedData;
+    return { info };
+}
 
-export default VehicleData;
+export default connect(mapStateToProps)(VehicleData);

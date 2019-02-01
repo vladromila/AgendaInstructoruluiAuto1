@@ -4,24 +4,22 @@ import { ListItem, Header, Icon } from 'react-native-elements';
 import firebase from 'firebase'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import Gradient from 'react-native-css-gradient';
-
+import { connect } from 'react-redux'
 class PersonalDocuments extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             isDateTimePickerVisible: false,
             selectedType: '',
-            dva: {},
-            ep: {},
-            fm: {}
+            dva: props.info ? props.info.personalDocuments ? props.info.personalDocuments.dva ? { day: props.info.personalDocuments.dva.day, month: props.info.personalDocuments.dva.month, year: props.info.personalDocuments.dva.year } : {} : {} : {},
+            ep: props.info ? props.info.personalDocuments ? props.info.personalDocuments.ep ? { day: props.info.personalDocuments.ep.day, month: props.info.personalDocuments.ep.month, year: props.info.personalDocuments.ep.year } : {} : {} : {},
+            fm: props.info ? props.info.personalDocuments ? props.info.personalDocuments.fm ? { day: props.info.personalDocuments.fm.day, month: props.info.personalDocuments.fm.month, year: props.info.personalDocuments.fm.year } : {} : {} : {},
+            caz: props.info ? props.info.personalDocuments ? props.info.personalDocuments.caz ? { day: props.info.personalDocuments.caz.day, month: props.info.personalDocuments.caz.month, year: props.info.personalDocuments.caz.year } : {} : {} : {}
         }
     }
     static navigationOptions = {
         header: null,
         title: "Acte Instructor"
-    }
-    componentWillMount() {
-        this.retrieveData();
     }
     onConfirmPress(date) {
         let data = {
@@ -46,40 +44,6 @@ class PersonalDocuments extends React.Component {
         }
         this.setState({ isDateTimePickerVisible: false })
     }
-    retrieveData() {
-        let arr = ['dva', 'ep', 'fm'];
-        arr.forEach(pr => {
-            AsyncStorage.getItem(pr).then((value) => {
-                if (value === null) {
-                    AsyncStorage.setItem(`${pr}u`, JSON.stringify(false))
-                        .then(() => {
-                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/info/personalDocuments/${pr}`)
-                                .on('value', snapshot => {
-                                    if (snapshot.val() !== null) {
-                                        this.setState({ [pr]: snapshot.val() })
-                                        AsyncStorage.setItem(pr, JSON.stringify(snapshot.val()))
-                                            .then(() => {
-                                                AsyncStorage.setItem(pr, JSON.stringify(true))
-                                            })
-                                    }
-                                })
-                        })
-                }
-                else {
-                    this.setState({ [pr]: JSON.parse(value) })
-                    AsyncStorage.getItem(`${pr}u`)
-                        .then((b) => {
-                            if (JSON.parse(b) === false)
-                                firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/info/personalDocuments/${pr}`)
-                                    .set({ ...JSON.parse(value) })
-                                    .then(() => {
-                                        AsyncStorage.setItem(`${pr}u`, JSON.stringify(true))
-                                    })
-                        })
-                }
-            })
-        })
-    }
     render() {
         return (
             <Gradient gradient={`linear-gradient(0deg ,white 0%,#1E6EC7 100% )`} style={{ width: '100%', height: '100%', zIndex: -1, position: 'absolute' }} >
@@ -89,6 +53,17 @@ class PersonalDocuments extends React.Component {
                     centerComponent={<Text style={{ fontSize: 22, fontWeight: '900' }}>Acte Instructor</Text>}
                 />
                 <ScrollView style={{ flex: 1 }}>
+                    <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '500' }}>Cazier:</Text>
+                    <ListItem
+                        containerStyle={{ borderRadius: 25, marginTop: 4, marginLeft: 4, marginRight: 4, marginBottom: 4, borderColor: 'black', borderWidth: 1, zIndex: 99 }}
+                        title={<Text style={{ alignSelf: 'center', fontSize: 18 }}>{Object.keys(this.state.caz).length === 0 ? 'Data valabilitatii nesetate' : `${this.state.caz.day}/${this.state.caz.month + 1}/${this.state.caz.year}`}</Text>}
+                        onPress={() => {
+                            this.setState({ selectedType: 'caz' })
+                            this.setState({ isDateTimePickerVisible: true })
+                        }}
+                        underlayColor={`rgba(0,0,0,0.05)`}
+                        hideChevron
+                    />
                     <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '500' }}>Atestat:</Text>
                     <ListItem
                         containerStyle={{ borderRadius: 25, marginTop: 4, marginLeft: 4, marginRight: 4, marginBottom: 4, borderColor: 'black', borderWidth: 1, zIndex: 99 }}
@@ -135,5 +110,8 @@ class PersonalDocuments extends React.Component {
         )
     }
 }
-
-export default PersonalDocuments;
+mapStateToProps = state => {
+    const { info } = state.FetchedData;
+    return { info };
+}
+export default connect(mapStateToProps)(PersonalDocuments);
