@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "2.2.0",
+    "version": "2.2.5",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
@@ -26,7 +26,7 @@
     },
     "android": {
       "package": "aia.agendainstructoruluiauto.com",
-      "versionCode": 220,
+      "versionCode": 225,
       "permissions": [
         "CAMERA",
         "MANAGE_DOCUMENTS",
