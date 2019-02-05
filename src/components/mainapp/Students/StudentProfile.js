@@ -87,19 +87,19 @@ class StudentProfile extends Component {
                     if (item.extraClassesTotal) {
                       let finishedNClasses = _.toArray(item.doneClassesTotal);
                       let finishedEClasses = _.toArray(item.extraClassesTotal);
-                      this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, finishedEClasses, nume: item.nume })
+                      this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, finishedEClasses, nume: item.nume, uid: item.uid })
                     }
                     else {
                       let finishedNClasses = _.toArray(item.doneClassesTotal);
-                      this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, nume: item.nume })
+                      this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, nume: item.nume, uid: item.uid })
                     }
                   else
                     if (item.extraClassesTotal) {
                       let finishedEClasses = _.toArray(item.extraClassesTotal);
-                      this.props.navigation.navigate('StudentFinishedClasses', { finishedEClasses, nume: item.nume })
+                      this.props.navigation.navigate('StudentFinishedClasses', { finishedEClasses, nume: item.nume, uid: item.uid })
                     }
                     else {
-                      this.props.navigation.navigate('StudentFinishedClasses', { nume: item.nume })
+                      this.props.navigation.navigate('StudentFinishedClasses', { nume: item.nume, uid: item.uid })
                     }
                 }}
                 title={
@@ -128,7 +128,7 @@ class StudentProfile extends Component {
               <View style={{ backgroundColor: 'white', paddingTop: 10, paddingBottom: 10, backgroundColor: '#1E6EC7' }}>
                 <ProgressCircle
                   style={{ height: 200, elevation: 10 }}
-                  progress={this.props.navigation.state.params.doneClasses ?Object.keys(this.props.navigation.state.params.doneClasses).length/15:0}
+                  progress={this.props.navigation.state.params.doneClasses ? Object.keys(this.props.navigation.state.params.doneClasses).length / 15 : 0}
                   progressColor={'white'}
                   backgroundColor={'black'}
                 /></View>

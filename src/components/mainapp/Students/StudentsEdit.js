@@ -10,11 +10,11 @@ import {
     Dimensions,
     TextInput,
     Modal,
-    Keyboard
+    Keyboard,
 } from 'react-native';
 import _ from 'lodash'
 import Icon1 from 'react-native-vector-icons/FontAwesome';
-import { List, ListItem, Button } from 'react-native-elements';
+import { List, ListItem, Button, CheckBox } from 'react-native-elements';
 import ActionSheet from 'react-native-actionsheet'
 import { Permissions, ImagePicker } from 'expo'
 import { studentEdit } from '../../../actions/'
@@ -39,7 +39,8 @@ class StudentEdit extends Component {
             sds: 0,
             sdp: 0,
             generatedSds: [],
-            generatedSdp: []
+            generatedSdp: [],
+            resetEnabled: false
         }
         Keyboard.addListener('keyboardDidShow', (frames) => {
             if (!frames.endCoordinates) return;
@@ -113,10 +114,10 @@ class StudentEdit extends Component {
         }
     }
     onEditStudentPress = async () => {
-        const { nume, phone, cnp, registru, serie, blob, generatedSds, generatedSdp } = this.state;
+        const { nume, phone, cnp, registru, serie, blob, generatedSds, generatedSdp, resetEnabled } = this.state;
         const { uid } = this.props.navigation.state.params;
         const student = this.props.navigation.state.params;
-        this.props.studentEdit({ uid, nume, phone, cnp, registru, serie, blob, student, generatedSds, generatedSdp })
+        this.props.studentEdit({ uid, nume, phone, cnp, registru, serie, blob, student, generatedSds, generatedSdp, resetEnabled })
     }
     render() {
         return (
@@ -170,7 +171,7 @@ class StudentEdit extends Component {
                                     Serie: <Text style={{ fontWeight: 'bold', paddingLeft: 10, color: 'white', fontSize: 18 }}>{this.state.serie}</Text>
                                 </Text>
                             } containerStyle={{ backgroundColor: '#1E6EC7' }} titleStyle={{ color: 'white' }} rightIcon={<Icon1 name='edit' size={30} color='white' />} />
-                        <View style={{ justifyContent: 'center', alignContent: 'center', backgroundColor: '#1E6EC7', marginTop: 10 }}>
+                        {this.state.resetEnabled === false ? <View style={{ justifyContent: 'center', alignContent: 'center', backgroundColor: '#1E6EC7', marginTop: 10 }}>
                             <Text style={{ fontSize: 16, color: 'white', alignSelf: 'center' }}>Genereaza sedinte de scolarizare:</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center' }}>
                                 <TouchableHighlight onPress={() => {
@@ -198,7 +199,9 @@ class StudentEdit extends Component {
                                 </TouchableHighlight>
                             </View>
                         </View>
-                        <View style={{ justifyContent: 'center', alignContent: 'center', backgroundColor: '#1E6EC7' }}>
+                            : null}
+
+                        {this.state.resetEnabled === false ? <View style={{ justifyContent: 'center', alignContent: 'center', backgroundColor: '#1E6EC7' }}>
                             <Text style={{ fontSize: 16, color: 'white', alignSelf: 'center' }}>Genereaza sedinte de scolarizare:</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center' }}>
                                 <TouchableHighlight onPress={() => {
@@ -225,6 +228,22 @@ class StudentEdit extends Component {
                                     <Text style={{ fontSize: 50, fontWeight: 'bold', alignSelf: 'center', justifyContent: 'center', alignContent: 'center', color: 'white' }}>+</Text>
                                 </TouchableHighlight>
                             </View>
+                        </View>
+                            : null}
+                        <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+                            <CheckBox
+                                checked={this.state.resetEnabled}
+                                title="Resetati sedintele elevului"
+                                containerStyle={{ backgroundColor: '#1E6EC7' }}
+                                textStyle={{ color: 'white' }}
+                                checkedColor="white"
+                                onPress={() => {
+                                    if (this.state.resetEnabled === false) {
+                                        this.setState({ sds: 0, sdp: 0, generatedSds: [], generatedSdp: [] })
+                                    }
+                                    this.setState({ resetEnabled: !this.state.resetEnabled })
+                                }}
+                            />
                         </View>
                         <Button
                             title="Editeaza"

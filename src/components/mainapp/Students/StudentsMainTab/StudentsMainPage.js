@@ -13,7 +13,6 @@ import firebase from 'firebase';
 import SearchHeader from 'react-native-search-header';
 import _ from 'lodash';
 
-const size = Dimensions.get('screen').width * 2 / 3;
 class StudentsMainPage extends Component {
     constructor(props) {
         super(props);
@@ -41,28 +40,28 @@ class StudentsMainPage extends Component {
             if (item.extraClassesTotal) {
                 let finishedNClasses = _.toArray(item.doneClassesTotal);
                 let finishedEClasses = _.toArray(item.extraClassesTotal);
-                this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, finishedEClasses, nume: item.nume })
+                this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, finishedEClasses, nume: item.nume, uid: item.uid })
             }
             else {
                 let finishedNClasses = _.toArray(item.doneClassesTotal);
-                this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, nume: item.nume })
+                this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, nume: item.nume, uid: item.uid })
             }
         else
             if (item.extraClassesTotal) {
                 let finishedEClasses = _.toArray(item.extraClassesTotal);
-                this.props.navigation.navigate('StudentFinishedClasses', { finishedEClasses, nume: item.nume })
+                this.props.navigation.navigate('StudentFinishedClasses', { finishedEClasses, nume: item.nume, uid: item.uid })
             }
             else {
-                this.props.navigation.navigate('StudentFinishedClasses', { nume: item.nume })
+                this.props.navigation.navigate('StudentFinishedClasses', { nume: item.nume, uid: item.uid })
             }
     }
     onViewCanceledClassesPress(item) {
         if (item.canceledClasses) {
             let canceledClasses = _.toArray(item.canceledClasses);
-            this.props.navigation.navigate('StudentCanceledClasses', { canceledClasses, nume: item.nume })
+            this.props.navigation.navigate('StudentCanceledClasses', { canceledClasses, nume: item.nume, uid: item.uid })
         }
         else
-            this.props.navigation.navigate('StudentCanceledClasses', { nume: item.nume })
+            this.props.navigation.navigate('StudentCanceledClasses', { nume: item.nume, uid: item.uid })
     }
 
     onInpuChange(input) {
@@ -100,7 +99,7 @@ class StudentsMainPage extends Component {
                 <FlatList
                     data={this.state.students}
                     keyExtractor={(item, i) => `${i}`}
-                    extraData={[this.state.students,this.state.selectedStudentUid]}
+                    extraData={[this.state.students, this.state.selectedStudentUid]}
                     renderItem={({ item }) => {
                         return <ListItemFS
                             isInactive={false}
@@ -129,22 +128,23 @@ class StudentsMainPage extends Component {
                     onRequestClose={() => { this.setState({ isQRCodeModalVisible: false }) }}
                 >
                     <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.75)', justifyContent: 'center', alignContent: 'center' }}>
-                        <View style={{ alignSelf: 'center', width: '100%', height: size + 200, backgroundColor: 'white', justifyContent: 'center', alignContent: 'center' }}>
+                        <View style={{ alignSelf: 'center', width: '100%', backgroundColor: 'white', justifyContent: 'center', alignContent: 'center' }}>
 
                             <View style={{ alignSelf: 'center', marginBottom: 20 }}>
                                 <Text style={{ alignSelf: 'center', fontSize: 21, fontWeight: 'bold' }}>{this.state.selectedStudent.nume}:</Text>
-                                <Text style={{ alignSelf: 'center', fontSize: 19, fontWeight: 'bold' }}>QRCode-ul pentru Aplicatia Elevului</Text>
+                                <Text style={{ alignSelf: 'center', fontSize: 19, fontWeight: 'bold' }}>QRCode-ul pentru Aplicatia Cursantului:</Text>
                             </View>
                             <View style={{ alignSelf: 'center' }}>
                                 <QRCode
                                     value={`${firebase.auth().currentUser.uid}+${this.state.selectedStudent.uid}`}
-                                    size={size}
+                                    size={150}
                                 />
                             </View>
                             <View style={{ alignSelf: 'center', marginTop: 20 }}>
                                 <Button
                                     backgroundColor="#1E6EC7"
                                     title="Gata"
+                                    style={{ marginBottom: 20 }}
                                     onPress={() => {
                                         this.setState({ isQRCodeModalVisible: false })
                                     }}

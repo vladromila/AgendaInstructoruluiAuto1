@@ -11,10 +11,10 @@ class ListItemFS extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-       if(nextProps.selectedStudentUid===nextProps.student.uid)
-       this.setState({isVisible:true})
-       else
-       this.setState({isVisible:false});
+        if (nextProps.selectedStudentUid === nextProps.student.uid)
+            this.setState({ isVisible: true })
+        else
+            this.setState({ isVisible: false });
     }
     render() {
         return (
@@ -29,7 +29,7 @@ class ListItemFS extends React.Component {
                     rightIcon={<Icon name={this.state.isVisible === true ? "keyboard-arrow-down" : "keyboard-arrow-up"} size={40} />}
                 />
                 {this.state.isVisible === true ?
-                    <View style={{ backgroundColor: this.props.isInactive === false ? 'rgba(30, 110, 199,0.3)' : 'rgba(239, 242, 55,0.3)', marginLeft: 10, marginRight: 10, alignSelf: 'center', width: Dimensions.get('screen').width - 20, padding: 5 }}>
+                    <View style={{ backgroundColor: this.props.isInactive === false ? 'rgba(30, 110, 199,0.3)' : 'rgba(239, 242, 55,0.3)', width: '95%', alignSelf: 'center', padding: 5 }}>
                         <Text style={{ fontWeight: "bold", fontSize: 18 }}>Starea sedintelor:</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={{ fontWeight: "bold", fontSize: 16 }}>Nr. total de sed. efectuate: </Text><Text style={{ fontSize: 16 }}>{this.props.student.doneClassesTotal ? this.props.student.extraClassesTotal ? Object.keys(this.props.student.doneClassesTotal).length + Object.keys(this.props.student.extraClassesTotal).length : Object.keys(this.props.student.doneClassesTotal).length : this.props.student.extraClassesTotal ? Object.keys(this.props.student.extraClassesTotal).length : 0}</Text>

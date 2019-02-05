@@ -1,14 +1,18 @@
 import { createMaterialTopTabNavigator, createAppContainer } from 'react-navigation'
 import StudentFinishedNClasses from './StudentFinishedClasses/StundentFinishedNClasses';
 import StudentFinishedEClasses from './StudentFinishedClasses/StudentFinishedEClasses';
+import StundentProgrammedClasses from './StudentFinishedClasses/StundentProgrammedClasses';
 
 const StudentFinishedClasses = createAppContainer(createMaterialTopTabNavigator({
+    StundetProgrammedClasses: {
+        screen: StundentProgrammedClasses
+    },
     StudentFinishedNClassesTab: {
         screen: StudentFinishedNClasses
     },
     StudentFinishedEClassesTab: {
         screen: StudentFinishedEClasses
-    }
+    },
 },
     {
         animationEnabled: false,
