@@ -225,28 +225,28 @@ class HomeMainPage extends Component {
             if (item.extraClassesTotal) {
                 let finishedNClasses = _.toArray(item.doneClassesTotal);
                 let finishedEClasses = _.toArray(item.extraClassesTotal);
-                this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, finishedEClasses, nume: item.nume })
+                this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, finishedEClasses, nume: item.nume, uid: item.uid })
             }
             else {
                 let finishedNClasses = _.toArray(item.doneClassesTotal);
-                this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, nume: item.nume })
+                this.props.navigation.navigate('StudentFinishedClasses', { finishedNClasses, nume: item.nume, uid: item.uid })
             }
         else
             if (item.extraClassesTotal) {
                 let finishedEClasses = _.toArray(item.extraClassesTotal);
-                this.props.navigation.navigate('StudentFinishedClasses', { finishedEClasses, nume: item.nume })
+                this.props.navigation.navigate('StudentFinishedClasses', { finishedEClasses, nume: item.nume, uid: item.uid })
             }
             else {
-                this.props.navigation.navigate('StudentFinishedClasses', { nume: item.nume })
+                this.props.navigation.navigate('StudentFinishedClasses', { nume: item.nume, uid: item.uid })
             }
     }
-    onViewCanceledClassesPress(item) {
+    onViewCanceledClassesPress(item) {  
         if (item.canceledClasses) {
             let canceledClasses = _.toArray(item.canceledClasses);
-            this.props.navigation.navigate('StudentCanceledClasses', { canceledClasses, nume: item.nume })
+            this.props.navigation.navigate('StudentCanceledClasses', { canceledClasses, nume: item.nume, uid: item.uid })
         }
         else
-            this.props.navigation.navigate('StudentCanceledClasses', { nume: item.nume })
+            this.props.navigation.navigate('StudentCanceledClasses', { nume: item.nume, uid: item.uid })
     }
 
 
