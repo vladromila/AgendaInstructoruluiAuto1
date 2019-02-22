@@ -20,7 +20,7 @@ export const fetchStudentsFromLocalStorage = ({ students }) => {
     }
 }
 
-export const fetchExamsFromLocalStorage = ({ exams}) => {
+export const fetchExamsFromLocalStorage = ({ exams }) => {
     return (dispatch) => {
         dispatch({
             type: 'examsLocal',
@@ -150,6 +150,14 @@ export const fetchData = () => {
                 const rStudents = _.map(snapshot.val(), (val, uid) => {
                     return { ...val, uid };
                 });
+                function compare(a, b) {
+                    if (a.name < b.name)
+                        return -1;
+                    if (a.name > b.name)
+                        return 1;
+                    return 0;
+                }
+                rStudents.sort(compare)
                 dispatch({
                     type: 'rStudents',
                     payload: rStudents
