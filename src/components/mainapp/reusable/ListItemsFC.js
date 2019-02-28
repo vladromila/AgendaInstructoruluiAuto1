@@ -19,6 +19,7 @@ class ListItemFC extends Component {
                 this.setState({ isVisible: false })
     }
     render() {
+        console.log(this.props.value)
         return (
             <React.Fragment>
                 {this.props.class && this.props.student ? <View><ListItem
@@ -29,7 +30,7 @@ class ListItemFC extends Component {
                     leftIcon={<View style={{ flexDirection: 'column', borderRightWidth: 3, borderRightColor: 'red' }}>
                         <View style={{ marginRight: 10 }}>
                             <Text style={{ fontSize: 19, fontWeight: '500' }}>{this.props.class.hour < 10 ? `0${this.props.class.hour}` : `${this.props.class.hour}`}:{this.props.class.minutes >= 0 && this.props.class.minutes < 10 ? `${this.props.class.minutes}0` : `${this.props.class.minutes}`}</Text>
-                            <Text style={{ fontSize: 16 }}>{this.props.class.minutes + 30 >= 60 ? `${this.props.class.hour + 2}` : `${this.props.class.hour + 1}`}:{(this.props.class.minutes + 30) % 60 >= 0 && (this.props.class.minutes + 30) % 60 < 10 ? `${(this.props.class.minutes + 30) % 60}0` : `${(this.props.class.minutes + 30) % 60}`}</Text></View></View>}
+                            <Text style={{ fontSize: 16 }}>{this.props.class.minutes + this.props.value >= 60 ? `${this.props.class.hour + 2}` : `${this.props.class.hour + 1}`}:{(this.props.class.minutes + this.props.value) % 60 >= 0 && (this.props.class.minutes + this.props.value) % 60 < 10 ? `${(this.props.class.minutes + this.props.value) % 60}0` : `${(this.props.class.minutes + this.props.value) % 60}`}</Text></View></View>}
                     rightIcon={<Icon name={this.state.isVisible === true ? "keyboard-arrow-down" : "keyboard-arrow-up"} size={40} />}
                     title={<View style={{ marginLeft: 6, flexDirection: 'column' }}>{this.props.class.location !== '' && this.props.class.location ? <Text style={{ fontSize: 17, fontWeight: '500', color: 'white' }}>Locatie: <Text style={{ fontWeight: 'bold' }}>{`${this.props.class.location}`}</Text></Text> : null}<Text style={{ fontSize: 19, fontWeight: '700' }}>{this.props.student.nume}</Text>{this.props.class.month === new Date().getMonth() && this.props.class.year === new Date().getFullYear() && this.props.class.day === new Date().getDate() ? <Text style={{ fontSize: 17, fontWeight: '200' }}>{this.props.student.doneClasses ? Object.keys(this.props.student.doneClasses).length < 15 ? "Sedinta de scolarizare" : "Sedinta de perfectionare" : "Sedinta de scolarizare"}</Text> : null}</View>} />
                     {this.state.isVisible === true ?
@@ -103,7 +104,7 @@ class ListItemFC extends Component {
                         leftIcon={<View style={{ flexDirection: 'column', borderRightWidth: 3, borderRightColor: 'red' }}>
                             <View style={{ marginRight: 10 }}>
                                 <Text style={{ fontSize: 19, fontWeight: '500' }}>{this.props.scheduledClass.hour < 10 ? `0${this.props.scheduledClass.hour}` : `${this.props.scheduledClass.hour}`}:{this.props.scheduledClass.minutes >= 0 && this.props.scheduledClass.minutes < 10 ? `${this.props.scheduledClass.minutes}0` : `${this.props.scheduledClass.minutes}`}</Text>
-                                <Text style={{ fontSize: 16 }}>{this.props.scheduledClass.minutes + 30 >= 60 ? `${this.props.scheduledClass.hour + 2}` : `${this.props.scheduledClass.hour + 1}`}:{(this.props.scheduledClass.minutes + 30) % 60 >= 0 && (this.props.scheduledClass.minutes + 30) % 60 < 10 ? `${(this.props.scheduledClass.minutes + 30) % 60}0` : `${(this.props.scheduledClass.minutes + 30) % 60}`}</Text></View></View>}
+                                <Text style={{ fontSize: 16 }}>{this.props.scheduledClass.minutes + this.props.value >= 60 ? `${this.props.scheduledClass.hour + 2}` : `${this.props.scheduledClass.hour + 1}`}:{(this.props.scheduledClass.minutes + this.props.value) % 60 >= 0 && (this.props.scheduledClass.minutes + this.props.value) % 60 < 10 ? `0${(this.props.scheduledClass.minutes + this.props.value) % 60}` : `${(this.props.scheduledClass.minutes + this.props.value) % 60}`}</Text></View></View>}
                         rightIcon={<Icon name="add" size={40} onPress={this.props.onClassCreatePress} />}
                         title={<View style={{ marginLeft: 6, flexDirection: 'column' }}><Text style={{ fontSize: 19, fontWeight: '700' }}>Nimic Programat</Text></View>} />
                 }

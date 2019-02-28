@@ -5,13 +5,14 @@ import { Header } from 'react-native-elements'
 import Gradient from 'react-native-css-gradient'
 import ListItemFC from '../reusable/ListItemsFC';
 import { connect } from 'react-redux'
-import { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange, fetchClassesFromLocalStorage, fetchStudentsFromLocalStorage, fetchExamsFromLocalStorage, fetchFinishedStudentsFromLocalStorage, fetchInStudentsFromLocalStorage, fetchInfoFromLocalStorage, fetchRStudentsFromLocalStorage } from '../../../actions';
+import { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange, fetchClassesFromLocalStorage, fetchStudentsFromLocalStorage, fetchExamsFromLocalStorage, fetchFinishedStudentsFromLocalStorage, fetchInStudentsFromLocalStorage, fetchInfoFromLocalStorage, fetchRStudentsFromLocalStorage, isUserSpecial } from '../../../actions';
 import CalendarStrip from 'react-native-calendar-strip';
 import { Agenda, LocaleConfig } from 'react-native-calendars'
 import _ from 'lodash';
 import { Item, Input, Label } from 'native-base'
 import ActionSheet from 'react-native-actionsheet';
 import { months, monthsShort } from '../../../variables';
+import firebase from 'firebase';
 const XDate = require('xdate');
 
 LocaleConfig.locales['ro'] = {
@@ -39,9 +40,9 @@ class HomeMainPage extends Component {
                 { hour: 18, minutes: 30 },
                 { hour: 20, minutes: 0 }
             ],
-            day: null,
-            month: null,
-            year: null,
+            day: new Date().getDate(),
+            month: new Date().getMonth(),
+            year: new Date().getFullYear(),
             minutes: null,
             hour: null,
             isExamVisible: false,
@@ -93,7 +94,6 @@ class HomeMainPage extends Component {
             this.handleFirstConnectivityChange
         );
         let date = new Date();
-        this.setState({ year: date.getFullYear(), month: date.getMonth(), day: date.getDate(), hour: date.getHours(), minutes: date.getMinutes() })
     }
 
     onClassCreatePress(item) {
@@ -107,13 +107,7 @@ class HomeMainPage extends Component {
             selectedDay: this.parseDate(new Date(date.getFullYear(), date.getMonth(), date.getDate()))
         })
         this.setState({ year: date.getFullYear(), month: date.getMonth(), day: date.getDate() });
-
-        let classes = []
-        this.props.classes.forEach(classData => {
-            if (classData.day === date.getDate() && classData.month === date.getMonth() && classData.year === date.getFullYear())
-                classes.push(classData);
-        });
-        this.setState({ classes })
+        this.setClasses({ classesFrom: this.props.classes, day: date.getDate(), month: date.getMonth(), year: date.getFullYear() });
         let wantedExam = null;
         this.props.exams.forEach(exam => {
             if (exam.day === date.getDate() && exam.month === date.getMonth() && exam.year === date.getFullYear()) {
@@ -128,12 +122,7 @@ class HomeMainPage extends Component {
 
     onDateSelectedPressFromAgenda(day, month, year) {
         this.setState({ day, month: month - 1, year });
-        let classes = []
-        this.props.classes.forEach(classData => {
-            if (classData.day === day && classData.month === month - 1 && classData.year === year)
-                classes.push(classData);
-        });
-        this.setState({ classes })
+        this.setClasses({ classesFrom: this.props.classes, day, month: month - 1, year })
         let wantedExam = null;
         this.props.exams.forEach(exam => {
             if (exam.day === day && exam.month === month - 1 && exam.year === year)
@@ -145,14 +134,77 @@ class HomeMainPage extends Component {
             this.setState({ exam: null, isExamVisible: false });
     }
 
+    setClasses = ({ classesFrom, day, month, year }) => {
+        let classes = [];
+        classesFrom.forEach(classData => {
+            if (classData.day === day && classData.month === month && classData.year === year)
+                classes.push(classData);
+        });
+        classes.sort((a, b) => {
+            if (a.hour < b.hour)
+                return -1;
+            if (a.hour > b.hour)
+                return 1;
+            if (a.hour === b.hour) {
+                if (a.minutes < b.minutes)
+                    return -1;
+                if (a.minutes > b.minutes)
+                    return 1;
+                if (a.month === b.month)
+                    return 0;
+            }
+        })
+        if (classes.length) {
+            let toRenderClasses = classes;
+            toRenderClasses.forEach((classData, i) => {
+                if (toRenderClasses[i + 1]) {
+                    let c1 = classData.hour * 60 + classData.minutes;
+                    let c2 = toRenderClasses[i + 1].hour * 60 + toRenderClasses[i + 1].minutes;
+                    let dif = c2 - c1 - 60 + this.props.value;
+                    let j = 0;
+                    while (dif >= 60 + this.props.value) {
+                        j++;
+                        classes.splice(classes.indexOf(classData) + j, 0, { hour: Math.trunc(classData.hour + j + (classData.minutes + j * this.props.value) / 60), minutes: (classData.minutes + j * this.props.value) % 60 })
+                        dif -= 60 + this.props.value;
+                    }
+                }
+            })
+            let startScheduleSum = 7 * 60;
+            let endScheduleSum = 20 * 60 + 40;
+            let startSum = classes[0].hour * 60 + classes[0].minutes;
+            let endSum = classes[classes.length - 1].hour * 60 - classes[classes.length - 1].minutes;
+            let startDif = startSum - startScheduleSum;
+            let endDif = endScheduleSum - endSum;
+            let k = 0;
+            while (startDif >= 60 + this.props.value) {
+                classes.splice(k, 0, { hour: Math.trunc(7 + k + (this.props.value * (k)) / 60), minutes: (k * this.props.value) % 60 })
+                k++;
+                startDif -= 60 + this.props.value;
+            }
+            k = 0;
+            let lastClass = classes[classes.length - 1];
+            while (endDif >= 60 + this.props.value) {
+                k++;
+                classes.push({ hour: Math.trunc((lastClass.hour * 60 + lastClass.minutes + k * (60 + this.props.value)) / 60), minutes: (k * this.props.value + lastClass.minutes) % 60 })
+                endDif -= 60 + this.props.value;
+            }
+            this.setState({ classes })
+        }
+        else {
+            let dif = 22 * 60 - 7 * 60;
+            let k = 0;
+            while (dif >= 60 + this.props.value) {
+                classes.push({ hour: Math.trunc((420 + k * (60 + this.props.value)) / 60), minutes: (420 + k * this.props.value) % 60 })
+                k++;
+                dif -= 60 + this.props.value;
+            }
+            this.setState({ classes })
+        }
+    }
     componentWillReceiveProps(nextProps) {
         if (nextProps.addCSuccess === true)
             this.setState({ isExamModalVisible: false, politist: '', calificativ: '', selectedExamedStudent: {} })
-        let classes = []
-        nextProps.classes.forEach(classData => {
-            if (classData.day === this.state.day && classData.month === this.state.month && classData.year === this.state.year)
-                classes.push(classData);
-        });
+        this.setClasses({ classesFrom: nextProps.classes, day: this.state.day, month: this.state.month, year: this.state.year });
         let exam = null;
         nextProps.exams.forEach(examC => {
             if (examC.year === this.state.year && examC.month === this.state.month && examC.day === this.state.day)
@@ -162,7 +214,7 @@ class HomeMainPage extends Component {
             this.setState({ exam })
         else
             this.setState({ exam: null })
-        this.setState({ classes, isExamVisible: false })
+        this.setState({ isExamVisible: false })
     }
 
     handleFirstConnectivityChange(connectionInfo) {
@@ -171,6 +223,7 @@ class HomeMainPage extends Component {
 
     componentWillMount() {
         this.props.fetchData();
+        this.props.isUserSpecial(firebase.auth().currentUser.uid)
         AsyncStorage.getItem('classes')
             .then((value) => {
                 if (value !== null)
@@ -206,6 +259,7 @@ class HomeMainPage extends Component {
                 if (value !== null)
                     this.props.fetchInfoFromLocalStorage({ info: JSON.parse(value) });
             })
+
     }
 
     compareClasses(s1, s2, sClass) {
@@ -240,7 +294,7 @@ class HomeMainPage extends Component {
                 this.props.navigation.navigate('StudentFinishedClasses', { nume: item.nume, uid: item.uid })
             }
     }
-    onViewCanceledClassesPress(item) {  
+    onViewCanceledClassesPress(item) {
         if (item.canceledClasses) {
             let canceledClasses = _.toArray(item.canceledClasses);
             this.props.navigation.navigate('StudentCanceledClasses', { canceledClasses, nume: item.nume, uid: item.uid })
@@ -346,73 +400,37 @@ class HomeMainPage extends Component {
                                         />}
                                     <FlatList
                                         keyExtractor={(item, i) => `${i}`}
-                                        data={this.state.classesSchedule}
-                                        extraData={[this.state, this.props]}
+                                        data={this.state.classes}
+                                        extraData={[this.state.classes, this.state.selectedClass, this.props.value]}
                                         renderItem={({ item, index }) => {
-                                            let wantedClass = null;
-                                            this.state.classes.forEach(classData => {
-                                                if (classData.hour === item.hour && classData.minutes === item.minutes) {
-                                                    wantedClass = classData;
-                                                }
-                                                else {
-                                                    if (classData.hour < item.hour) {
-                                                        if (index === 0) {
-                                                            wantedClass = classData;
-                                                        }
-                                                        else {
-                                                            if (this.compareClasses(this.state.classesSchedule[index - 1], item, classData) === 2) {
-                                                                wantedClass = classData;
-                                                            }
-                                                        }
-                                                    }
-                                                    if (classData.hour === item.hour) {
-                                                        if (this.compareClasses(item, this.state.classesSchedule[index + 1], classData) === 1) {
-                                                            wantedClass = classData;
-                                                        }
-                                                        if (this.compareClasses(item, this.state.classesSchedule[index + 1], classData) === 3) {
-                                                            wantedClass = classData;
-                                                        }
-
-                                                    }
-                                                    if (classData.hour > item.hour) {
-                                                        if (this.state.classesSchedule[index + 1]) {
-                                                            if (this.compareClasses(item, this.state.classesSchedule[index + 1], classData) === 1) {
-                                                                wantedClass = classData;
-                                                            }
-                                                            if (this.compareClasses(item, this.state.classesSchedule[index + 1], classData) === 3) {
-                                                                wantedClass = classData;
-                                                            }
-                                                        }
-                                                        else
-                                                            wantedClass = classData;
-                                                    }
-                                                }
-                                            })
-                                            if (wantedClass) {
+                                            if (item.studentUid) {
                                                 let wantedStudent = {}
                                                 this.props.students.forEach(student => {
-                                                    if (student.uid === wantedClass.studentUid)
+                                                    if (student.uid === item.studentUid)
                                                         wantedStudent = student;
                                                 })
                                                 return <ListItemFC
-                                                    class={wantedClass}
+                                                    class={item}
+                                                    value={this.props.value}
                                                     student={wantedStudent}
                                                     onListItemProfilePress={() => { this.props.navigation.navigate('StudentProfile', wantedStudent); }}
                                                     onViewCanceledClassesPress={() => this.onViewCanceledClassesPress(wantedStudent)}
                                                     onViewFinishedClassesPress={() => this.onViewFinishedClassesPress(wantedStudent)}
                                                     selectedUid={this.state.selectedUid}
                                                     onLongPress={() => {
-                                                        this.setState({ selectedClass: wantedClass, selectedStudent: wantedStudent });
+                                                        this.setState({ selectedClass: item, selectedStudent: wantedStudent });
                                                         this.ActionSheetForClasses.show();
                                                     }}
                                                     onPress={() => {
-                                                        this.setState({ selectedUid: this.state.selectedUid === wantedClass.uid ? null : wantedClass.uid })
+                                                        this.setState({ selectedUid: this.state.selectedUid === item.uid ? null : item.uid })
                                                     }}
                                                 />
 
                                             }
                                             else
-                                                return <ListItemFC onClassCreatePress={() => this.onClassCreatePress(item)} scheduledClass={item} />
+                                                return <ListItemFC
+                                                    value={this.props.value}
+                                                    onClassCreatePress={() => this.onClassCreatePress(item)} scheduledClass={item} />
                                         }}
                                     /></View>
                             </ScrollView>
@@ -684,6 +702,7 @@ mapStateToProps = (state) => {
     const { classes, exams, students } = state.FetchedData
     const { isClassCancelDeleteModalVisible, classCancelDeleteLoading, isClassDeleteModalVisible, classDeleteLoading } = state.ClassesReducer;
     const { addCLoading, addCSuccess, isExamDeleteModalVisible, deleteLoading } = state.ExamsReducer;
-    return { classes, exams, students, isClassCancelDeleteModalVisible, classCancelDeleteLoading, isClassDeleteModalVisible, classDeleteLoading, addCLoading, addCSuccess, isExamDeleteModalVisible, deleteLoading };
+    const { value } = state.GlobalVariablesReducer;
+    return { classes, exams, students, isClassCancelDeleteModalVisible, classCancelDeleteLoading, isClassDeleteModalVisible, classDeleteLoading, addCLoading, addCSuccess, isExamDeleteModalVisible, deleteLoading, value };
 }
-export default connect(mapStateToProps, { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange, fetchClassesFromLocalStorage, fetchStudentsFromLocalStorage, fetchExamsFromLocalStorage, fetchFinishedStudentsFromLocalStorage, fetchInStudentsFromLocalStorage, fetchInfoFromLocalStorage, fetchRStudentsFromLocalStorage })(HomeMainPage)
+export default connect(mapStateToProps, { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange, fetchClassesFromLocalStorage, fetchStudentsFromLocalStorage, fetchExamsFromLocalStorage, fetchFinishedStudentsFromLocalStorage, fetchInStudentsFromLocalStorage, fetchInfoFromLocalStorage, fetchRStudentsFromLocalStorage, isUserSpecial })(HomeMainPage)

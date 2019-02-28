@@ -8,9 +8,9 @@ export const LOGIN_WITH_FACEBOOK_FAIL = 'login_with_facebook_fail';
 export const SIGNUP_START = 'signup_start';
 export const SIGNUP_SUCCESS = 'signup_success';
 export const SIGNUP_FAILED = 'signup_failed';
-export const PASSWORD_RESET_START='password_reset_start';
-export const PASSWORD_RESET_SUCCESS='password_reset_success';
-export const PASSWORD_RESET_FAIL='password_reset_fail';
+export const PASSWORD_RESET_START = 'password_reset_start';
+export const PASSWORD_RESET_SUCCESS = 'password_reset_success';
+export const PASSWORD_RESET_FAIL = 'password_reset_fail';
 export const FETCH_START = 'fetch_start';
 export const FETCH_SUCCESS = 'fetch_success';
 export const FETCH_FAILED = 'fetch_failed';
@@ -36,7 +36,7 @@ export const EXAM_ADDC_SUCCESS = 'exam_addc_success';
 export const EXAM_ADDC_FAIL = 'exam_addc_fail';
 export const EXAM_OH_DELETE = 'exam_oh_delete';
 export const EXAM_OH_DELETE1 = 'exam_oh_delete1';
-export const CONNECTION_STATUS_CHANGE='connection_status_change';
+export const CONNECTION_STATUS_CHANGE = 'connection_status_change';
 
 //edit
 export const STUDENT_EDIT_START = 'student_edit_start';
@@ -69,3 +69,4 @@ export const EXAM_DELETE_FAIL = 'exam_delete_fail';
 //GlobalVariables
 
 export const IS_AUTOMATIC_TYPE_SELECT_WANTED = 'is_automatic_type_select_wanted';
+export const IS_USER_SPECIAL = "is_user_special";
