@@ -19,7 +19,6 @@ class ListItemFC extends Component {
                 this.setState({ isVisible: false })
     }
     render() {
-        console.log(this.props.value)
         return (
             <React.Fragment>
                 {this.props.class && this.props.student ? <View><ListItem
