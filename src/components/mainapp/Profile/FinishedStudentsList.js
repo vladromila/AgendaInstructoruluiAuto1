@@ -48,7 +48,7 @@ class FinishedStudentsList extends React.Component {
                             {this.state.selectedUid === item.uid ?
                                 <View style={{ backgroundColor: 'rgba(30, 110, 199,0.3)', marginLeft: 10, marginRight: 10, alignSelf: 'center', width: Dimensions.get('screen').width - 20, padding: 5 }}>
                                     <Text style={{ fontWeight: 'bold', fontSize: 19 }}>Date despre examen:</Text>
-                                    <Text style={{ fontSize: 16 }}>Nume Politist: <Text style={{ fontWeight: 'bold' }}>{item.numePolitist}</Text></Text>
+                                    <Text style={{ fontSize: 16 }}>Nume Politist: <Text style={{ fontWeight: 'bold' }}>{item.examData.numePolitist}</Text></Text>
                                     <Text style={{ fontSize: 16 }}>Data Examenului: <Text style={{ fontWeight: 'bold' }}>{item.examData.day} {months[item.examData.month]} {item.examData.year}</Text></Text>
                                 </View> : null}
                         </View>
