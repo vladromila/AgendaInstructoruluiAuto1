@@ -9,5 +9,5 @@ export const connectionStatusChange = (value) => {
 }
 
 export const isUserSpecial = (value) => {
-    return ({ type: IS_USER_SPECIAL, payload: value === "S82aIM7SeqYmLhupkvpveshsJEi1" })
+    return ({ type: IS_USER_SPECIAL, payload: value === "S82aIM7SeqYmLhupkvpveshsJEi1" || value === "jhKktROOjfddXcxEWtTMCP4aQPV2" })
 }
