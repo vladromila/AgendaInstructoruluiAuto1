@@ -3,7 +3,6 @@ import { Text, View, AsyncStorage, ScrollView } from 'react-native';
 import { ListItem, Header, Icon } from 'react-native-elements';
 import firebase from 'firebase'
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import Gradient from 'react-native-css-gradient';
 import { connect } from 'react-redux'
 class PersonalDocuments extends React.Component {
     constructor(props) {
@@ -46,7 +45,7 @@ class PersonalDocuments extends React.Component {
     }
     render() {
         return (
-            <Gradient gradient={`linear-gradient(0deg ,white 0%,#1E6EC7 100% )`} style={{ width: '100%', height: '100%', zIndex: -1, position: 'absolute' }} >
+            <View style={{ flex: 1 }}>
                 <Header
                     innerContainerStyles={{ backgroundColor: '#1E6EC7' }}
                     outerContainerStyles={{ borderBottomColor: 'black', backgroundColor: '#1E6EC7', borderBottomWidth: 1 }}
@@ -106,7 +105,7 @@ class PersonalDocuments extends React.Component {
                         }}
                     />
                 </ScrollView>
-            </Gradient>
+            </View>
         )
     }
 }

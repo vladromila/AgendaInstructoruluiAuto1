@@ -18,11 +18,11 @@ const HomeTabComponent = createStackNavigator({
     ClassEdit: {
         screen: ClassEdit
     },
-    ExamEdit:{
-        screen:ExamEdit
+    ExamEdit: {
+        screen: ExamEdit
     }
 }, {
-        initialRouteName: 'HomeMainPage'
-    })
+    initialRouteName: 'HomeMainPage'
+})
 const HomeTab = createAppContainer(HomeTabComponent);
 export default HomeTab;

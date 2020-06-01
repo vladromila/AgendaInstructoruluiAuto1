@@ -2,7 +2,6 @@ import React from 'react';
 import { View, FlatList, Text, Dimensions } from 'react-native';
 import { connect } from 'react-redux'
 import { ListItem, Icon } from 'react-native-elements';
-import Gradient from 'react-native-css-gradient';
 import { months } from '../../../variables';
 import _ from 'lodash';
 
@@ -27,7 +26,7 @@ class FinishedStudentsList extends React.Component {
 
     render() {
         return (
-            <Gradient gradient={`linear-gradient(0deg ,white 0%,#1E6EC7 100% )`} style={{ width: '100%', height: '100%', zIndex: -1, position: 'absolute' }} >
+            <View style={{ flex: 1 }}>
                 <FlatList
                     data={this.props.rStudents}
                     keyExtractor={(item, i) => `${i}`}
@@ -51,7 +50,7 @@ class FinishedStudentsList extends React.Component {
                                     <Text style={{ fontSize: 19, fontWeight: "bold" }}>Istoricul Examenelor:</Text>
                                     {_.toArray(item.attempts).map((ex, i) => {
                                         return <ListItem
-                                        containerStyle={{borderBottomColor:'black'}}
+                                            containerStyle={{ borderBottomColor: 'black' }}
                                             key={i}
                                             title={<View style={{ flexDirection: 'column' }}><Text style={{ fontSize: 17 }}>Data: <Text style={{ fontWeight: 'bold' }}>{ex.day} {months[ex.month]} {ex.year}</Text></Text>{ex.numePolitist != "" ? <Text style={{ fontSize: 15 }}>Politist Examinator: <Text style={{ fontWeight: 'bold', fontSize: 15 }}>{ex.numePolitist}</Text></Text> : null}</View>}
                                         />
@@ -60,7 +59,7 @@ class FinishedStudentsList extends React.Component {
                         </View>
                     }}
                 />
-            </Gradient>
+            </View>
         );
     }
 }

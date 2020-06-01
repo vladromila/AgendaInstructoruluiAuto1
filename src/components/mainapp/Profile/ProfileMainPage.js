@@ -4,7 +4,6 @@ import { Button, Header, ListItem, Icon } from 'react-native-elements';
 import firebase from 'firebase';
 import { setIsAutomaticTypeSelectWanted } from '../../../actions/'
 import { connect } from 'react-redux';
-import Gradient from 'react-native-css-gradient';
 import _ from 'lodash';
 import { Notifications, Permissions } from 'expo'
 import { months } from '../../../variables'
@@ -57,9 +56,9 @@ class ProfileMainPage extends Component {
                     }).then(() => {
                         firebase.auth().signOut();
                     })
-                    .catch(()=>{
-                        firebase.auth().signOut();
-                    })
+                        .catch(() => {
+                            firebase.auth().signOut();
+                        })
                 })
                 .catch(() => {
                     firebase.auth().signOut();
@@ -70,7 +69,7 @@ class ProfileMainPage extends Component {
 
     render() {
         return (
-            <Gradient gradient={`linear-gradient(0deg ,white 0%,#1E6EC7 100% )`} style={{ width: '100%', height: '100%', zIndex: -1, position: 'absolute' }} >
+            <View style={{ flex: 1 }}>
                 <Header
                     innerContainerStyles={{ backgroundColor: '#1E6EC7' }}
                     outerContainerStyles={{ borderBottomColor: 'black', backgroundColor: '#1E6EC7', borderBottomWidth: 1 }}
@@ -128,7 +127,7 @@ class ProfileMainPage extends Component {
                     }
                     containerViewStyle={{ marginBottom: 4 }}
                 />
-            </Gradient>
+            </View>
         )
     }
 }

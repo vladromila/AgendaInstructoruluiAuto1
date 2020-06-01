@@ -2,7 +2,6 @@ import React from 'react';
 import { View, FlatList, Text, Dimensions } from 'react-native';
 import { connect } from 'react-redux'
 import { ListItem, Icon } from 'react-native-elements';
-import Gradient from 'react-native-css-gradient';
 import { months } from '../../../variables';
 
 class FinishedStudentsList extends React.Component {
@@ -26,7 +25,7 @@ class FinishedStudentsList extends React.Component {
 
     render() {
         return (
-            <Gradient gradient={`linear-gradient(0deg ,white 0%,#1E6EC7 100% )`} style={{ width: '100%', height: '100%', zIndex: -1, position: 'absolute' }} >
+            <View style={{ flex: 1 }}>
                 <FlatList
                     data={this.props.finishedStudents}
                     keyExtractor={(item, i) => `${i}`}
@@ -54,7 +53,7 @@ class FinishedStudentsList extends React.Component {
                         </View>
                     }}
                 />
-            </Gradient>
+            </View>
         );
     }
 }

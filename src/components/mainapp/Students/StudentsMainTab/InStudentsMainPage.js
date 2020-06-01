@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, ScrollView, FlatList, Modal } from 'react-native';
-import Gradient from 'react-native-css-gradient'
 import { Header, Button } from 'react-native-elements'
 import { studentOHInToAModal, studentInToA } from '../../../../actions/'
 import { connect } from 'react-redux'
@@ -22,7 +21,7 @@ class InStudentsHome extends React.Component {
     }
     render() {
         return (
-            <Gradient gradient={`linear-gradient(0deg ,white 0%, #1E6EC7 100% )`} style={{ width: '100%', height: '100%', zIndex: -1, position: 'absolute' }} >
+            <View style={{ flex: 1 }}>
                 <Header
                     innerContainerStyles={{ backgroundColor: '#1E6EC7' }}
                     outerContainerStyles={{ borderBottomColor: 'black', backgroundColor: '#1E6EC7', borderBottomWidth: 1 }}
@@ -139,7 +138,7 @@ class InStudentsHome extends React.Component {
                         </View>
                     </View>
                 </Modal>
-            </Gradient>
+            </View>
         );
     }
 }

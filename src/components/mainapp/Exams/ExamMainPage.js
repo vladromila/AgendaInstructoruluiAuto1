@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Text, View, FlatList, Modal, Dimensions } from 'react-native'
-import Gradient from 'react-native-css-gradient';
 import { Header, ListItem, Button } from 'react-native-elements'
 import { Item, Label, Input } from 'native-base'
 import { examAddC, examOHDelete1, examDelete } from '../../../actions/'
@@ -33,8 +32,7 @@ class ExamMainPage extends Component {
     }
     render() {
         return (
-
-            <Gradient gradient={`linear-gradient(0deg ,white 0%, #1E6EC7 130% )`} style={{ width: '100%', height: '100%', zIndex: 2, position: 'absolute' }} >
+            <View style={{ flex: 1, backgroundColor: "white" }}>
                 <Header
                     innerContainerStyles={{ backgroundColor: '#1E6EC7' }}
                     outerContainerStyles={{ borderBottomColor: 'black', backgroundColor: '#1E6EC7', borderBottomWidth: 1 }}
@@ -358,7 +356,7 @@ class ExamMainPage extends Component {
                         }
                     }}
                 />
-            </Gradient>
+            </View>
         )
     }
 }
