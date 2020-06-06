@@ -8,7 +8,7 @@ import { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHD
 import CalendarStrip from 'react-native-calendar-strip';
 import { Agenda, LocaleConfig } from 'react-native-calendars'
 import _ from 'lodash';
-import { Item, Input, Label } from 'native-base'
+import { Item, Input, Label, Title } from 'native-base'
 import ActionSheet from 'react-native-actionsheet';
 import { months, monthsShort } from '../../../variables';
 import firebase from 'firebase';
@@ -410,23 +410,64 @@ class HomeMainPage extends Component {
                                                         if (student.uid === item.studentUid)
                                                             wantedStudent = student;
                                                     })
-                                                    return <ListItemFC
-                                                        class={item}
-                                                        value={this.props.value}
-                                                        student={wantedStudent}
-                                                        onListItemProfilePress={() => { this.props.navigation.navigate('StudentProfile', wantedStudent); }}
-                                                        onViewCanceledClassesPress={() => this.onViewCanceledClassesPress(wantedStudent)}
-                                                        onViewFinishedClassesPress={() => this.onViewFinishedClassesPress(wantedStudent)}
-                                                        selectedUid={this.state.selectedUid}
-                                                        onLongPress={() => {
-                                                            this.setState({ selectedClass: item, selectedStudent: wantedStudent });
-                                                            this.ActionSheetForClasses.show();
-                                                        }}
-                                                        onPress={() => {
-                                                            this.setState({ selectedUid: this.state.selectedUid === item.uid ? null : item.uid })
-                                                        }}
-                                                    />
-
+                                                    if (this.state.classes[index + 1])
+                                                        if (this.state.classes[index + 1].day) {
+                                                            let startsum = item.hour * 60 + item.minutes + 90;
+                                                            let endsum = this.state.classes[index + 1].hour * 60 + this.state.classes[index + 1].minutes;
+                                                            if (endsum - startsum < 90)
+                                                                return <React.Fragment><ListItemFC
+                                                                    class={item}
+                                                                    value={this.props.value}
+                                                                    student={wantedStudent}
+                                                                    onListItemProfilePress={() => { this.props.navigation.navigate('StudentProfile', wantedStudent); }}
+                                                                    onViewCanceledClassesPress={() => this.onViewCanceledClassesPress(wantedStudent)}
+                                                                    onViewFinishedClassesPress={() => this.onViewFinishedClassesPress(wantedStudent)}
+                                                                    selectedUid={this.state.selectedUid}
+                                                                    onLongPress={() => {
+                                                                        this.setState({ selectedClass: item, selectedStudent: wantedStudent });
+                                                                        this.ActionSheetForClasses.show();
+                                                                    }}
+                                                                    onPress={() => {
+                                                                        this.setState({ selectedUid: this.state.selectedUid === item.uid ? null : item.uid })
+                                                                    }}
+                                                                />
+                                                                    <Text style={{ color: "black", fontSize: 20, marginLeft: 10, fontWeight: "bold" }}>Pauză: {endsum - startsum} minute</Text>
+                                                                </React.Fragment>
+                                                        }
+                                                        else
+                                                            return <ListItemFC
+                                                                class={item}
+                                                                value={this.props.value}
+                                                                student={wantedStudent}
+                                                                onListItemProfilePress={() => { this.props.navigation.navigate('StudentProfile', wantedStudent); }}
+                                                                onViewCanceledClassesPress={() => this.onViewCanceledClassesPress(wantedStudent)}
+                                                                onViewFinishedClassesPress={() => this.onViewFinishedClassesPress(wantedStudent)}
+                                                                selectedUid={this.state.selectedUid}
+                                                                onLongPress={() => {
+                                                                    this.setState({ selectedClass: item, selectedStudent: wantedStudent });
+                                                                    this.ActionSheetForClasses.show();
+                                                                }}
+                                                                onPress={() => {
+                                                                    this.setState({ selectedUid: this.state.selectedUid === item.uid ? null : item.uid })
+                                                                }}
+                                                            />
+                                                    else
+                                                        return <ListItemFC
+                                                            class={item}
+                                                            value={this.props.value}
+                                                            student={wantedStudent}
+                                                            onListItemProfilePress={() => { this.props.navigation.navigate('StudentProfile', wantedStudent); }}
+                                                            onViewCanceledClassesPress={() => this.onViewCanceledClassesPress(wantedStudent)}
+                                                            onViewFinishedClassesPress={() => this.onViewFinishedClassesPress(wantedStudent)}
+                                                            selectedUid={this.state.selectedUid}
+                                                            onLongPress={() => {
+                                                                this.setState({ selectedClass: item, selectedStudent: wantedStudent });
+                                                                this.ActionSheetForClasses.show();
+                                                            }}
+                                                            onPress={() => {
+                                                                this.setState({ selectedUid: this.state.selectedUid === item.uid ? null : item.uid })
+                                                            }}
+                                                        />
                                                 }
                                                 else
                                                     return <ListItemFC
