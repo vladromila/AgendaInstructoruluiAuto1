@@ -431,7 +431,7 @@ class HomeMainPage extends Component {
                                                                         this.setState({ selectedUid: this.state.selectedUid === item.uid ? null : item.uid })
                                                                     }}
                                                                 />
-                                                                    <Text style={{ color: "black", fontSize: 20, marginLeft: 10, fontWeight: "bold" }}>Pauză: {endsum - startsum} minute</Text>
+                                                                    {endsum - startsum > 0 ? <Text style={{ color: "black", fontSize: 20, marginLeft: 10, fontWeight: "bold" }}>Pauză: {endsum - startsum} minute</Text> : null}
                                                                 </React.Fragment>
                                                         }
                                                         else
