@@ -171,15 +171,15 @@ class HomeMainPage extends Component {
                     }
                 }
             })
-            let startScheduleSum = 7 * 60;
-            let endScheduleSum = 20 * 60 + 40;
+            let startScheduleSum = 8 * 60;
+            let endScheduleSum = 21 * 60 + 40;
             let startSum = toRenderClasses[0].hour * 60 + toRenderClasses[0].minutes;
             let endSum = toRenderClasses[toRenderClasses.length - 1].hour * 60 - toRenderClasses[toRenderClasses.length - 1].minutes;
             let startDif = startSum - startScheduleSum;
             let endDif = endScheduleSum - endSum;
             let k = 0;
             while (startDif >= 60 + this.props.value) {
-                toRenderClasses.splice(k, 0, { hour: Math.trunc(7 + k + (this.props.value * (k)) / 60), minutes: (k * this.props.value) % 60 })
+                toRenderClasses.splice(k, 0, { hour: Math.trunc(8 + k + (this.props.value * (k)) / 60), minutes: (k * this.props.value) % 60 })
                 k++;
                 startDif -= 60 + this.props.value;
             }
@@ -191,10 +191,10 @@ class HomeMainPage extends Component {
             this.setState({ classes: toRenderClasses })
         }
         else {
-            let dif = 22 * 60 - 7 * 60;
+            let dif = 23 * 60 -8 * 60;
             let k = 0;
             while (dif >= 60 + this.props.value) {
-                classes.push({ hour: Math.trunc((420 + k * (60 + this.props.value)) / 60), minutes: (420 + k * this.props.value) % 60 })
+                classes.push({ hour: Math.trunc((480 + k * (60 + this.props.value)) / 60), minutes: (480 + k * this.props.value) % 60 })
                 k++;
                 dif -= 60 + this.props.value;
             }
