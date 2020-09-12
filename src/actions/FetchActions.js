@@ -28,7 +28,14 @@ export const fetchExamsFromLocalStorage = ({ exams }) => {
         })
     }
 }
-
+export const fetchTheoryExamsFromLocalStorage = ({ exams }) => {
+    return (dispatch) => {
+        dispatch({
+            type: 'theoryExamsLocal',
+            payload: exams
+        })
+    }
+}
 export const fetchInStudentsFromLocalStorage = ({ inStudents }) => {
     return (dispatch) => {
         dispatch({
@@ -131,6 +138,26 @@ export const fetchData = () => {
                 exams.sort(compare);
                 dispatch({
                     type: 'exams',
+                    payload: exams
+                })
+            })
+        firebase.database().ref(`/users/${currentUser.uid}/theoryExams`)
+            .on('value', (snapshot) => {
+                function compare(a, b) {
+                    if (new Date(a.date).getTime() < new Date(b.date).getTime())
+                        return -1;
+                    if (new Date(a.date).getTime() > new Date(b.date).getTime())
+                        return 1;
+                    if (new Date(a.date).getTime() == new Date(b.date).getTime())
+                        return 1;
+                }
+
+                const exams = _.map(snapshot.val(), (val, uid) => {
+                    return { ...val, uid };
+                });
+                exams.sort(compare);
+                dispatch({
+                    type: 'theoryExams',
                     payload: exams
                 })
             })

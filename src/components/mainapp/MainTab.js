@@ -12,6 +12,7 @@ import ProfileTab from './Profile/ProfileTab';
 import { createMaterialTopTabNavigator, createAppContainer } from 'react-navigation'
 import { Icon } from 'native-base';
 import ChatTab from "./ChatTab/ChatTab";
+import TheoryExamsTab from "./TheoryExams/TheoryExamsTab";
 
 HomeTab.navigationOptions = {
     tabBarIcon: ({ tintColor }) => (
@@ -21,6 +22,11 @@ HomeTab.navigationOptions = {
 ExamsTab.navigationOptions = {
     tabBarIcon: ({ tintColor }) => (
         <Icon name="md-car" style={{ color: tintColor }} />
+    )
+}
+TheoryExamsTab.navigationOptions = {
+    tabBarIcon: ({ tintColor }) => (
+        <Icon name="md-book" style={{ color: tintColor }} />
     )
 }
 StudentsTab.navigationOptions = {
@@ -33,7 +39,7 @@ ProfileTab.navigationOptions = {
         <Icon name="md-person" style={{ color: tintColor }} />
     )
 }
-ChatTab.navigationOptions={
+ChatTab.navigationOptions = {
     tabBarIcon: ({ tintColor }) => (
         <Icon name="md-chatbubbles" style={{ color: tintColor }} />
     )
@@ -46,38 +52,38 @@ const MainTabComponent = createMaterialTopTabNavigator({
     ExamsTab: {
         screen: ExamsTab
     },
+    TheoryExamsTab: {
+        screen: TheoryExamsTab
+    },
     StudentsTab: {
         screen: StudentsTab
-    },
-    ChatTav: {
-        screen: ChatTab
     },
     ProfileTab: {
         screen: ProfileTab
     }
 }, {
-        animationEnabled: true,
-        swipeEnabled: true,
-        tabBarPosition: "bottom",
-        tabBarOptions: {
-            style: {
-                ...Platform.select({
-                    android: {
-                        backgroundColor: 'white'
-                    }
-                })
-            },
-            indicatorStyle: {
-                backgroundColor: '#1E6EC7'
-            },
-            activeTintColor: '#1E6EC7',
-            inactiveTintColor: '#d1cece',
-            pressColor: '#1E6EC7',
-            showLabel: false,
-            showIcon: true,
+    animationEnabled: true,
+    swipeEnabled: true,
+    tabBarPosition: "bottom",
+    tabBarOptions: {
+        style: {
+            ...Platform.select({
+                android: {
+                    backgroundColor: 'white'
+                }
+            })
+        },
+        indicatorStyle: {
+            backgroundColor: '#1E6EC7'
+        },
+        activeTintColor: '#1E6EC7',
+        inactiveTintColor: '#d1cece',
+        pressColor: '#1E6EC7',
+        showLabel: false,
+        showIcon: true,
 
-        }
-    })
+    }
+})
 
 const MainTab = createAppContainer(MainTabComponent);
 export default MainTab;

@@ -4,6 +4,8 @@ import ClassCreate from './ClassActionsComponents/ClassCreate';
 import ExamCreate from './ExamActionsComponents/ExamCreate';
 import ClassEdit from './ClassActionsComponents/ClassEdit';
 import ExamEdit from './ExamActionsComponents/ExamEdit';
+import TheoryExamCreate from './TheoryExamActionsComponents/TheoryExamCreate';
+import TheoryExamEdit from './TheoryExamActionsComponents/TheoryExamEdit';
 
 const HomeTabComponent = createStackNavigator({
     HomeMainPage: {
@@ -20,7 +22,13 @@ const HomeTabComponent = createStackNavigator({
     },
     ExamEdit: {
         screen: ExamEdit
-    }
+    },
+    TheoryExamCreate: {
+        screen: TheoryExamCreate
+    },
+    TheoryExamEdit: {
+        screen: TheoryExamEdit
+    },
 }, {
     initialRouteName: 'HomeMainPage'
 })

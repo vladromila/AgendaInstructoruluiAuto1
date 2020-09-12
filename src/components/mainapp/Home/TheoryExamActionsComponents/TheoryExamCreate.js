@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import { Text, View, BackHandler, TextInput, ScrollView, FlatList, Picker, Modal } from 'react-native'
-import { examEdit } from '../../../../actions/'
 import { connect } from 'react-redux'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { Button, ListItem, SearchBar, Icon } from 'react-native-elements'
-import { months } from '../../../../variables';
-
-class ExamEdit extends Component {
+import { months } from '../../../../variables'
+import firebase from 'firebase'
+class TheoryExamCreate extends Component {
 
     constructor(props) {
         super(props);
@@ -15,16 +14,19 @@ class ExamEdit extends Component {
             month: null,
             year: null,
             input: '',
-            uid: '',
             isStudentsModalVisible: true,
             isDateModalVisible: false,
+            isSetHourModalVisible: false,
             students: this.props.students,
             selectedStudents: [],
+            pressed: false,
+            selectedStudent: '',
+            loading: false
         }
     }
 
     static navigationOptions = {
-        title: "Editeaza examenul",
+        title: "Programeaza la sala",
         headerTitleStyle: { color: 'white' },
         headerStyle: {
             backgroundColor: '#1E6EC7'
@@ -32,18 +34,26 @@ class ExamEdit extends Component {
     }
 
     async componentDidMount() {
-        const { day, month, year, selectedStudents, uid } = this.props.navigation.state.params;
+        const { day, month, year } = this.props.navigation.state.params;
         this.setState({
-            day, month, year, selectedStudents, uid
+            day, month, year
         })
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.editSuccess === true)
-            this.props.navigation.goBack();
-        this.setState({ students: nextProps.students })
     }
-
+    addExam = async () => {
+        this.setState({ loading: true })
+        firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/theoryExams/`)
+            .push({ date: new Date(this.state.year, this.state.month, this.state.day).toString(), examedStudents: this.state.selectedStudents })
+            .then(() => {
+                this.setState({ loading: false })
+                this.props.navigation.goBack()
+            })
+            .then(() => {
+                this.setState({ loading: false })
+            })
+    }
     onInpuChange(input) {
         let search = input.toLowerCase()
         let students = this.props.students
@@ -54,27 +64,36 @@ class ExamEdit extends Component {
     }
 
     render() {
+        let maxDate = new Date()
+        maxDate.setFullYear(new Date().getFullYear() + 1)
+        let minDate = new Date()
+        minDate.setFullYear(new Date().getFullYear() - 1)
         return (
             <ScrollView style={{ flex: 1 }} >
                 <Text style={{ alignSelf: "center", fontSize: 21, color: "#1E6EC7", fontWeight: 'bold' }}>Elevii selectati:</Text>
                 {this.state.selectedStudents.map((item, i) => {
-                    return <ListItem
-                        key={i}
-                        underlayColor={'rgba(0,0,0,0.01)'}
-                        onPress={() => {
-                            if (item.progress === "pending") {
-                                let { selectedStudents } = this.state;
+                    return <React.Fragment key={i}>
+                        <ListItem
+                            key={i}
+                            underlayColor={'rgba(0,0,0,0.01)'}
+                            onPress={() => {
+                                let { selectedStudents } = this.state; new Date().setFullYear(new Date().getFullYear() + 1)
                                 selectedStudents.splice(i, 1);
                                 this.setState({ selectedStudents });
-                            }
-                            else
-                                alert('Elevii care au primit deja un calificativ nu pot fi eliminati din lista.')
-                        }}
-                        title={<Text style={{ color: '#1E6EC7', fontSize: 20, fontWeight: "bold" }}>{item.nume}</Text>}
-                        containerStyle={{ backgroundColor: 'rgba(0,0,0,0)', borderRadius: 10, marginTop: 4, marginLeft: 4, marginRight: 4, marginBottom: 4, borderColor: '#1E6EC7', borderWidth: 1, zIndex: 99 }}
-                        hideChevron
-                    />
-                })}
+                            }}
+                            title={<Text style={{ color: '#1E6EC7', fontSize: 20, fontWeight: "bold" }}>{item.nume}</Text>}
+                            containerStyle={{ backgroundColor: 'rgba(0,0,0,0)', borderRadius: 10, marginTop: 4, marginLeft: 4, marginRight: 4, marginBottom: 4, borderColor: '#1E6EC7', borderWidth: 1, zIndex: 99 }}
+                            hideChevron
+                        />
+                        <Button
+                            onPress={() => { this.setState({ isSetHourModalVisible: true, selectedStudent: item }) }}
+                            backgroundColor="#1E6EC7"
+                            title={`Ora programarii: ${new Date(item.date).getHours() < 10 ? "0" : ""}${new Date(item.date).getHours()}:${new Date(item.date).getMinutes() < 10 ? "0" : ""}${new Date(item.date).getMinutes()}`}
+                            containerViewStyle={{ marginBottom: 10 }}
+                        />
+                    </React.Fragment>
+                })
+                }
                 <Button
                     title={"Schimba elevii selectati"}
                     backgroundColor="#1E6EC7"
@@ -89,20 +108,43 @@ class ExamEdit extends Component {
                 />
                 <Button
                     containerViewStyle={{ marginTop: 3 }}
-                    title="Editeaza examenul"
-                    loading={this.props.editLoading}
+                    title="Creeaza ziua de sala"
+                    loading={this.state.loading}
                     onPress={() => {
-                        const { day, month, year, selectedStudents, uid } = this.state
-                        this.props.examEdit({ day, month, year, examedStudents: selectedStudents, uid })
+                        if (this.state.pressed === false) {
+                            if (this.state.selectedStudents.length > 0) {
+                                this.addExam()
+                            }
+                            else
+                                alert('Alegeti cel putin un elev inainte de a creea o zi de sala')
+                        }
                     }}
                     backgroundColor="#1E6EC7"
                 />
                 <DateTimePicker
+                    date={new Date(this.state.selectedStudent.date)}
+                    onConfirm={date => {
+                        let students = [...this.state.selectedStudents]
+                        this.state.selectedStudents.forEach((student, i) => {
+                            if (student.uid === this.state.selectedStudent.uid) {
+                                students[i].date = new Date(this.state.year, this.state.month, this.state.day, date.getHours(), date.getMinutes()).toString()
+                            }
+                        })
+                        this.setState({ selectedStudents: students, isSetHourModalVisible: false })
+                    }}
+                    minimumDate={minDate}
+                    maximumDate={maxDate}
+                    onCancel={() => this.setState({ isSetHourModalVisible: false })}
+                    isVisible={this.state.isSetHourModalVisible}
+                    mode='time'
+                />
+                <DateTimePicker
                     date={new Date(this.state.year, this.state.month, this.state.day)}
                     onConfirm={date => {
-                        this.setState({ day: date.getDate(), month: date.getMonth(), year: date.getFullYear() })
-                        this.setState({ isDateModalVisible: false })
+                        this.setState({ day: date.getDate(), month: date.getMonth(), year: date.getFullYear(), isDateModalVisible: false })
                     }}
+                    minimumDate={minDate}
+                    maximumDate={maxDate}
                     onCancel={() => this.setState({ isDateModalVisible: false })}
                     isVisible={this.state.isDateModalVisible}
                     mode='date'
@@ -153,7 +195,7 @@ class ExamEdit extends Component {
                                             }
                                             else {
                                                 const { selectedStudents } = this.state
-                                                selectedStudents.push({ nume: item.nume, nre: item.nre, progress: "pending", uid: item.uid })
+                                                selectedStudents.push({ nume: item.nume, uid: item.uid, date: new Date(this.state.year, this.state.month, this.state.day, 9, 0).toString() })
                                                 this.setState({ selectedStudents });
                                             }
                                         }}
@@ -171,15 +213,14 @@ class ExamEdit extends Component {
                         />
                     </View>
                 </Modal>
-            </ScrollView>
+            </ScrollView >
         )
     }
 }
 
 mapStateToProps = (state) => {
     const { students } = state.FetchedData;
-    const { editLoading, editSuccess } = state.ExamsReducer;
-    return { students, editLoading, editSuccess };
+    return { students };
 }
 
-export default connect(mapStateToProps, { examEdit })(ExamEdit);
+export default connect(mapStateToProps)(TheoryExamCreate);

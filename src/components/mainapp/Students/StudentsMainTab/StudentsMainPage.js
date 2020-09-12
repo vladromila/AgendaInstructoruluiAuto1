@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import QRCode from 'react-native-qrcode-svg';
 import firebase from 'firebase';
-import SearchHeader from 'react-native-search-header';
 import _ from 'lodash';
 
 class StudentsMainPage extends Component {
@@ -76,25 +75,11 @@ class StudentsMainPage extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <Header
-                    leftComponent={<Icon name="search" onPress={() => {
-                        this.searchHeader.show();
-                    }} />}
+                    leftComponent={null}
                     innerContainerStyles={{ backgroundColor: '#1E6EC7' }}
                     outerContainerStyles={{ borderBottomColor: 'black', backgroundColor: '#1E6EC7', borderBottomWidth: 1 }}
                     centerComponent={<Text style={{ fontSize: 22, fontWeight: '900' }}>Elevi</Text>}
                     rightComponent={<Icon name="add" fontSize={40} onPress={() => this.props.navigation.navigate('StudentCreate')} />}
-                />
-                <SearchHeader
-                    ref={(searchHeader) => {
-                        this.searchHeader = searchHeader;
-                    }}
-                    enableSuggestion={false}
-                    placeholder='Search...'
-                    placeholderColor='gray'
-                    onClear={() => { this.onInpuChange('') }}
-                    onEnteringSearch={(input) => {
-                        this.onInpuChange(input.nativeEvent.text);
-                    }}
                 />
                 <ScrollView style={{ flex: 1 }}>
                     <FlatList

@@ -16,10 +16,12 @@ import _ from 'lodash'
 import Icon1 from 'react-native-vector-icons/FontAwesome';
 import { List, ListItem, Button } from 'react-native-elements';
 import ActionSheet from 'react-native-actionsheet'
-import { Permissions, ImagePicker } from 'expo'
+import { ImagePicker } from 'expo'
 import { studentCreate } from '../../../actions/'
 import { connect } from 'react-redux';
 import { Header } from 'react-navigation'
+import * as Permissions from 'expo-permissions';
+
 class StudentCreate extends Component {
     constructor() {
         super();

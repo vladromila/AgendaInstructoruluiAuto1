@@ -4,7 +4,7 @@ import { examCreate } from '../../../../actions/'
 import { connect } from 'react-redux'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { Button, ListItem, SearchBar, Icon } from 'react-native-elements'
-import {months} from '../../../../variables'
+import { months } from '../../../../variables'
 
 class ExamCreate extends Component {
 
@@ -102,7 +102,7 @@ class ExamCreate extends Component {
                     backgroundColor="#1E6EC7"
                 />
                 <DateTimePicker
-                    date={new Date(this.state.year, this.state.month, this.state.day, this.state.hour, this.state.minutes)}
+                    date={new Date(this.state.year, this.state.month, this.state.day)}
                     onConfirm={date => {
                         this.setState({ day: date.getDate(), month: date.getMonth(), year: date.getFullYear() })
                         this.setState({ isDateModalVisible: false })

@@ -16,9 +16,11 @@ import _ from 'lodash'
 import Icon1 from 'react-native-vector-icons/FontAwesome';
 import { List, ListItem, Button, CheckBox } from 'react-native-elements';
 import ActionSheet from 'react-native-actionsheet'
-import { Permissions, ImagePicker } from 'expo'
+import { ImagePicker } from 'expo'
 import { studentEdit } from '../../../actions/'
 import { connect } from 'react-redux';
+import * as Permissions from 'expo-permissions';
+
 class StudentEdit extends Component {
     constructor() {
         super();

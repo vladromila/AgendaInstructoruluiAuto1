@@ -7,32 +7,35 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "expo": "^34.0.0",
+    "@react-native-community/datetimepicker": "^3.0.2",
+    "expo": "^35.0.0",
+    "expo-permissions": "~7.0.0",
     "firebase": "^5.7.0",
     "lodash": "^4.17.11",
     "moment": "^2.23.0",
     "native-base": "^2.8.2",
     "react": "16.8.3",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.2.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
     "react-native-actionsheet": "^2.4.2",
     "react-native-calendar-strip": "^1.3.6",
     "react-native-calendars": "^1.21.0",
+    "react-native-datepicker": "^1.7.2",
     "react-native-elements": "^0.19.1",
     "react-native-fs": "^2.13.3",
-    "react-native-gesture-handler": "^1.3.0",
+    "react-native-gesture-handler": "~1.3.0",
     "react-native-gifted-chat": "^0.5.0",
     "react-native-image-zoom-viewer": "^2.2.24",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-keyboard-spacer": "^0.4.1",
-    "react-native-modal-datetime-picker": "^6.0.0",
+    "react-native-modal-datetime-picker": "^6.1.0",
     "react-native-modalbox": "^1.6.0",
     "react-native-numeric-input": "^1.6.5",
     "react-native-paypal-wrapper": "^1.3.2",
     "react-native-qrcode": "^0.2.7",
     "react-native-qrcode-svg": "^5.1.1",
-    "react-native-screens": "1.0.0-alpha.22",
+    "react-native-screens": "~1.0.0-alpha.23",
     "react-native-search-header": "^0.3.5",
-    "react-native-svg": "^9.5.1",
+    "react-native-svg": "9.9.5",
     "react-native-svg-charts": "^5.2.0",
     "react-native-vector-icons": "^6.1.0",
     "react-navigation": "3.11.1",
@@ -44,7 +47,7 @@
     "slid_cli": "^1.2.0"
   },
   "devDependencies": {
-    "babel-preset-expo": "^6.0.0"
+    "babel-preset-expo": "^7.0.0"
   },
   "private": true
 }

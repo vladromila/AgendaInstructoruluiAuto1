@@ -4,7 +4,7 @@ import { ListItem, Button, Icon } from 'react-native-elements'
 import { Header } from 'react-native-elements'
 import ListItemFC from '../reusable/ListItemsFC';
 import { connect } from 'react-redux'
-import { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange, fetchClassesFromLocalStorage, fetchStudentsFromLocalStorage, fetchExamsFromLocalStorage, fetchFinishedStudentsFromLocalStorage, fetchInStudentsFromLocalStorage, fetchInfoFromLocalStorage, fetchRStudentsFromLocalStorage, isUserSpecial } from '../../../actions';
+import { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange, fetchClassesFromLocalStorage, fetchStudentsFromLocalStorage, fetchExamsFromLocalStorage, fetchFinishedStudentsFromLocalStorage, fetchInStudentsFromLocalStorage, fetchInfoFromLocalStorage, fetchRStudentsFromLocalStorage, fetchTheoryExamsFromLocalStorage, isUserSpecial } from '../../../actions';
 import CalendarStrip from 'react-native-calendar-strip';
 import { Agenda, LocaleConfig } from 'react-native-calendars'
 import _ from 'lodash';
@@ -117,6 +117,16 @@ class HomeMainPage extends Component {
             this.setState({ exam: wantedExam, isExamVisible: false })
         else
             this.setState({ exam: null, isExamVisible: false });
+        let wantedTheoryExam = null;
+        this.props.theoryExams.forEach(exam => {
+            if (new Date(exam.date).getDate() === date.getDate() && new Date(exam.date).getMonth() === date.getMonth() && new Date(exam.date).getFullYear() === date.getFullYear()) {
+                wantedTheoryExam = exam
+            }
+        });
+        if (wantedTheoryExam)
+            this.setState({ theoryExam: wantedTheoryExam, isTheoryExamVisible: false })
+        else
+            this.setState({ theoryExam: null, isTheoryExamVisible: false });
     }
 
     onDateSelectedPressFromAgenda(day, month, year) {
@@ -131,6 +141,15 @@ class HomeMainPage extends Component {
             this.setState({ exam: wantedExam, isExamVisible: false })
         else
             this.setState({ exam: null, isExamVisible: false });
+        let wantedTheoryExam = null;
+        this.props.theoryExams.forEach(exam => {
+            if (new Date(exam.date).getDate() === day && new Date(exam.date).getMonth() === month - 1 && new Date(exam.date).getFullYear() === year)
+                wantedTheoryExam = exam;
+        });
+        if (wantedTheoryExam)
+            this.setState({ theoryExam: wantedTheoryExam, isTheoryExamVisible: false })
+        else
+            this.setState({ theoryExam: null, isTheoryExamVisible: false });
     }
 
     setClasses = ({ classesFrom, day, month, year }) => {
@@ -191,7 +210,7 @@ class HomeMainPage extends Component {
             this.setState({ classes: toRenderClasses })
         }
         else {
-            let dif = 23 * 60 -8 * 60;
+            let dif = 23 * 60 - 8 * 60;
             let k = 0;
             while (dif >= 60 + this.props.value) {
                 classes.push({ hour: Math.trunc((480 + k * (60 + this.props.value)) / 60), minutes: (480 + k * this.props.value) % 60 })
@@ -215,6 +234,16 @@ class HomeMainPage extends Component {
         else
             this.setState({ exam: null })
         this.setState({ isExamVisible: false })
+        let theoryExam = null;
+        nextProps.theoryExams.forEach(theoryE => {
+            if (new Date(theoryE.date).getFullYear() == this.state.year && new Date(theoryE.date).getMonth() == this.state.month && new Date(theoryE.date).getDate() == this.state.day)
+                theoryExam = theoryE
+        })
+        if (theoryExam)
+            this.setState({ theoryExam })
+        else
+            this.setState({ theoryExam: null })
+        this.setState({ isTheoryExamVisible: false })
     }
 
     handleFirstConnectivityChange(connectionInfo) {
@@ -238,6 +267,11 @@ class HomeMainPage extends Component {
             .then((value) => {
                 if (value !== null)
                     this.props.fetchExamsFromLocalStorage({ exams: JSON.parse(value) });
+            })
+        AsyncStorage.getItem('theoryExams')
+            .then((value) => {
+                if (value !== null)
+                    this.props.fetchTheoryExamsFromLocalStorage({ exams: JSON.parse(value) });
             })
         AsyncStorage.getItem('inStudents')
             .then((value) => {
@@ -305,6 +339,7 @@ class HomeMainPage extends Component {
 
 
     render() {
+        console.log(this.props.theoryExams)
         return (
             <View style={{ flex: 1 }}>
                 <Header
@@ -398,6 +433,45 @@ class HomeMainPage extends Component {
                                                 title={<Text style={{ fontSize: 21, fontWeight: "bold" }}>Nici-un examen programat</Text>}
                                                 rightIcon={<Icon name="add" size={40} color="black"
                                                     onPress={() => this.props.navigation.navigate('ExamCreate', { day: this.state.day, month: this.state.month, year: this.state.year })} />}
+                                            />}
+                                        {this.state.theoryExam ?
+                                            <View>
+                                                <ListItem
+                                                    underlayColor={'rgba(30, 110, 199,0.9)'}
+                                                    leftIcon={null}
+                                                    containerStyle={{ backgroundColor: '#1E6EC7', borderRadius: 6, margin: 4, borderBottomColor: 'rgba(0,0,0,0)', zIndex: 99, marginBottom: this.state.isTheoryExamVisible === true ? 0 : 4 }}
+                                                    title={<Text style={{ fontSize: 21, fontWeight: "bold", marginLeft: 5, color: 'white' }}>Sala: {Object.keys(this.state.theoryExam.examedStudents).length} elev{Object.keys(this.state.theoryExam.examedStudents).length != 1 ? "i" : null}</Text>}
+                                                    onPress={() => this.setState({ isTheoryExamVisible: !this.state.isTheoryExamVisible })}
+                                                    onLongPress={() => this.ActionSheetForTheoryExams.show()}
+                                                    hideChevron
+                                                />
+                                                {this.state.isTheoryExamVisible === true ?
+                                                    <View style={{ alignSelf: 'center', width: '90%', backgroundColor: 'rgba(0,0,0,0.1)' }}>
+                                                        {_.toArray(this.state.theoryExam.examedStudents).map((examedStudent, i) => {
+                                                            return <ListItem
+                                                                underlayColor={'rgba(255, 255, 255,0.15)'}
+                                                                containerStyle={{ backgroundColor: 'rgba(255, 255, 255,0.2)', borderBottomColor: 'black', borderLeftColor: 'black', borderRightColor: 'black', borderWidth: 1, borderTopWidth: 0 }}
+                                                                titleStyle={{ fontSize: 19, fontWeight: 'bold', color: 'black' }}
+                                                                key={i}
+                                                                title={
+                                                                    <View style={{ flexDirection: 'row' }}>
+                                                                        <Text style={{ fontSize: 19, fontWeight: 'bold', color: 'black' }}>{examedStudent.nume}</Text>
+                                                                    </View>}
+                                                                onLongPress={() => {
+                                                                    //this.setState({ selectedExamedStudent: examedStudent, id: i, isExamModalVisible: true })
+                                                                }}
+                                                                hideChevron
+                                                            />
+                                                        })}
+                                                    </View>
+                                                    : null}
+                                            </View>
+                                            :
+                                            <ListItem
+                                                containerStyle={{ backgroundColor: 'rgba(255, 247, 35, 0.8)', borderRadius: 6, margin: 4, borderBottomColor: 'rgba(0,0,0,0)', zIndex: 99 }}
+                                                title={<Text style={{ fontSize: 21, fontWeight: "bold" }}>Nici-un elev programat la sala</Text>}
+                                                rightIcon={<Icon name="add" size={40} color="black"
+                                                    onPress={() => this.props.navigation.navigate('TheoryExamCreate', { day: this.state.day, month: this.state.month, year: this.state.year })} />}
                                             />}
                                         <FlatList
                                             keyExtractor={(item, i) => `${i}`}
@@ -602,6 +676,26 @@ class HomeMainPage extends Component {
                                     </View>
                                 </Modal>
                                 <ActionSheet
+                                    ref={o => this.ActionSheetForTheoryExams = o}
+                                    title={
+                                        <View>
+                                            {this.state.theoryExam ?
+                                                <Text style={{ fontSize: 17, color: '#1E6EC7', fontWeight: 'bold', textAlign: 'center' }}>Sala: {this.state.theoryExam.examedStudents.length} elevi</Text> : null}
+                                        </View>}
+                                    options={['Editeaza sala', 'Sterge sala', 'Anuleaza']}
+                                    cancelButtonIndex={2}
+                                    destructiveButtonIndex={1}
+                                    onPress={(index) => {
+                                        if (index === 0) {
+                                            this.props.navigation.navigate('TheoryExamEdit', { day: new Date(this.state.theoryExam.date).getDate(), month: new Date(this.state.theoryExam.date).getMonth(), year: new Date(this.state.theoryExam.date).getFullYear(), selectedStudents: this.state.theoryExam.examedStudents, uid: this.state.theoryExam.uid })
+                                        }
+                                        if (index === 1) {
+                                            firebase.database().ref(`/users/${firebase.auth().currentUser.uid}/theoryExams/${this.state.theoryExam.uid}`)
+                                                .remove()
+                                        }
+                                    }}
+                                />
+                                <ActionSheet
                                     ref={o => this.ActionSheetForExams = o}
                                     title={
                                         <View>
@@ -741,10 +835,10 @@ class HomeMainPage extends Component {
     }
 }
 mapStateToProps = (state) => {
-    const { classes, exams, students } = state.FetchedData
+    const { classes, exams, students, theoryExams } = state.FetchedData
     const { isClassCancelDeleteModalVisible, classCancelDeleteLoading, isClassDeleteModalVisible, classDeleteLoading } = state.ClassesReducer;
     const { addCLoading, addCSuccess, isExamDeleteModalVisible, deleteLoading } = state.ExamsReducer;
     const { value } = state.GlobalVariablesReducer;
-    return { classes, exams, students, isClassCancelDeleteModalVisible, classCancelDeleteLoading, isClassDeleteModalVisible, classDeleteLoading, addCLoading, addCSuccess, isExamDeleteModalVisible, deleteLoading, value };
+    return { classes, exams, students, isClassCancelDeleteModalVisible, classCancelDeleteLoading, isClassDeleteModalVisible, classDeleteLoading, addCLoading, addCSuccess, isExamDeleteModalVisible, deleteLoading, value, theoryExams };
 }
-export default connect(mapStateToProps, { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange, fetchClassesFromLocalStorage, fetchStudentsFromLocalStorage, fetchExamsFromLocalStorage, fetchFinishedStudentsFromLocalStorage, fetchInStudentsFromLocalStorage, fetchInfoFromLocalStorage, fetchRStudentsFromLocalStorage, isUserSpecial })(HomeMainPage)
+export default connect(mapStateToProps, { fetchData, classOHCancelDeleteModal, classCancel, classDelete, classOHDeleteModal, examAddC, examOHDelete, examDelete, connectionStatusChange, fetchClassesFromLocalStorage, fetchStudentsFromLocalStorage, fetchExamsFromLocalStorage, fetchFinishedStudentsFromLocalStorage, fetchInStudentsFromLocalStorage, fetchInfoFromLocalStorage, fetchRStudentsFromLocalStorage, fetchTheoryExamsFromLocalStorage, isUserSpecial })(HomeMainPage)

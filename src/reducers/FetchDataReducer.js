@@ -1,5 +1,5 @@
 import { AsyncStorage } from 'react-native'
-const INITIAL_STATE = { classes: [], students: [], exams: [], finishedStudents: [], rStudents: [], canceledClasses: [], inStudents: [], info: {}, messages: [] }
+const INITIAL_STATE = { classes: [], students: [], exams: [], theoryExams: [], finishedStudents: [], rStudents: [], canceledClasses: [], inStudents: [], info: {}, messages: [] }
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case 'classesLocal':
@@ -25,6 +25,9 @@ export default (state = INITIAL_STATE, action) => {
         case 'exams':
             AsyncStorage.setItem('exams', JSON.stringify(action.payload))
             return { ...state, exams: action.payload }
+        case 'theoryExams':
+            AsyncStorage.setItem('theoryExams', JSON.stringify(action.payload))
+            return { ...state, theoryExams: action.payload }
         case 'messages':
             return { ...state, messages: action.payload }
         case 'finishedStudents':

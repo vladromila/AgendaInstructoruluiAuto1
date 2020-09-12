@@ -34,7 +34,7 @@ export const studentCreate = ({ nume, phone, cnp, registru, serie, blob, generat
                             })
                         })
                         .catch(e => {
-                            console.log(e);
+
                         })
                 }
                 else {

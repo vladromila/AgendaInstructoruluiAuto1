@@ -5,8 +5,9 @@ import firebase from 'firebase';
 import { setIsAutomaticTypeSelectWanted } from '../../../actions/'
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { Notifications, Permissions } from 'expo'
+import { Notifications } from 'expo'
 import { months } from '../../../variables'
+import * as Permissions from 'expo-permissions';
 
 class ProfileMainPage extends Component {
     constructor() {

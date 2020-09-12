@@ -1,8 +1,8 @@
 import firebase from 'firebase';
 import { NavigationActions } from 'react-navigation'
 import { LOGIN_START, LOGIN_SUCCESS, SIGNUP_START, SIGNUP_SUCCESS, SIGNUP_FAILED, LOGIN_FAILED, LOGIN_WITH_FACEBOOK_SUCCESS, LOGIN_WITH_FACEBOOK_FAIL, LOGIN_WITH_FACEBOOK_START, PASSWORD_RESET_START, PASSWORD_RESET_FAIL, PASSWORD_RESET_SUCCESS } from './types';
-import { Permissions, Notifications, Facebook } from 'expo';
-
+import { Notifications, Facebook } from 'expo';
+import * as Permissions from 'expo-permissions';
 const PUSH_ENDPOINT = 'https://agendainstructoruluiautoserver.herokuapp.com/addToken';
 async function loginWFacebook() {
     const { type, token } = await Facebook.logInWithReadPermissionsAsync(
