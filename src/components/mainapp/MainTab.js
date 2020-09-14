@@ -49,15 +49,16 @@ const MainTabComponent = createMaterialTopTabNavigator({
     HomeTab: {
         screen: HomeTab
     },
+    StudentsTab: {
+        screen: StudentsTab
+    },
     ExamsTab: {
         screen: ExamsTab
     },
     TheoryExamsTab: {
         screen: TheoryExamsTab
     },
-    StudentsTab: {
-        screen: StudentsTab
-    },
+
     ProfileTab: {
         screen: ProfileTab
     }
